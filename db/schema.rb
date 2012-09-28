@@ -11,7 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120927213747) do
+ActiveRecord::Schema.define(:version => 20120928080612) do
+
+  create_table "books", :force => true do |t|
+    t.string   "title"
+    t.string   "author"
+    t.string   "isbn_13"
+    t.string   "isbn_10"
+    t.string   "edition"
+    t.string   "requirement"
+    t.string   "asin"
+    t.integer  "course_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
 
   create_table "courses", :force => true do |t|
     t.string   "department"
@@ -20,6 +33,14 @@ ActiveRecord::Schema.define(:version => 20120927213747) do
     t.string   "instructor"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "search_id"
+  end
+
+  create_table "searches", :force => true do |t|
+    t.string   "password"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.string   "username"
   end
 
 end

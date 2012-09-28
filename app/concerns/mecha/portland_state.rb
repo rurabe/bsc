@@ -1,8 +1,8 @@
 
 module Mecha
 	class PortlandState
-		def self.navigate(options = {}) #{:user => 'foo', :password => 'blah'}
-			user = options.fetch(:user)
+		def self.navigate(options = {}) #{:username => 'foo', :password => 'blah'}
+			username = options.fetch(:username)
 			password = options.fetch(:password)
 
 			mecha = Mechanize.new
@@ -11,16 +11,12 @@ module Mecha
 			login_page = mecha.get('https://banweb.pdx.edu/pls/oprd/twbkwbis.P_WWWLogin')
 
 			login_form = login_page.form('loginform')
-				login_form.sid = user
+				login_form.sid = username
 				login_form.PIN = password
 
 			main_page = login_form.submit
 
-			student_services_link = main_page.link_with(:text => 'Student Services & Financial Aid')
-			student_services_page = student_services_link.click
-
-			registration_link = student_services_page.link_with(:text => 'Registration')
-			registration_page = registration_link.click
+			registration_page = mecha.get('https://banweb.pdx.edu/pls/oprd/twbkwbis.P_GenMenu?name=bmenu.P_RegMnu')
 
 			term_select_link = registration_page.link_with(:text => 'Student Detail Schedule')
 			term_select_page = term_select_link.click
@@ -35,9 +31,9 @@ module Mecha
 			booklist_page = booklist_submit_page.forms[0].submit
 		end
 
-		def self.create_classes_and_books(booklist_page)
+		def self.create_courses_and_books(search, booklist_page)
 			book_list = booklist_page.search("//table[starts-with(@id,'section')]/tbody/tr[contains(concat(' ',@class,' '),'book course')] | //span[@id='course-bookdisplay-coursename']")
-
+			courses = []
 			book_list.each do |node|
 				if node.name == "span"
 					#then its a course!
@@ -47,10 +43,15 @@ module Mecha
           number = course_info.match(/ - (\d+)/)[1]
           section = course_info.match(/section (\d+)/)[1]
           if instructor_string = course_info.match(/\((.+)\)/)
-          	instructor = instructor_string[1]
+          	instructor = instructor_string[1].titlecase
           end
 
-          p "#{department}, #{number}, #{section}, #{instructor}"
+          new_course = search.courses.build(:department => department, 
+          					 												:number => number, 
+          																  :section => section, 
+          					 												:instructor => instructor)
+
+          courses << new_course
 
 				elsif node.name == "tr"
 					#then its a book!
@@ -62,10 +63,17 @@ module Mecha
           end
           requirement = node.search("./td[@class='book-desc']/p[starts-with(@class,'book-')]").first.content
 					
-					p "#{title}, #{author}, #{isbn_13}, #{edition}, #{requirement}"
-				end
-			end
+					current_course = courses[-1]
 
+					current_course.books.build(:title => title,
+																		 :author => author,
+																		 :isbn_13 => isbn_13,
+																		 :edition => edition,
+																		 :requirement => requirement)
+				end
+
+			end
+			courses
 		end
 
 	end

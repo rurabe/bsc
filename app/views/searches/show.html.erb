@@ -1,0 +1,9 @@
+<% @search.courses.each do |course| %>
+	<h2><%= course.department %> <%= course.number %></h2>
+	<ul>
+		<% course.books.each do |book| %>
+			<li><%= link_to book.title, book.referral_link %></li>
+		<% end %>
+	</ul>
+
+<% end %>
