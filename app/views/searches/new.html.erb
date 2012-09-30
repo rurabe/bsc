@@ -1,5 +1,31 @@
-<%= form_for @search do |f| %>
-	<%= f.text_field :username %>
-	<%= f.password_field :password %>
-	<%= f.submit "Search" %>
-<% end %>
+<div class="row pagination-centered">
+	<div class="main">
+		<div class="logo">
+			<%= image_tag 'logo.png' %>
+		</div>
+		<h1> Portland State </h1>
+		<div class="form">
+			<%= form_for @search do |f| %>
+			<table class="login">
+				<tr>
+					<td class="form-label-cell">
+						<%= f.label "ODIN Username" %>
+					</td>
+					<td class="form-field-cell">
+						<%= f.text_field :username, :class => 'form-field' %>
+					</td>
+				</tr>
+				<tr>
+					<td class="form-label-cell">
+						<%= f.label :password %>
+					</td>
+					<td class="form-field-cell">
+						<%= f.password_field :password, :class => 'form-field' %>
+					</td>
+				</tr>
+			</table>
+				<%= f.submit "Find my books!", :class => 'btn btn-large btn-success' %>
+			<% end %>
+		</div>
+	</div>
+</div>
