@@ -1,9 +1,29 @@
-<% @search.courses.each do |course| %>
-	<h2><%= course.department %> <%= course.number %></h2>
-	<ul>
-		<% course.books.each do |book| %>
-			<li><%= link_to book.title, book.referral_link %></li>
-		<% end %>
-	</ul>
+<table class="book-table">
+	<thead>
+		<th></th>
+		<th>PSU Bookstore</th>
+		<th>Amazon.com</th>
+	</thead>
+	<% @search.courses.each do |course| %>
+		<tr>
+			<td class="course-header">
+				<%= course.department %> <%= course.number %>
+			</td>
+		</tr>
+			<% course.books.each do |book| %>
+				<tr>
+					<td class="book-title">
+						<%= book.title %>
+					</td>
+					<td class="book-bookstore" id="bookstore-<%= book.id %>">
+						<%= show_price(book.bookstore_new_price) %>
+					</td>
+					<td class="book-amazon" id="amazon-<%= book.id %>">
+						
+					</td>
+				</tr>
+			<% end %>
 
-<% end %>
+
+	<% end %>
+</table>

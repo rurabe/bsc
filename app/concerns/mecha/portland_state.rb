@@ -1,6 +1,7 @@
 
 module Mecha
 	class PortlandState
+
 		def self.navigate(options = {}) #{:username => 'foo', :password => 'blah'}
 			username = options.fetch(:username)
 			password = options.fetch(:password)
@@ -32,49 +33,129 @@ module Mecha
 		end
 
 		def self.create_courses_and_books(search, booklist_page)
-			book_list = booklist_page.search("//table[starts-with(@id,'section')]/tbody/tr[contains(concat(' ',@class,' '),'book course')] | //span[@id='course-bookdisplay-coursename']")
+			book_list = collect_elements(booklist_page)
 			courses = []
 			book_list.each do |node|
 				if node.name == "span"
 					#then its a course!
-					course_info = node.content
-
-          department = course_info.match(/(\S+) -/)[1]
-          number = course_info.match(/ - (\d+)/)[1]
-          section = course_info.match(/section (\d+)/)[1]
-          if instructor_string = course_info.match(/\((.+)\)/)
-          	instructor = instructor_string[1].titlecase
-          end
-
-          new_course = search.courses.build(:department => department, 
-          					 												:number => number, 
-          																  :section => section, 
-          					 												:instructor => instructor)
-
-          courses << new_course
-
+          courses << build_course(node,search)
 				elsif node.name == "tr"
 					#then its a book!
-					title = node.search("*[@class='book-title']").first.content
-					author = node.search("*[@class='book-meta book-author']").first.content
-					isbn_13 = node.search("*[@class='isbn']").first.content
-					if !node.search("*[@class='book-meta book-edition']").empty?
-            edition = node.search("*[@class='book-meta book-edition']").first.content.match(/Edition.(\d+)/)[1]
-          end
-          requirement = node.search("./td[@class='book-desc']/p[starts-with(@class,'book-')]").first.content
-					
-					current_course = courses[-1]
-
-					current_course.books.build(:title => title,
-																		 :author => author,
-																		 :isbn_13 => isbn_13,
-																		 :edition => edition,
-																		 :requirement => requirement)
+					course = courses[-1]
+					build_book(node,course)
 				end
-
 			end
 			courses
 		end
+
+		private
+
+			def self.collect_elements(booklist_page)
+				booklist_page.search("//table[starts-with(@id,'section')]/tbody/tr[contains(concat(' ',@class,' '),'book course')] | //span[@id='course-bookdisplay-coursename']")
+			end
+
+			# Course helper methods
+
+			def self.build_course(node, search)
+				course_info = node.content
+
+	      search.courses.build(	:department => parse_course_department(course_info), 
+			 												:number => parse_course_number(course_info), 
+														  :section => parse_course_section(course_info), 
+			 												:instructor => parse_course_instructor(course_info))
+			end
+
+			def self.parse_course_department(course_info)
+				parse_result(course_info,/(\S+) -/)
+			end
+
+			def self.parse_course_number(course_info)
+				parse_result(course_info,/ - (\d+)/)
+			end
+
+			def self.parse_course_section(course_info)
+				parse_result(course_info,/section (\d+)/)
+			end
+
+			def self.parse_course_instructor(course_info)
+				parse_result(course_info,/\((.+)\)/)
+			end
+
+			# Book helper methods
+
+			def self.build_book(book_node,course)
+				course.books.build(:title => parse_book_title(book_node),
+													 :author => parse_book_author(book_node),
+													 :isbn_13 => parse_book_isbn_13(book_node),
+													 :edition => parse_book_edition(book_node),
+													 :requirement => parse_book_requirement(book_node),
+													 :bookstore_new_price => parse_book_new_price(book_node),
+													 :bookstore_new_rental_price => parse_book_new_rental_price(book_node),
+													 :bookstore_used_price => parse_book_used_price(book_node),
+													 :bookstore_used_rental_price => parse_book_used_rental_price(book_node))
+			end
+
+			def self.parse_book_title(book_node)
+				parse_node(book_node,"*[@class='book-title']")
+			end
+
+			def self.parse_book_author(book_node)
+				parse_node(book_node,"*[@class='book-meta book-author']")
+			end
+
+			def self.parse_book_isbn_13(book_node)
+				parse_node(book_node,"*[@class='isbn']")
+			end
+
+			def self.parse_book_edition(book_node)
+				edition = parse_node(book_node,"*[@class='book-meta book-edition']")
+				parse_result(edition,/Edition.(\d+)/)
+			end
+
+			def self.parse_book_requirement(book_node)
+				parse_node(book_node,"./td[@class='book-desc']/p[starts-with(@class,'book-')]")
+			end
+
+			def self.parse_book_new_price(book_node)
+				price = parse_node(book_node,"./td[@class='book-pref']/table/tbody/tr[starts-with(@id,'tr-radio-sku-new')]/td[@class='price']/label")
+				numberize_price(price)
+			end
+
+			def self.parse_book_new_rental_price(book_node)
+				price = parse_node(book_node,"./td[@class='book-pref']/table/tbody/tr[starts-with(@id,'tr-radio-radio-sku-new-rental')]/td[@class='price']/label")
+				numberize_price(price)
+			end
+
+			def self.parse_book_used_price(book_node)
+				price = parse_node(book_node,"./td[@class='book-pref']/table/tbody/tr[starts-with(@id,'tr-radio-sku-used')]/td[@class='price']/label")
+				numberize_price(price)
+			end
+
+			def self.parse_book_used_rental_price(book_node)
+				price = parse_node(book_node,"./td[@class='book-pref']/table/tbody/tr[starts-with(@id,'tr-radio-radio-sku-used-rental')]/td[@class='price']/label")
+				numberize_price(price)
+			end
+
+			# Parsing helpers
+
+			def self.parse_node(node,xpath)
+				result = node.search(xpath).first
+				result.content if result
+			end
+
+			def self.parse_result(string,regex)
+				match = string.match(regex) if string
+				match[1] if match
+			end
+
+			def self.numberize_price(string)
+				if string =~ /\$/
+					number = string.gsub("$","")
+					BigDecimal.new(number)
+				else
+					nil
+				end
+			end
 
 	end
 end

@@ -1,9 +1,24 @@
 <div class="row pagination-centered">
 	<div class="main">
+
 		<div class="logo">
 			<%= image_tag 'logo.png' %>
 		</div>
-		<h1> Portland State </h1>
+
+
+		<div id="intro-carousel" class="carousel slide">
+			<!-- Carousel items -->
+		  <div class="carousel-inner">
+		    <div class="active item"><%= image_tag 'psu.jpg' %></div>
+		    <div class="item">Two</div>
+		    <div class="item">Three</div>
+		  </div>
+		  <!-- Carousel nav -->
+		  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+		  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+		</div>
+
+
 		<div class="form">
 			<%= form_for @search do |f| %>
 			<table class="login">
