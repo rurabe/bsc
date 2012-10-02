@@ -1,7 +1,7 @@
 BookSupply::Application.routes.draw do
 
   resources :searches
-
+  resources :amazonbooks, :only => :update
   root :to => 'searches#new'
   # The priority is based upon order of creation:
   # first created -> highest priority.

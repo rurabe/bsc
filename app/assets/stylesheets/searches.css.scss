@@ -6,12 +6,31 @@ body {
 	background-image:url('bg.jpg');
 }
 
-.main {
-	margin-top: 50px;
+#main {
+	background-image: url(bubble.png);
+	background-repeat: no-repeat;
+	background-position: center top;
+	min-height: 400px;
 }
 
 .logo {
-	margin: 20px;
+	margin: 150px auto 20px auto;
+}
+
+.school {
+	font-family: "Brush Script Std", "Brush Script MT", cursive;
+	font-size: 30pt;
+	margin: 10px auto;
+}
+
+.subtag{
+	font-family: "Brush Script Std", "Brush Script MT", cursive;
+	font-size: 14pt;
+		margin: 10px auto;
+}
+
+.loginform{
+	margin: 10px auto;
 }
 
 .login {
@@ -37,6 +56,7 @@ body {
 
 .book-table {
 	margin: 0px auto;
+	background-color: rgba(255,255,255,0.7);
 }
 
 .book-table td,th{
@@ -60,8 +80,20 @@ body {
 
 .book-amazon {
 	text-align: center;
+
+}
+
+.requirement {
+	font-size: 7pt;
+}
+
+.loading {
+	margin: auto;
 	background-image: url(ajax-loader.gif);
 	background-repeat: no-repeat;
-	background-position: center center
+	background-position: center center;
+	width: 16px;
+	height: 16px;
 }
+
 

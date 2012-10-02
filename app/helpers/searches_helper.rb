@@ -7,4 +7,16 @@ module SearchesHelper
 			"N/A"
 		end
 	end
+
+
+	def requirement_class(requirement)
+		case requirement
+		when "Required"
+			"label-important"
+		when "Recommended"
+			"label-warning"
+		when "Optional"
+			"label-success"
+		end
+	end
 end

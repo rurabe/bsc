@@ -1,6 +1,7 @@
 <table class="book-table">
 	<thead>
 		<th></th>
+		<th></th>
 		<th>PSU Bookstore</th>
 		<th>Amazon.com</th>
 	</thead>
@@ -11,15 +12,20 @@
 			</td>
 		</tr>
 			<% course.books.each do |book| %>
-				<tr>
+				<tr id="row-<%= book.id %>">
+					<td class="book-requirement">
+							<span class="label requirement <%= requirement_class(book.requirement) %>">
+								<%= book.requirement %>
+							</span>
+					</td>
 					<td class="book-title">
-						<%= book.title %>
+						<%= book.title %> 
 					</td>
 					<td class="book-bookstore" id="bookstore-<%= book.id %>">
 						<%= show_price(book.bookstore_new_price) %>
 					</td>
 					<td class="book-amazon" id="amazon-<%= book.id %>">
-						
+						<div class="loading"></div>
 					</td>
 				</tr>
 			<% end %>

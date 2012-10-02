@@ -1,46 +1,44 @@
-<div class="row pagination-centered">
-	<div class="main">
+<div class="row-fluid pagination-centered">
+	<div class="span12" id="main">
 
-		<div class="logo">
-			<%= image_tag 'logo.png' %>
+		<div class="row-fluid">
+			<div class="logo">
+				<%= image_tag 'logo.png' %>
+			</div>
+			<div class="school">
+				Portland State
+			</div>
+			<div class="subtag">
+				Save up to 40% versus the bookstore in 60 seconds or less!
+			</div>
 		</div>
+		
 
 
-		<div id="intro-carousel" class="carousel slide">
-			<!-- Carousel items -->
-		  <div class="carousel-inner">
-		    <div class="active item"><%= image_tag 'psu.jpg' %></div>
-		    <div class="item">Two</div>
-		    <div class="item">Three</div>
-		  </div>
-		  <!-- Carousel nav -->
-		  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-		  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
-		</div>
-
-
-		<div class="form">
-			<%= form_for @search do |f| %>
-			<table class="login">
-				<tr>
-					<td class="form-label-cell">
-						<%= f.label "ODIN Username" %>
-					</td>
-					<td class="form-field-cell">
-						<%= f.text_field :username, :class => 'form-field' %>
-					</td>
-				</tr>
-				<tr>
-					<td class="form-label-cell">
-						<%= f.label :password %>
-					</td>
-					<td class="form-field-cell">
-						<%= f.password_field :password, :class => 'form-field' %>
-					</td>
-				</tr>
-			</table>
-				<%= f.submit "Find my books!", :class => 'btn btn-large btn-success' %>
-			<% end %>
+		<div class="row-fluid">
+			<div class="loginform">
+				<%= form_for @search do |f| %>
+				<table class="login">
+					<tr>
+						<td class="form-label-cell">
+							<%= f.label "ODIN Username" %>
+						</td>
+						<td class="form-field-cell">
+							<%= f.text_field :username, :class => 'form-field' %>
+						</td>
+					</tr>
+					<tr>
+						<td class="form-label-cell">
+							<%= f.label :password %>
+						</td>
+						<td class="form-field-cell">
+							<%= f.password_field :password, :class => 'form-field' %>
+						</td>
+					</tr>
+				</table>
+					<%= f.submit "Find my books!", :class => 'btn btn-large btn-success' %>
+				<% end %>
+			</div>
 		</div>
 	</div>
 </div>

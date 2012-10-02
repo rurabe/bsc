@@ -3,4 +3,5 @@ class Course < ActiveRecord::Base
 
   belongs_to :search
   has_many :books
+
 end
