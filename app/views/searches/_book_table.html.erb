@@ -1,0 +1,35 @@
+<div class="row-fluid">
+	<table class="book-table table">
+		<thead>
+			<th></th>
+			<th></th>
+			<th>Bookstore</th>
+			<th><%= image_tag 'amazon-icon.jpg' %></th>
+		</thead>
+		<% @search.courses.each do |course| %>
+			<tr>
+				<td class="course-header" colspan=4>
+					<%= course.department %> <%= course.number %>
+				</td>
+			</tr>
+			<% course.books.each do |book| %>
+				<tr id="row-<%= book.id %>">
+					<td class="book-requirement">
+							<span class="label requirement <%= requirement_class(book.requirement) %>">
+								<%= book.requirement %>
+							</span>
+					</td>
+					<td class="book-title">
+						<%= book.title %> 
+					</td>
+					<td class="book-bookstore" id="bookstore-<%= book.id %>">
+						<%= show_price(book.bookstore_new_price) %>
+					</td>
+					<td class="book-amazon" id="amazon-<%= book.id %>">
+						<div class="loading"></div>
+					</td>
+				</tr>
+			<% end %>
+		<% end %>
+	</table>
+</div>

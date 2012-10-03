@@ -5,32 +5,9 @@
 			<%= render :partial => 'logo' %>
 		</div>
 		
-
-
-		<div class="row-fluid">
-			<div class="loginform">
-				<%= form_for @search do |f| %>
-				<table class="login">
-					<tr>
-						<td class="form-label-cell">
-							<%= f.label "ODIN Username" %>
-						</td>
-						<td class="form-field-cell">
-							<%= f.text_field :username, :class => 'form-field' %>
-						</td>
-					</tr>
-					<tr>
-						<td class="form-label-cell">
-							<%= f.label :password %>
-						</td>
-						<td class="form-field-cell">
-							<%= f.password_field :password, :class => 'form-field' %>
-						</td>
-					</tr>
-				</table>
-					<%= f.submit "Find my books!", :class => 'btn btn-large btn-success' %>
-				<% end %>
-			</div>
+		<div class="loginform">
+			<%= render :partial => 'loginform' %>
 		</div>
+
 	</div>
 </div>

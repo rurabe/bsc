@@ -48,7 +48,8 @@ class Book < ActiveRecord::Base
     end
 
     def parse_amazon_new_price(response)
-      response.get('//OfferListing/Price/Amount').to_d / 100
+      price = response.get('//OfferListing/Price/Amount')
+      price.to_d / 100 if price
     end
 
     def keywords

@@ -17,6 +17,10 @@ body {
 	margin: 130px auto 20px auto;
 }
 
+.logo-head {
+
+}
+
 .logo {
 	margin: 20px auto 20px auto;
 }
@@ -58,9 +62,22 @@ body {
 	height: 300px;
 }
 
+.book-card {
+	background-color: rgba(255,255,255,1);
+	border: 3px solid #DDD;
+	padding: 10px;
+	-webkit-border-radius: 4px 4px 4px 4px;
+	-moz-border-radius: 4px 4px 4px 4px;
+	border-radius: 4px 4px 4px 4px;
+}
+
 .book-table {
 	margin: 0px auto;
-	background-color: rgba(255,255,255,0.7);
+
+}
+
+.book-table thead {
+	border-bottom: 2px solid #CC0052;
 }
 
 .book-table td,th{
