@@ -1,4 +1,16 @@
 $(document).ready(function(){
+	// #new
+	$('#loadingModal').modal({
+		backdrop: 'static',
+		keyboard: false,
+		show: false
+	});
+
+	$('#login-button').click(function(){
+		$('#icon-carousel').carousel('cycle')
+		$('#loadingModal').modal('show');
+	})
+
 
 	// #show
 
@@ -10,7 +22,6 @@ $(document).ready(function(){
 		$.ajax({
 			type: 'PUT',
 			url: 	"/amazonbooks/" + idFinder.exec(this.id),
-			timeout: 10000,
 			dataType: "html",
 			// Set this to el for reference in the callbacks
 			el: this,
@@ -18,7 +29,6 @@ $(document).ready(function(){
 				$(this.el.children).fadeOut(function(){
 					el = $(this).parent();
 					$(this).remove();
-					console.log(data)
 					el.html(data).hide().fadeIn();
 				});
 			},

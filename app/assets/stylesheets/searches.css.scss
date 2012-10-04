@@ -6,7 +6,7 @@ body {
 	background-image:url('bg.jpg');
 }
 
-#main {
+.spotlight {
 	background-image: url(bubble.png);
 	background-repeat: no-repeat;
 	background-position: center top;
@@ -96,11 +96,11 @@ body {
 }
 
 .book-bookstore {
-	text-align: center;
+	text-align: center !important;
 }
 
 .book-amazon {
-	text-align: center;
+	text-align: center !important;
 
 }
 
@@ -117,4 +117,6 @@ body {
 	height: 16px;
 }
 
+.search-icon {
 
+}

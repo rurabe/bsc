@@ -1,5 +1,5 @@
 <div class="row-fluid pagination-centered">
-	<div class="span12" id="main">
+	<div class="span12 spotlight">
 
 		<div class="logo-front">
 			<%= render :partial => 'logo' %>
@@ -7,6 +7,29 @@
 		
 		<div class="loginform">
 			<%= render :partial => 'loginform' %>
+		</div>
+
+
+
+		<div class="modal hide fade" id="loadingModal" >
+			<div class="modal-body">
+				<div id="icon-carousel" class="carousel slide">
+				  <!-- Carousel items -->
+				  <div class="carousel-inner">
+				    <div class="active item">
+							<button class ="btn search-icon">
+								<%= image_tag 'psubookstore-icon.png' %>
+							</button>
+						</div>
+				    <div class="item">
+				    	<button class ="btn search-icon">
+								<%= image_tag 'amazon-icon.png' %>
+							</button>
+				    </div>
+				  </div>
+				</div>
+			<h3>Searching... this will only take a bit.	</h3>
+			</div>
 		</div>
 
 	</div>
