@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121002024306) do
+ActiveRecord::Schema.define(:version => 20121007004859) do
 
   create_table "books", :force => true do |t|
     t.string   "title"
@@ -47,6 +47,9 @@ ActiveRecord::Schema.define(:version => 20121002024306) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.string   "username"
+    t.string   "slug"
   end
+
+  add_index "searches", ["slug"], :name => "index_searches_on_slug", :unique => true
 
 end

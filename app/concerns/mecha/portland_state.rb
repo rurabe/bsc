@@ -2,53 +2,70 @@
 module Mecha
 	class PortlandState
 
-		def self.navigate(options = {}) #{:username => 'foo', :password => 'blah'}
-			username = options.fetch(:username)
-			password = options.fetch(:password)
+		def self.execute(options = {}) #{:username => 'foo', :password => 'blah', :search => #<Search>}
+			username 	= options.fetch(:username)
+			password 	= options.fetch(:password)
+			search 		= options.fetch(:search)
 
-			mecha = Mechanize.new
-			mecha.follow_meta_refresh = true
-
-			login_page = mecha.get('https://banweb.pdx.edu/pls/oprd/twbkwbis.P_WWWLogin')
-
-			login_form = login_page.form('loginform')
-				login_form.sid = username
-				login_form.PIN = password
-
-			main_page = login_form.submit
-
-			registration_page = mecha.get('https://banweb.pdx.edu/pls/oprd/twbkwbis.P_GenMenu?name=bmenu.P_RegMnu')
-
-			term_select_link = registration_page.link_with(:text => 'Student Detail Schedule')
-			term_select_page = term_select_link.click
-
-			term_form = term_select_page.forms[0]
-			term_form.field_with(:name => 'term_in').options[0].select
-			schedule_page = term_form.submit
-
-			booklist_link = schedule_page.link_with(:text => 'Booklist and course materials')
-			booklist_submit_page = booklist_link.click
-
-			booklist_page = booklist_submit_page.forms[0].submit
-		end
-
-		def self.create_courses_and_books(search, booklist_page)
-			book_list = collect_elements(booklist_page)
-			courses = []
-			book_list.each do |node|
-				if node.name == "span"
-					#then its a course!
-          courses << build_course(node,search)
-				elsif node.name == "tr"
-					#then its a book!
-					course = courses[-1]
-					build_book(node,course)
-				end
-			end
-			courses
+			booklist_page = navigate(:username => username, :password => password)
+			create_courses_and_books(:search => search,:page => booklist_page)
 		end
 
 		private
+
+			def self.navigate(options = {}) #{:username => 'foo', :password => 'blah'}
+
+				username = options.fetch(:username)
+				password = options.fetch(:password)
+
+				mecha = Mechanize.new
+				mecha.follow_meta_refresh = true
+
+				login_page = mecha.get('https://banweb.pdx.edu/pls/oprd/twbkwbis.P_WWWLogin')
+
+				login_form = login_page.form('loginform')
+					login_form.sid = username
+					login_form.PIN = password
+
+				main_page = login_form.submit
+
+				if login_failed?(main_page)
+					raise Mecha::AuthenticationError
+				end
+
+				registration_page = mecha.get('https://banweb.pdx.edu/pls/oprd/twbkwbis.P_GenMenu?name=bmenu.P_RegMnu')
+
+				term_select_link = registration_page.link_with(:text => 'Student Detail Schedule')
+				term_select_page = term_select_link.click
+
+				term_form = term_select_page.forms[0]
+				term_form.field_with(:name => 'term_in').options[0].select
+				schedule_page = term_form.submit
+
+				booklist_link = schedule_page.link_with(:text => 'Booklist and course materials')
+				booklist_submit_page = booklist_link.click
+
+				booklist_page = booklist_submit_page.forms[0].submit
+			end
+
+			def self.create_courses_and_books(options = {}) #{:search => #<Search>, :page => #<Mechanize::Page>}
+				search 				= options.fetch(:search)
+				booklist_page = options.fetch(:page)
+
+				book_list = collect_elements(booklist_page)
+				courses = []
+				book_list.each do |node|
+					if node.name == "span"
+						#then its a course!
+	          courses << build_course(node,search)
+					elsif node.name == "tr"
+						#then its a book!
+						course = courses[-1]
+						build_book(node,course)
+					end
+				end
+				courses
+			end
 
 			def self.collect_elements(booklist_page)
 				booklist_page.search("//table[starts-with(@id,'section')]/tbody/tr[contains(concat(' ',@class,' '),'book course')] | //span[@id='course-bookdisplay-coursename']")
@@ -154,6 +171,16 @@ module Mecha
 					BigDecimal.new(number)
 				else
 					nil
+				end
+			end
+
+			# Error handling
+
+			def self.login_failed?(page)
+				if page.search("//*[text()[contains(.,'Invalid User ID or Password')]]").empty?
+					false
+				else
+					true
 				end
 			end
 

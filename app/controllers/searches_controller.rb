@@ -1,26 +1,21 @@
 class SearchesController < ApplicationController
 
+	before_filter :root_redirect, :only => :new
+
 	def new
 		@search = Search.new
 	end
 
 	def create
-t0 = Time.now
-		@search = Search.new(params[:search])
-t1 = Time.now
-		booklist = Mecha::PortlandState.navigate(:username => @search.username, :password => @search.password)
-t2 = Time.now
-		Mecha::PortlandState.create_courses_and_books(@search, booklist)
-t3 = Time.now
+		@search = Search.new
+		Mecha::PortlandState.execute(	:username => params[:search][:username], 
+																	:password => params[:search][:password],
+																	:search => @search)
 		@search.save
-t4 = Time.now
-		redirect_to search_path(@search)
-
-p "Search instantiation #{t1-t0}"
-p "Navigation #{t2-t1}"
-p "Object creation #{t3-t2}"
-p "Object saving #{t4-t3}"
-p "Total #{t4-t0}"
+		rescue 
+			redirect_to new_search_url(:protocol => "https")
+		else
+			redirect_to search_url(@search, :protocol => "http")
 	end
 
 	def show
@@ -30,5 +25,16 @@ p "Total #{t4-t0}"
 	def destroy
 
 	end
+
+	private
+	
+	def root_redirect
+    if !request.ssl?
+      protocol = "https"
+      flash.keep
+      redirect_to root_url(:protocol => "https"), status: :moved_permanently
+	  end
+	end
+
 
 end

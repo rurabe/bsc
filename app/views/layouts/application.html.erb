@@ -9,6 +9,7 @@
 	<div class="container-fluid">
 		<%= yield %>
 	</div>
+	<%= debug flash if Rails.env.development? %> 
 	<%= javascript_include_tag "application" %>
 </body>
 </html>

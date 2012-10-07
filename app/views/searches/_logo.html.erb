@@ -1,6 +1,8 @@
 <div class="row-fluid">
 	<div class="logo">
-		<%= image_tag 'logo.png' %>
+		<%= link_to root_url(:protocol => "https") do %>
+			<%= image_tag 'logo.png' %>
+		<% end %>
 	</div>
 	<div class="school">
 		Portland State
