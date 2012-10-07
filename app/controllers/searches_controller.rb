@@ -1,7 +1,5 @@
 class SearchesController < ApplicationController
 
-	before_filter :root_redirect, :only => :new
-
 	def new
 		@search = Search.new
 	end
@@ -13,9 +11,9 @@ class SearchesController < ApplicationController
 																	:search => @search)
 		@search.save
 		rescue 
-			redirect_to new_search_url(:protocol => "https")
+			redirect_to new_search_url
 		else
-			redirect_to search_url(@search, :protocol => "http")
+			redirect_to search_url(@search)
 	end
 
 	def show
@@ -24,16 +22,6 @@ class SearchesController < ApplicationController
 
 	def destroy
 
-	end
-
-	private
-	
-	def root_redirect
-    if !request.ssl?
-      protocol = "https"
-      flash.keep
-      redirect_to root_url(:protocol => "https"), status: :moved_permanently
-	  end
 	end
 
 
