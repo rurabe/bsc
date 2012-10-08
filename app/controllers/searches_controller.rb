@@ -1,6 +1,8 @@
 class SearchesController < ApplicationController
 
-	before_filter :https_redirect, :only => [:new, :create]
+	before_filter :root_redirect, :only => [:new]
+	before_filter :https_redirect, :only => [:create]
+	before_filter :http_redirect, :only => [:show]
 
 	rescue_from Mecha::AuthenticationError, :with => :error_handling
 
@@ -29,17 +31,34 @@ class SearchesController < ApplicationController
 
 	end
 
+	# Error handling
+
 	def error_handling(error)
 		flash[:error] = [error.message]
 		redirect_to new_search_url
 	end
 
-	def https_redirect
+	# SSL Redirects
+
+	def root_redirect
 		if !request.ssl?
 	    flash.keep
-	    redirect_to protocol: "https", status: :moved_permanently
+	    redirect_to root_url(protocol: "https"), status: :moved_permanently
  		end
 	end
 
+	def https_redirect
+    if !request.ssl?
+      flash.keep
+      redirect_to protocol: "https", status: :moved_permanently
+	  end
+	end
+
+	def http_redirect
+    if request.ssl?
+      flash.keep
+      redirect_to protocol: "http", status: :moved_permanently
+	  end
+	end
 
 end
