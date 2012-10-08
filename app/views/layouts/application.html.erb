@@ -7,9 +7,25 @@
 </head>
 <body>
 	<div class="container-fluid">
-		<%= render 'shared/flash' if !flash.empty? %>
+		
+		<!-- Flash -->
+		<div id="flash">
+			<% flash.each do |key,array| %>
+				<div class="alert alert-<%= key %> fade in">
+					<a class="close" data-dismiss="alert" href="#">&times;</a>
+					<ul>
+						<% array.each do |error| %>
+							<li><%= error %></li>
+						<% end %>
+					</ul>
+				</div>
+			<% end %>
+		</div>
 
+		<!-- Content -->
 		<%= yield %>
+
+
 	</div>
 	<%= debug flash if Rails.env.development? %> 
 	<%= javascript_include_tag "application" %>
