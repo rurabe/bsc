@@ -7,7 +7,10 @@ $(document).ready(function(){
 	});
 
 	$('#login-button').click(function(){
-		$('#icon-carousel').carousel('cycle')
+		$('#icon-carousel').carousel({
+			interval: 2500,
+			pause: "false"
+		}).carousel('cycle')
 		$('#loadingModal').modal('show');
 	})
 
