@@ -1,5 +1,7 @@
 BookSupply::Application.routes.draw do
 
+  match "/about", :to => 'staticpages#about'
+
   resources :searches
   resources :amazonbooks, :only => :update
   

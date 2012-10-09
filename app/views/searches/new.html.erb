@@ -5,12 +5,19 @@
 			<div class="logo-inner">
 
 				<div class="logo-front">
-					<%= render :partial => 'logo' %>
+					<%= render :partial => 'shared/logo' %>
 				</div>
 				
 				<div class="loginform">
 					<%= render :partial => 'loginform' %>
 				</div>
+
+				<div class="about-info" style="display: none">
+					<%= render :partial => 'about_info' %>
+				</div>
+
+		
+				<button class="btn btn-warning" id="about-handle"> What the heck is Book Supply Co.??? </button>
 
 			</div>
 		</div>
