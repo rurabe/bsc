@@ -41,24 +41,30 @@ class SearchesController < ApplicationController
 	# SSL Redirects
 
 	def root_redirect
-		if !request.ssl?
-	    flash.keep
-	    redirect_to root_url(protocol: "https"), status: :moved_permanently
- 		end
+		if ENV["ENABLE_HTTPS"] == "yes"
+			if !request.ssl?
+		    flash.keep
+		    redirect_to root_url(protocol: "https"), status: :moved_permanently
+	 		end
+	 	end
 	end
 
 	def https_redirect
-    if !request.ssl?
-      flash.keep
-      redirect_to protocol: "https", status: :moved_permanently
-	  end
+		if ENV["ENABLE_HTTPS"] == "yes"
+	    if !request.ssl?
+	      flash.keep
+	      redirect_to protocol: "https", status: :moved_permanently
+		  end
+		end
 	end
 
 	def http_redirect
-    if request.ssl?
-      flash.keep
-      redirect_to protocol: "http", status: :moved_permanently
-	  end
+		if ENV["ENABLE_HTTPS"] == "yes"
+	    if request.ssl?
+	      flash.keep
+	      redirect_to protocol: "http", status: :moved_permanently
+		  end
+		end
 	end
 
 end
