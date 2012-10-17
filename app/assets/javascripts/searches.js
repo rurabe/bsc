@@ -44,31 +44,57 @@ $(document).ready(function(){
 	// #show
 
 	// Fetch Amazon prices
-	$('.book-amazon').each(function(){
+	$('.book-row').each(function(){
 		// Regex to pull the object ID from the #ID attribute
-		idFinder = /\d+/;
+		var idFinder = /\d+/;
+		var el = this;
 		
 		$.ajax({
 			type: 'PUT',
 			url: 	"/amazonbooks/" + idFinder.exec(this.id),
-			dataType: "html",
-			// Set this to el for reference in the callbacks
-			el: this,
+			dataType: "json",
 			success: function(data, textStatus, jqXHR){
-				$(this.el.children).fadeOut(function(){
-					el = $(this).parent();
-					$(this).remove();
-					el.html(data).hide().fadeIn();
-				});
+				// Select the td's that are updated by ajax
+				$(el).children(".book-query").each(function(){
+					// Fade out the loading divs
+					$(this).children(".loading")
+								 .fadeOut(function(){
+						// Insert amazon new price
+						$(el).children(".amazon-new")
+								 .children("span")
+								 .html(makeLink(data["new_price"],data["new_link"]))
+								 .hide()
+								 .fadeIn();
+						// Insert amazon used price 
+						$(el).children(".amazon-used")
+								 .children("span")
+								 .html(makeLink(data["used_price"],data["used_link"]))
+								 .hide()
+								 .fadeIn();
+					});
+				})
+
 			},
 			error: function(jqXHR, textStatus, errorThrown){
-				$(this.el.children).fadeOut(function(){
-					el = $(this).parent();
-					$(this).remove();
-					el.append("N/A").hide().fadeIn();
-					console.log(errorThrown);
-				});
+				$(el).children(".book-query").each(function(){
+					// Fade out the loading divs
+					$(this).children(".loading")
+								 .fadeOut(function(){
+						$(this).parent().html("Error").hide().fadeIn();
+						console.log(errorThrown);
+					});
+				})
 			}
 		});
 	});
+	
+	$('span:contains(Sold out)').addClass('label')
+
+	var makeLink = function(price,link){
+		if (price === 'Sold out') {
+			return '<a href=' + link +' target="_blank"><span class="label">' + price + '</span></a>'
+		} else {
+			return '<a href=' + link +' target="_blank">' + price + '</a>'
+		}
+	};
 });

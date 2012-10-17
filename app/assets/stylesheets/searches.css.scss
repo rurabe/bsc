@@ -164,7 +164,7 @@ body {
 
 }
 
-.book-table thead {
+.book-table thead tr.header-row {
 	border-bottom: 2px solid #CC0052;
 }
 
@@ -183,12 +183,22 @@ body {
 	text-indent: 10px;
 }
 
-.book-bookstore {
-	text-align: center !important;
+
+th.header {
+	text-align: center;
 }
 
-.book-amazon {
-	text-align: center !important;
+th.subheader {
+	text-align: center;
+
+}
+
+td.book-bookstore {
+	text-align: center;
+}
+
+td.book-amazon {
+	text-align: center;
 
 }
 

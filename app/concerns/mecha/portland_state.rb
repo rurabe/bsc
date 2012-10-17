@@ -54,6 +54,7 @@ module Mecha
 
 				book_list = collect_elements(booklist_page)
 				courses = []
+				books = []
 				book_list.each do |node|
 					if node.name == "span"
 						#then its a course!
@@ -61,10 +62,10 @@ module Mecha
 					elsif node.name == "tr"
 						#then its a book!
 						course = courses[-1]
-						build_book(node,course)
+						books << build_book(node,course)
 					end
 				end
-				courses
+				{:courses => courses, :books => books}
 			end
 
 			def self.collect_elements(booklist_page)

@@ -17,38 +17,51 @@ class Book < ActiveRecord::Base
 
   default_scope order('requirement DESC')
 
-  def amazon_referral_link
+  def amazon_new_link
   	"https://www.amazon.com/dp/#{self.asin}?tag=booksupply-20" if asin
   end
 
+  def amazon_used_link
+    "http://www.amazon.com/gp/offer-listing/#{self.asin}?tag=booksupply-20" if asin
+  end
+
   def query_amazon
-    response = amazon_item_search(keywords)
+    response = amazon_item_search(keywords) # returns an array of 0-20 products
     parse_amazon_response(response)
   end
+    
 
   private
 
     def amazon_item_search(keywords,options={})
       default_options = {:response_group => 'Offers',
                          :search_index => 'Books', 
-                         :sort => 'relevancerank'}
+                         :sort => 'relevancerank',
+                         :'ItemSearch.1.Condition'=> 'New', 
+                         :'ItemSearch.2.Condition' => 'Used',
+                         :'ItemSearch.1.MerchantId'=> 'Amazon', 
+                        }
       parameters = default_options.merge(options)
 
       response = Amazon::Ecs.item_search(keywords,parameters).items
-      response.first if response
     end
 
     def parse_amazon_response(response)
-      self.asin = parse_amazon_asin(response)
-      self.amazon_new_price = parse_amazon_new_price(response)
+      if best_match = response.first
+        self.asin               = best_match.get('ASIN')
+      end
+      
+      if new_offer = response.find { |item| item.get('Offers/Offer/OfferAttributes/Condition') == 'New' }
+        self.amazon_new_price   = parse_amazon_price(new_offer)
+      end
+
+      if used_offer = response.find { |item| item.get('Offers/Offer/OfferAttributes/Condition') == 'Used' }
+        self.amazon_used_price  = parse_amazon_price(used_offer)
+      end
     end
 
-    def parse_amazon_asin(response)
-      response.get('//ASIN')
-    end
-
-    def parse_amazon_new_price(response)
-      price = response.get('//OfferListing/Price/Amount')
+    def parse_amazon_price(response)
+      price = response.get('Offers/Offer/OfferListing/Price/Amount')
       price.to_d / 100 if price
     end
 

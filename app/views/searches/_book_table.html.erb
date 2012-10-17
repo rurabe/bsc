@@ -1,33 +1,82 @@
 <div class="row-fluid">
 	<table class="book-table table">
+
 		<thead>
-			<th></th>
-			<th></th>
-			<th class="book-bookstore">Bookstore</th>
-			<th class="book-bookstore"><%= image_tag 'amazon-icon.jpg' %></th>
+			<tr class="header-row">
+				<th></th>
+				<th></th>
+				<th class="header" colspan="2">Bookstore</th>
+				<th class="header" colspan="2"><%= image_tag 'amazon-icon.jpg' %></th>
+			</tr>
+			<tr class="subhead-row">
+				<th></th>
+				<th></th>
+				<!-- Bookstore -->
+				<th class="subheader">
+					<span class="label label-info">New</span>
+				</th>
+				<th class="subheader">
+					<span class="label label-info">Used</span>
+				</th>
+				<!-- Amazon -->
+				<th class="subheader">
+					<span class="label label-info">New</span>
+				</th>
+				<th class="subheader">
+					<span class="label label-info">Used</span>
+				</th>
+
+			</tr>
+
 		</thead>
+		
 		<% @search.courses.each do |course| %>
 			<tr>
-				<td class="course-header" colspan=4>
+				<td class="course-header" colspan=6>
 					<%= course.department %> <%= course.number %>
 				</td>
 			</tr>
 			<% course.books.each do |book| %>
-				<tr id="row-<%= book.id %>">
+				<tr class="book-row" id="book-row-<%= book.id %>">
+
 					<td class="book-requirement">
 							<span class="label requirement <%= requirement_class(book.requirement) %>">
 								<%= book.requirement %>
 							</span>
 					</td>
+
 					<td class="book-title">
+						<span>
 						<%= book.title %> 
+						</span>
 					</td>
-					<td class="book-bookstore" id="bookstore-<%= book.id %>">
+
+					<!-- Bookstore -->
+					<td class="book-bookstore bookstore-new" >
+						<span>
 						<%= show_price(book.bookstore_new_price) %>
+						</span>
 					</td>
-					<td class="book-amazon" id="amazon-<%= book.id %>">
+
+					<td class="book-bookstore bookstore-used">
+						<span>
+						<%= show_price(book.bookstore_used_price) %>
+						</span>
+					</td>
+
+					<!-- Amazon -->
+					<td class="book-query book-amazon amazon-new">
 						<div class="loading"></div>
+						<span>
+						</span>
 					</td>
+
+					<td class="book-query book-amazon amazon-used">
+						<div class="loading"></div>
+						<span>
+						</span>
+					</td>
+
 				</tr>
 			<% end %>
 		<% end %>

@@ -4,7 +4,7 @@ module SearchesHelper
 		if price
 			number_to_currency(price)
 		else
-			"N/A"
+			"Sold out"
 		end
 	end
 
