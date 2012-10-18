@@ -1,6 +1,7 @@
 BookSupply::Application.routes.draw do
 
-  match "/about", :to => 'staticpages#about'
+  match "/about"        => 'staticpages#about'
+  match '/channel.html' => Facebook::Channel
 
   resources :searches
   resources :amazonbooks, :only => :update

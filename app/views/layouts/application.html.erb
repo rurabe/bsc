@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:fb="http://ogp.me/ns/fb#">
 <head>
   <title>BookSupply</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= csrf_meta_tags %>
 </head>
 <body>
+	<div id="fb-root"></div>
 	<div class="container-fluid">
 		
 		<!-- Flash -->
@@ -25,8 +26,11 @@
 		<!-- Content -->
 		<%= yield %>
 
+	<div>
+		
 
-	</div>
+
+
 	<%= javascript_include_tag "application" %>
 </body>
 </html>
