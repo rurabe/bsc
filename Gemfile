@@ -10,6 +10,7 @@ gem 'mechanize'
 gem 'amazon-ecs'
 gem 'friendly_id'
 gem 'font-awesome-rails'
+gem 'newrelic_rpm'
 
 # Gems used only for assets and not required
 # in production environments by default.
