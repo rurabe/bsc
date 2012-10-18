@@ -92,9 +92,11 @@ $(document).ready(function(){
 
 	var makeLink = function(price,link){
 		if (price === 'Sold out') {
-			return '<a href=' + link +' target="_blank"><span class="label">' + price + '</span></a>'
+			return '<a href=' + link +' target="_blank"><span class="label">' + price + '</span></a>';
+		} else if (price) {
+			return '<a href=' + link +' target="_blank">' + price + '</a>';
 		} else {
-			return '<a href=' + link +' target="_blank">' + price + '</a>'
+			return price;
 		}
 	};
 });
