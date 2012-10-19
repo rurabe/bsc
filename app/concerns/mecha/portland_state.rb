@@ -18,7 +18,7 @@ module Mecha
 				username = options.fetch(:username)
 				password = options.fetch(:password)
 
-				if username == nil || password == nil
+				if username.blank? || password.blank?
 					raise Mecha::AuthenticationError
 				end
 

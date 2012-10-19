@@ -6,6 +6,7 @@ class SearchesController < ApplicationController
 
 	rescue_from Mecha::AuthenticationError, :with => :error_handling
 
+
 	def new
 		@search = Search.new
 	end
