@@ -18,6 +18,10 @@ module Mecha
 				username = options.fetch(:username)
 				password = options.fetch(:password)
 
+				if username == nil || password == nil
+					raise Mecha::AuthenticationError
+				end
+
 				mecha = Mechanize.new
 				mecha.follow_meta_refresh = true
 
