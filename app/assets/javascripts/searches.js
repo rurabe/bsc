@@ -60,20 +60,10 @@ $(document).ready(function(){
 					$(this).children(".loading")
 								 .fadeOut(function(){
 						// Insert amazon new price
-						$(el).children(".amazon-new")
-								 .children("span")
-								 .html(makeLink(data["new_price"],data["new_link"]))
-								 .hide()
-								 .fadeIn();
-						// Insert amazon used price 
-						$(el).children(".amazon-used")
-								 .children("span")
-								 .html(makeLink(data["used_price"],data["used_link"]))
-								 .hide()
-								 .fadeIn();
+						newDiv = fillDiv($(el).children(".amazon-new"),data["new_price"],data["new_link"]).toHtml()
+						usedDiv = fillDiv($(el).children(".amazon-used"),data["used_price"],data["used_link"]).toHtml()
 					});
-				})
-
+				});
 			},
 			error: function(jqXHR, textStatus, errorThrown){
 				$(el).children(".book-query").each(function(){
@@ -87,16 +77,55 @@ $(document).ready(function(){
 			}
 		});
 	});
-	
-	$('span:contains(Sold out)').addClass('label')
 
-	var makeLink = function(price,link){
-		if (price === 'Sold out') {
-			return '<a href=' + link +' target="_blank"><span class="label">' + price + '</span></a>';
-		} else if (price) {
-			return '<a href=' + link +' target="_blank">' + price + '</a>';
-		} else {
-			return price;
+	var fillDiv = function(div,price,link){
+		return {
+			div: div,
+			price: price,
+			link: link,
+			toHtml: function(){
+				if (this.price === "Sold out"){
+					return this.soldOutLabel();
+				} else {
+					return this.priceLink();
+				}
+
+			},
+			priceLink: function(){
+				this.div.addClass("selectable");
+				this.makeToggleable();
+				this.div.children("span")
+								.html(this.price)
+								.hide()
+								.fadeIn();
+			},
+			soldOutLabel: function(){
+				this.div.children("span")
+								.html(
+									'<a href=' + this.link +' target="_blank"><span class="label">' + this.price + '</span></a>')
+								.hide()
+								.fadeIn();
+			},
+			makeToggleable: function(){
+				this.div.toggle(
+					function(){
+						$(this).siblings(".selected").click();
+						$(this).addClass("selected");
+					},
+					function(){
+						$(this).removeClass("selected");
+					}
+				);
+			}
 		}
 	};
+	
+
+	// Format bookstore sold outs as labels
+	$('span:contains(Sold out)').addClass('label')
+
+	
+
+
+
 });
