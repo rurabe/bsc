@@ -11,7 +11,9 @@ class Book < ActiveRecord::Base
                   :bookstore_used_price,
                   :bookstore_used_rental_price,
                   :amazon_new_price,
-                  :amazon_used_price
+                  :amazon_new_offer_listing_id,
+                  :amazon_used_price,
+                  :amazon_used_offer_listing_id
 
   belongs_to :course
 
@@ -52,17 +54,25 @@ class Book < ActiveRecord::Base
       end
       
       if new_offer = response.find { |item| item.get('Offers/Offer/OfferAttributes/Condition') == 'New' }
-        self.amazon_new_price   = parse_amazon_price(new_offer)
+        self.amazon_new_price            = parse_amazon_price(new_offer)
+        self.amazon_new_offer_listing_id = parse_amazon_offer_listing_id(new_offer)
+
       end
 
       if used_offer = response.find { |item| item.get('Offers/Offer/OfferAttributes/Condition') == 'Used' }
-        self.amazon_used_price  = parse_amazon_price(used_offer)
+        self.amazon_used_price            = parse_amazon_price(used_offer)
+        self.amazon_used_offer_listing_id = parse_amazon_offer_listing_id(used_offer)
       end
+      self
     end
 
     def parse_amazon_price(response)
       price = response.get('Offers/Offer/OfferListing/Price/Amount')
       price.to_d / 100 if price
+    end
+
+    def parse_amazon_offer_listing_id(response)
+      offer_listing_id = response.get('Offers/Offer/OfferListing/OfferListingId')
     end
 
     def keywords

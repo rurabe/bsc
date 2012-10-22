@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121007004859) do
+ActiveRecord::Schema.define(:version => 20121022014936) do
 
   create_table "books", :force => true do |t|
     t.string   "title"
@@ -22,14 +22,16 @@ ActiveRecord::Schema.define(:version => 20121007004859) do
     t.string   "requirement"
     t.string   "asin"
     t.integer  "course_id"
-    t.datetime "created_at",                                                :null => false
-    t.datetime "updated_at",                                                :null => false
-    t.decimal  "bookstore_new_price",         :precision => 6, :scale => 2
-    t.decimal  "bookstore_new_rental_price",  :precision => 6, :scale => 2
-    t.decimal  "bookstore_used_price",        :precision => 6, :scale => 2
-    t.decimal  "bookstore_used_rental_price", :precision => 6, :scale => 2
-    t.decimal  "amazon_new_price",            :precision => 6, :scale => 2
-    t.decimal  "amazon_used_price",           :precision => 6, :scale => 2
+    t.datetime "created_at",                                                 :null => false
+    t.datetime "updated_at",                                                 :null => false
+    t.decimal  "bookstore_new_price",          :precision => 6, :scale => 2
+    t.decimal  "bookstore_new_rental_price",   :precision => 6, :scale => 2
+    t.decimal  "bookstore_used_price",         :precision => 6, :scale => 2
+    t.decimal  "bookstore_used_rental_price",  :precision => 6, :scale => 2
+    t.decimal  "amazon_new_price",             :precision => 6, :scale => 2
+    t.decimal  "amazon_used_price",            :precision => 6, :scale => 2
+    t.string   "amazon_new_offer_listing_id"
+    t.string   "amazon_used_offer_listing_id"
   end
 
   create_table "courses", :force => true do |t|

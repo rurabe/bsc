@@ -92,7 +92,6 @@ $(document).ready(function(){
 
 			},
 			priceLink: function(){
-				this.div.addClass("selectable");
 				this.makeToggleable();
 				this.div.children("span")
 								.html(this.price)
@@ -107,6 +106,7 @@ $(document).ready(function(){
 								.fadeIn();
 			},
 			makeToggleable: function(){
+				this.div.addClass("selectable");
 				this.div.toggle(
 					function(){
 						$(this).siblings(".selected").click();
@@ -124,7 +124,37 @@ $(document).ready(function(){
 	// Format bookstore sold outs as labels
 	$('span:contains(Sold out)').addClass('label')
 
-	
+
+	var checkoutData = function(){
+
+		var selectedBooks = $('.selected').map(function(){
+			return $(this).attr('id')
+		});
+
+		var bookParser = function(collection,vendor,condition){
+			return collection.map(function(){
+				match = this.match(vendor + "-" + condition + "-(\\d+)");
+				if (match) {
+					return match[1];
+				}
+			}).get();
+		};
+
+		return {
+			amazon:{
+				new:  bookParser(selectedBooks,"amazon","new"),
+				used: bookParser(selectedBooks,"amazon","used")
+			}
+		};
+	};
+
+	$('#checkout-amazon').click(function(){
+		$.ajax({
+			type: 'PUT',
+			url: 	"/amazonbooks/300",
+			data: checkoutData()
+		});
+	});
 
 
 
