@@ -51,7 +51,7 @@ $(document).ready(function(){
 		
 		$.ajax({
 			type: 'PUT',
-			url: 	"/amazonbooks/" + idFinder.exec(this.id),
+			url: 	"/books/" + idFinder.exec(this.id),
 			dataType: "json",
 			success: function(data, textStatus, jqXHR){
 				// Select the td's that are updated by ajax
@@ -124,35 +124,53 @@ $(document).ready(function(){
 	// Format bookstore sold outs as labels
 	$('span:contains(Sold out)').addClass('label')
 
-
+	// checkoutData returns an array of selected book objects with id, vendor, and condition
 	var checkoutData = function(){
-
+		// Get the DOM nodes
 		var selectedBooks = $('.selected').map(function(){
 			return $(this).attr('id')
 		});
-
+		// function to parse the ids into an array of objects
 		var bookParser = function(collection,vendor,condition){
 			return collection.map(function(){
 				match = this.match(vendor + "-" + condition + "-(\\d+)");
 				if (match) {
-					return match[1];
+					return {	book_id: match[1],
+										condition: condition,
+										vendor: vendor };
 				}
 			}).get();
 		};
-
-		return {
-			amazon:{
-				new:  bookParser(selectedBooks,"amazon","new"),
-				used: bookParser(selectedBooks,"amazon","used")
-			}
-		};
+		// return the array
+		return	bookParser(selectedBooks,"amazon","new").concat(
+						bookParser(selectedBooks,"amazon","used"))
 	};
 
+	// set the behavior of the checkout button
 	$('#checkout-amazon').click(function(){
+		$('#checkout-amazon-text').fadeOut(function(){
+			$(this).html('Loading...')
+						 .hide()
+						 .fadeIn();
+		});
+
 		$.ajax({
-			type: 'PUT',
-			url: 	"/amazonbooks/300",
-			data: checkoutData()
+			type: 'POST',
+			url: 	window.location.pathname + "/carts",
+			data: {cart: {cart_items_attributes: checkoutData()}},
+			dataType: "json",
+			success: function(data, textStatus, jqXHR){
+				$('#checkout-amazon-text').fadeOut(function(){
+					$(this).html('<i class="icon-shopping-cart"></i> Go to cart')
+						 		 .hide()
+						 		 .fadeIn();
+					$('#checkout-amazon').wrap('<a href="' + data["link"] + '" target="_blank" />');
+				});
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				console.log("error!")
+				console.log(errorThrown);
+			}
 		});
 	});
 

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  book: 
+  cart: 
+  condition: MyString
+  offer_listing_id: MyString
+
+two:
+  book: 
+  cart: 
+  condition: MyString
+  offer_listing_id: MyString

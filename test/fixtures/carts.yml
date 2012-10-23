@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  search: 
+  vendor: MyString
+  link: MyString
+
+two:
+  search: 
+  vendor: MyString
+  link: MyString
