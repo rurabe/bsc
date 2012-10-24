@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121022182155) do
+ActiveRecord::Schema.define(:version => 20121023230002) do
 
   create_table "books", :force => true do |t|
     t.string   "title"
@@ -33,30 +33,6 @@ ActiveRecord::Schema.define(:version => 20121022182155) do
     t.string   "amazon_new_offer_listing_id"
     t.string   "amazon_used_offer_listing_id"
   end
-
-  create_table "cart_items", :force => true do |t|
-    t.integer  "book_id"
-    t.integer  "cart_id"
-    t.string   "condition"
-    t.string   "offer_listing_id"
-    t.datetime "created_at",                                     :null => false
-    t.datetime "updated_at",                                     :null => false
-    t.decimal  "price",            :precision => 6, :scale => 2
-    t.string   "vendor"
-  end
-
-  add_index "cart_items", ["book_id"], :name => "index_cart_items_on_book_id"
-  add_index "cart_items", ["cart_id"], :name => "index_cart_items_on_cart_id"
-
-  create_table "carts", :force => true do |t|
-    t.integer  "search_id"
-    t.string   "vendor"
-    t.string   "link"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  add_index "carts", ["search_id"], :name => "index_carts_on_search_id"
 
   create_table "courses", :force => true do |t|
     t.string   "department"

@@ -1,20 +1,22 @@
 class AmazonCartQuery
+	attr_reader :link
 
-	def initialize(cart)
-		@cart = cart
+	def initialize(params)
+		@books = params
 		@request_defaults = {
 			:operation		=> 'CartCreate',
 			:service 			=> 'AWSECommerceService' 	 
 		}
-	end
-
-	def create_cart
-		response = send_request
-		link = parse_node(response.doc,'./CartCreateResponse/Cart/PurchaseURL')
-		{ :link => link }
+		@link = nil
+		create_cart
 	end
 	
 	private
+
+		def create_cart
+			response = send_request
+			@link = parse_node(response.doc,'./CartCreateResponse/Cart/PurchaseURL')
+		end
 
 		def send_request
 			# Amazon::Ecs.send_request(:operation => 'CartCreate',:'Item.1.OfferListingId' => 'cdr23rg...', :'Item.1.Quantity' => 1,:service => "AWSECommerceService")
@@ -34,7 +36,7 @@ class AmazonCartQuery
 		end
 
 		def get_item_offer_listing_ids
-			@cart.cart_items.map(&:offer_listing_id)
+			AmazonItemLookup.new(@books).offer_listing_ids
 		end
 
 		def parse_node(node,xpath)

@@ -43,7 +43,10 @@ module Mecha
 				term_select_page = term_select_link.click
 
 				term_form = term_select_page.forms[0]
-				term_form.field_with(:name => 'term_in').options[0].select
+				term_field = term_form.field_with(:name => 'term_in')
+					available_terms = term_field.options.map(&:text)
+					latest_term = available_terms.find_index {|term| term !~ /View only/i }
+				term_field.options[latest_term].select
 				schedule_page = term_form.submit
 
 				booklist_link = schedule_page.link_with(:text => 'Booklist and course materials')
