@@ -61,5 +61,8 @@ module BookSupply
 
     # Load modules from concerns
     config.autoload_paths += %W(#{Rails.root}/app/concerns)
+
+    # For deployment on heroku
+    config.assets.initialize_on_precompile = false
   end
 end
