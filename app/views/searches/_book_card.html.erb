@@ -3,8 +3,16 @@
 
 		<thead>
 			<tr class="header-row">
-				<th></th>
-				<th></th>
+				<th colspan="2">
+					<label class="checkout-label">
+						<input type="radio" id="simple" name="checkout-option" value="simple" class="checkout-radio">
+						<span class="label">Just links</span>
+					</label>
+					<label class="checkout-label">
+						<input type="radio" id="express" name="checkout-option" value="express" class="checkout-radio" checked="checked"> 
+						<span class="label label-info"><i>Express mode!!!</i></span>
+					</label>
+				</th>
 				<th class="header" colspan="2">Bookstore</th>
 				<th class="header" colspan="2"><%= image_tag 'amazon-icon.jpg' %></th>
 			</tr>
@@ -67,14 +75,11 @@
 					<!-- Amazon -->
 					<td class="book-query book-amazon amazon-new" id="amazon-new-<%= book.id %>">
 						<div class="loading"></div>
-						<span>
-						</span>
 					</td>
 
 					<td class="book-query book-amazon amazon-used" id="amazon-used-<%= book.id %>">
 						<div class="loading"></div>
-						<span>
-						</span>
+
 					</td>
 
 				</tr>

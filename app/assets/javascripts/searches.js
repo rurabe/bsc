@@ -44,31 +44,93 @@ $(document).ready(function(){
 
 		// [----------===== ** Helper Methods (Async Book Prices) ** =====----------]
 
-			// Constructor for priceDiv objects, which are called in the ajax callback using the method .toHtml
-			var priceDiv = function(div,price,asin){
+			// Constructor for priceDiv objects, which are called in the ajax callback
+			var priceDiv = function(div,price,asin,condition){
 				return {
 					div: div,
-					price: price,
-					asin: asin,
-					toHtml: function(){
-						console.log(this);
-						if (this.price === "Sold out"){
-							this.soldOutLabel();
+					price: 			function(){
+												if (price === undefined){
+													return this.div.attr('data-price')
+												} else if (asin === ""){
+													return "Not found"
+												} else {
+													return price
+												}
+											}(),
+					asin: 			function(){
+												if (asin === undefined){
+													return this.div.attr('data-asin')
+												} else if (asin === ""){
+													return null
+												} else {
+													return asin
+												}
+											}(),
+					condition:	condition || this.div.attr("id").match(/-(\w+)-/)[1],
+					changeContent: function(html,callback){
+						callback = callback || $.noop;
+						var that = this
+						that.div.children()
+										.fadeOut(function(){
+											$(that.div).html(
+																	'<span class="priceDiv-content">' + html + '</span>')
+														 		 .hide()
+																 .fadeIn();
+											callback();
+										});
+						
+					},
+					toSimpleDiv: function(){
+						this.div.off()
+						this.div.addClass("simple")
+						this.div.removeClass("selectable")
+						if (this.price === "Sold out" || this.price === "Not found"){
+							this.simpleSoldOut();
 						} else {
-							this.priceLink();
+							this.simplePrice();
 						}
-
 					},
-					priceLink: function(){
+					simplePrice: function(){
+						this.changeContent(
+							'<a href=' + this.link() + ' target="_blank">' +
+								 this.price
+							+ '</a>'
+						);
+					},
+					simpleSoldOut: function(){
+						this.changeContent(
+							this.makeLabel(this.price)
+						);
+					},
+					toExpressDiv: function(){
+						this.div.addClass("selectable")
+						if (this.price === "Sold out" || this.price === "Not found"){
+							this.expressSoldOut();
+						} else {
+							this.expressPrice();
+						}
+					},
+					expressPrice: function(){
+						var that = this
 						this.makeToggleable();
-						this.addAsinToDiv();
-						this.addPriceToDiv();
-						this.changeContent(this.price);
+						this.addDataAttributes();
+						this.changeContent(this.price,function(){
+							that.div.removeClass("simple")
+						});
 					},
-					soldOutLabel: function(){
-						this.addAsinToDiv();
-						this.addPriceToDiv();
-						this.changeContent('<span class="label">' + this.price + '</span>')
+					expressSoldOut: function(){
+						var that = this
+						this.addDataAttributes();
+						this.changeContent(
+							this.makeLabel(this.price),function(){
+								that.div.removeClass("simple")
+								console.log(that.div)
+							}
+						)
+					},
+					addDataAttributes: function(){
+						this.div.attr('data-price',this.price)
+						this.div.attr('data-asin',this.asin)
 					},
 					makeToggleable: function(){
 						this.div.addClass("selectable");
@@ -77,25 +139,56 @@ $(document).ready(function(){
 							$(this).siblings(".selected").removeClass("selected")
 							resetCheckoutButton();
 						});
-
 					},
-					changeContent: function(html){
-						this.div.children("span")
-										.html(html)
-										.hide()
-										.fadeIn();
+					makeLinkable: function(content){
+						return '<a href=' + this.link() + ' target="_blank">' +
+							content
+						+ '</a>'
 					},
-					addAsinToDiv: function(){
-						this.div.attr('data-asin',this.asin)
+					makeLabel: function(content){
+						return '<span class="label">' + content + '</span>'
 					},
-					addPriceToDiv: function(){
-						this.div.attr('data-price',this.price)
+					link: function(){
+						if (this.asin){
+							if (this.condition === "new") {
+								return this.newLink();
+							} else {
+								return this.usedLink();
+							}
+						}
+					},
+					newLink: function(){
+						return "https://www.amazon.com/dp/" + this.asin + "?tag=booksupply-20"
+					},
+					usedLink: function(){
+						return "http://www.amazon.com/gp/offer-listing/" + this.asin + "?tag=booksupply-20"
 					}
 				}
 			};
 
+		var priceDivsHeartShapedBox = {
+			divs: [],
+			makeSimple: function(){
+				$.each(this.divs,function(){
+					this.toSimpleDiv();
+				});
+			},
+			makeExpress: function(){
+				$.each(this.divs,function(){
+					this.toExpressDiv();
+				});
+			}
+		}
+
 	// [----------=====Async Book Prices=====----------]
-		
+
+		$('#simple').change(function(){
+			priceDivsHeartShapedBox.makeSimple();
+		});
+		$('#express').change(function(){
+			priceDivsHeartShapedBox.makeExpress();
+		});		
+
 		// Format bookstore sold outs as labels on load
 		$('span:contains(Sold out)').addClass('label')
 
@@ -107,24 +200,27 @@ $(document).ready(function(){
 				url: 	"/books/" + this.id.match(/\d+/),
 				dataType: "json",
 				success: function(data, textStatus, jqXHR){
-					// Fade out the loading divs
-					$(el).children(".amazon-new")
-							 .children(".loading")
-							 .fadeOut(function(){
-							 		priceDiv($(el).children(".amazon-new"),data["new_price"],data["asin"]).toHtml();
-							 });
-					$(el).children(".amazon-used")
-							 .children(".loading")
-							 .fadeOut(function(){
-							 		priceDiv($(el).children(".amazon-used"),data["used_price"],data["asin"]).toHtml();
-							 });
+					newDiv 		= $(el).children(".amazon-new");
+					newPrice 	= data["new_price"];
+					asin 			= data["asin"];
+
+					newPriceDiv = priceDiv(newDiv,newPrice,asin,"new");
+					newPriceDiv.toExpressDiv();
+
+					usedDiv		= $(el).children(".amazon-used");
+					usedPrice = data["used_price"];
+
+					usedPriceDiv = priceDiv(usedDiv,usedPrice,asin,"used");
+					usedPriceDiv.toExpressDiv();
+
+					priceDivsHeartShapedBox.divs.push(newPriceDiv,usedPriceDiv);
 				},
 				error: function(jqXHR, textStatus, errorThrown){
 					$(el).children(".book-query").each(function(){
 						// Fade out the loading divs
 						$(this).children(".loading")
 									 .fadeOut(function(){
-							$(this).parent().html("Error").hide().fadeIn();
+							$(this).parent().html('Error').hide().fadeIn();
 							console.log(errorThrown);
 						});
 					})

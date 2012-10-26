@@ -239,10 +239,21 @@ td.book-amazon {
 
 .selected{
 	background-color: #3A87AD;
-
 }
 
 .selected span{
+	color: #FFFFFF;
+}
+
+.simple{
+	background-color: #FFFFFF;
+}
+
+.simple span{
+	color: #08C;
+}
+
+.simple span.label{
 	color: #FFFFFF;
 }
 
@@ -250,3 +261,11 @@ td.book-amazon {
 	text-align: center;
 }
 
+input.checkout-radio {
+	vertical-align: middle;
+	margin: 0px;
+}
+
+label.checkout-label {
+	display: inline;
+}
