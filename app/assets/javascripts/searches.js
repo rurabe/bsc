@@ -49,6 +49,30 @@ $(document).ready(function(){
 	
 		// [----------===== ** Helper Methods (Async Book Prices) ** =====----------]
 
+			var checkoutData = function(){
+				var getAsins = function(collection){
+					return collection.map(function(){
+						return $(this).attr('data-asin')
+					}).get();
+				};
+
+				var response = {
+					amazon: {}
+				};
+
+				var new_books = getAsins($('.selected.amazon-new'));
+				var used_books = getAsins($('.selected.amazon-used'));
+
+				if (new_books.length != 0){
+					response.amazon.new = new_books;
+				}
+				if (used_books.length != 0){
+					response.amazon.used = used_books;
+				}
+				console.log(response)
+				return window.location.pathname + "/carts?" + $.param(response);
+			};
+
 			// Constructor for priceDiv objects, which are called in the ajax callback
 			var priceDiv = function(div,price,asin,condition){
 				return {
@@ -118,6 +142,7 @@ $(document).ready(function(){
 					expressPrice: function(){
 						var that = this
 						this.makeToggleable();
+						this.setCheckoutLinkHandler();
 						this.addDataAttributes();
 						this.changeContent(this.price,function(){
 							that.div.removeClass("simple")
@@ -129,7 +154,6 @@ $(document).ready(function(){
 						this.changeContent(
 							this.makeLabel(this.price),function(){
 								that.div.removeClass("simple")
-								console.log(that.div)
 							}
 						)
 					},
@@ -142,8 +166,15 @@ $(document).ready(function(){
 						this.div.click(function(){
 							$(this).toggleClass("selected")
 							$(this).siblings(".selected").removeClass("selected")
-							resetCheckoutButton();
 						});
+					},
+					setCheckoutLinkHandler: function(){
+						this.div.click(function(){
+							$('a > #checkout-amazon').unwrap()
+							$('#checkout-amazon').wrap(
+								'<a href="' + checkoutData() + '" target="_blank" data-method="post" rel="nofollow"/>'
+							)
+						})
 					},
 					makeLinkable: function(content){
 						return '<a href=' + this.link() + ' target="_blank">' +
@@ -229,85 +260,5 @@ $(document).ready(function(){
 				}
 			});
 		});
-
-	// [----------=====Checkout Button=====----------]
-		// [----------===== ** Helper Methods(Checkout Button) ** =====----------]
-
-			// 
-			var createCart = function(){
-				$.ajax({
-					type: 'POST',
-					url: 	window.location.pathname + "/carts",
-					data: checkoutData(),
-					dataType: "json",
-					beforeSend: function(){
-						changeCheckoutButton('Loading...');	
-					},
-					success: function(data, textStatus, jqXHR){
-						changeCheckoutButton('Go to cart')
-						$('#checkout-amazon').wrap('<a href="' + data["link"] + '" target="_blank" />').click();
-
-					},
-					error: function(jqXHR, textStatus, errorThrown){
-						console.log("Error: " + errorThrown);
-						resetCheckoutButton();
-					}
-				});
-				$('#checkout-amazon').off("click",createCart);
-			};
-
-			// Function to return data to the ajax request based on the
-			// elements selected by the user.
-			var checkoutData = function(){
-				// Get the ASINs from the divs
-				var getAsins = function(collection){
-					return collection.map(function(){
-						return $(this).attr('data-asin')
-					}).get();
-				};
-				// return the object
-				var response = {
-					amazon: {}
-				};
-
-				var new_books = getAsins($('.selected.amazon-new'));
-				var used_books = getAsins($('.selected.amazon-used'));
-
-				if (new_books.length != 0){
-					response.amazon.new = new_books;
-				}
-				if (used_books.length != 0){
-					response.amazon.used = used_books;
-				}
-				return response;
-			};
-
-			// Change the contents of the checkout button. Optional callback for additional actions
-			// after the fadeOut completes
-			var changeCheckoutButton = function(html,callback){
-				callback = callback || $.noop;
-				$('#checkout-amazon-text').fadeOut(function(){
-					$(this).html(html)
-								 .hide()
-								 .fadeIn();
-					callback();
-				});
-			};
-
-			// Reset the checkout button, usually after the selection changes.
-			var resetCheckoutButton = function(){
-				if ($('#checkout-amazon-text').text() != "Checkout"){
-					changeCheckoutButton('Checkout');
-					$('a > #checkout-amazon').unwrap();
-					$('#checkout-amazon').on("click",createCart);
-					console.log("reset")
-				}
-			};
-
-		// [----------===== ** Execution Code (Checkout Button) ** =====----------]
-
-		// set the behavior of the checkout button
-
-		$('#checkout-amazon').on("click",createCart);
 
 });

@@ -90,10 +90,13 @@
 			<td></td>
 			<td colspan="2"></td>
 			<td id="checkout-amazon-td" colspan="2" class="centered">
-				<button class="btn btn-info" id="checkout-amazon">
-					<span id="checkout-amazon-icon"><i class="icon-amazon "></i></span>
-					<span id="checkout-amazon-text">Checkout</span>
-				</button>
+				<%= link_to search_carts_path(@search), :method => :post do %>
+					<button type="submit" class="btn btn-info" id="checkout-amazon">
+						<span id="checkout-amazon-icon"><i class="icon-amazon "></i></span>
+						<span id="checkout-amazon-text">Checkout</span>
+					</button>
+				<% end %>
+
 			</td>
 		</tr>
 
