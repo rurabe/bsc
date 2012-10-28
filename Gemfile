@@ -9,7 +9,6 @@ gem 'pg'
 gem 'mechanize'
 gem 'amazon-ecs'
 gem 'friendly_id'
-gem 'font-awesome-rails'
 gem 'newrelic_rpm'
 
 
@@ -23,7 +22,6 @@ group :assets do
   # gem 'therubyracer', :platforms => :ruby
 
   gem 'uglifier', '>= 1.0.3'
-
 end
 
 group :development do

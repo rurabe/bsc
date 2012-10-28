@@ -42,6 +42,11 @@ $(document).ready(function(){
 
 	// [----------------------------------------===== #SHOW =====----------------------------------------]
 
+		// Format bookstore sold outs as labels on load
+		$('span:contains(Sold out)').addClass('label')
+	
+	// [----------=====Async Book Prices=====----------]
+	
 		// [----------===== ** Helper Methods (Async Book Prices) ** =====----------]
 
 			// Constructor for priceDiv objects, which are called in the ajax callback
@@ -180,7 +185,7 @@ $(document).ready(function(){
 			}
 		}
 
-	// [----------=====Async Book Prices=====----------]
+	//[----------===== ** Execution code (Async Book Prices) ** =====----------]
 
 		$('#simple').change(function(){
 			priceDivsHeartShapedBox.makeSimple();
@@ -188,9 +193,6 @@ $(document).ready(function(){
 		$('#express').change(function(){
 			priceDivsHeartShapedBox.makeExpress();
 		});		
-
-		// Format bookstore sold outs as labels on load
-		$('span:contains(Sold out)').addClass('label')
 
 		$('.book-row').each(function(){
 			var el = this;
@@ -220,7 +222,7 @@ $(document).ready(function(){
 						// Fade out the loading divs
 						$(this).children(".loading")
 									 .fadeOut(function(){
-							$(this).parent().html('Error').hide().fadeIn();
+							$(this).parent().html('<span class="label">Error</span>').hide().fadeIn();
 							console.log(errorThrown);
 						});
 					})
@@ -228,6 +230,7 @@ $(document).ready(function(){
 			});
 		});
 
+	// [----------=====Checkout Button=====----------]
 		// [----------===== ** Helper Methods(Checkout Button) ** =====----------]
 
 			// 
@@ -241,8 +244,8 @@ $(document).ready(function(){
 						changeCheckoutButton('Loading...');	
 					},
 					success: function(data, textStatus, jqXHR){
-						changeCheckoutButton('<i class="icon-shopping-cart"></i> Go to cart')
-						$('#checkout-amazon').wrap('<a href="' + data["link"] + '" target="_blank" />');
+						changeCheckoutButton('Go to cart')
+						$('#checkout-amazon').wrap('<a href="' + data["link"] + '" target="_blank" />').click();
 
 					},
 					error: function(jqXHR, textStatus, errorThrown){
@@ -301,7 +304,7 @@ $(document).ready(function(){
 				}
 			};
 
-	// [----------=====Checkout Button=====----------]
+		// [----------===== ** Execution Code (Checkout Button) ** =====----------]
 
 		// set the behavior of the checkout button
 
