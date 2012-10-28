@@ -69,7 +69,6 @@ $(document).ready(function(){
 				if (used_books.length != 0){
 					response.amazon.used = used_books;
 				}
-				console.log(response)
 				return window.location.pathname + "/carts?" + $.param(response);
 			};
 
