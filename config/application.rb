@@ -59,6 +59,9 @@ module BookSupply
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
+    # Load fonts into the asset pipeline
+    config.assets.paths << Rails.root.join("app", "assets", "fonts")
+
     # Load modules from concerns
     config.autoload_paths += %W(#{Rails.root}/app/concerns)
 

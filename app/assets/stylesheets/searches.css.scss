@@ -10,6 +10,7 @@ $psu-secondary-color: rgba(168,180,0,1);
 
 // COMMON ---------------/
 
+
 body {
 	background-image:url('bg.jpg');
 }
@@ -128,9 +129,6 @@ body {
 
 .icon-image {
 	font-size: 48pt;
-	text-align: left;
-	height: 48px;
-	width: 48px;
 }
 
 .btn-school {
@@ -259,6 +257,10 @@ td.book-amazon {
 
 #checkout-amazon-td {
 	text-align: center;
+}
+
+#checkout-amazon-text {
+	line-height: 24px;
 }
 
 input.checkout-radio {
