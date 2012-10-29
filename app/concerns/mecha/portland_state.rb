@@ -45,7 +45,7 @@ module Mecha
 				term_form = term_select_page.forms[0]
 				term_field = term_form.field_with(:name => 'term_in')
 					available_terms = term_field.options.map(&:text)
-					latest_term = available_terms.find_index {|term| term !~ /View only/i }
+					latest_term = available_terms.find_index {|term| term =~ /Fall 2012/i }
 				term_field.options[latest_term].select
 				schedule_page = term_form.submit
 
