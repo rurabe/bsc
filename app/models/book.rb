@@ -19,17 +19,17 @@ class Book < ActiveRecord::Base
 
   default_scope order('requirement DESC')
 
-  def amazon_new_link
-  	"https://www.amazon.com/dp/#{self.asin}?tag=booksupply-20" if asin
-  end
-
-  def amazon_used_link
-    "http://www.amazon.com/gp/offer-listing/#{self.asin}?tag=booksupply-20" if asin
-  end
+  before_create :clean_isbns
 
   def query_amazon
     response = amazon_item_search(keywords) # returns an array of 0-20 products
     parse_amazon_response(response)
+  end
+
+  def clean_isbns
+    [isbn_10,isbn_13].each do |isbn|
+      isbn.gsub!(/[\W_]/,"") if isbn
+    end
   end
     
 

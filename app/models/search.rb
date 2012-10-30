@@ -2,6 +2,7 @@ class Search < ActiveRecord::Base
   attr_accessible :username, :password
 
   has_many :courses
+  has_many :books, :through => :courses
   has_many :carts
 
   before_create :set_slug
