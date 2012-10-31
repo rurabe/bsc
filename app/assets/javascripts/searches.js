@@ -49,31 +49,8 @@ $(document).ready(function(){
 	
 		// [----------===== ** Helper Methods (Async Book Prices) ** =====----------]
 
-			var checkoutData = function(){
-				var getAsins = function(collection){
-					return collection.map(function(){
-						return $(this).attr('data-asin')
-					}).get();
-				};
-
-				var response = {
-					amazon: {}
-				};
-
-				var new_books = getAsins($('.selected.amazon-new'));
-				var used_books = getAsins($('.selected.amazon-used'));
-
-				if (new_books.length != 0){
-					response.amazon.new = new_books;
-				}
-				if (used_books.length != 0){
-					response.amazon.used = used_books;
-				}
-				return window.location.pathname + "/carts?" + $.param(response);
-			};
-
 			// Constructor for priceDiv objects, which are called in the ajax callback
-			// params = {div,vendor,vendorId,price,condition}
+			// params = {vendor,vendorId,price,condition, *link}
 			var priceDiv = function(div,params){
 				return {
 					div: 				div,
@@ -126,10 +103,10 @@ $(document).ready(function(){
 					expressPrice: function(){
 						var that = this
 						this.makeToggleable();
-						this.setCheckoutLinkHandler();
 						this.changeContent(this.price,function(){
 							that.div.removeClass("simple")
 						});
+						this.setCheckoutLinkHandler();
 					},
 					expressSoldOut: function(){
 						var that = this
@@ -145,12 +122,14 @@ $(document).ready(function(){
 						});
 					},
 					setCheckoutLinkHandler: function(){
+						var vendor = this.vendor
 						this.div.click(function(){
-							$('a > #checkout-' + this.vendor).unwrap()
-							$('#checkout-' + this.vendor).wrap(
-								'<a href="' + checkoutData() + '" target="_blank" data-method="post" rel="nofollow"/>'
-							)
-						})
+							var amazonTarget = priceDivsHeartShapedBox.checkoutData("amazon")
+							$('a > #checkout-amazon').unwrap();
+							$('#checkout-amazon').wrap(
+								'<a href="' + amazonTarget + '" target="_blank" data-method="post" rel="nofollow"/>'
+							);
+						});
 					},
 					makeLinkable: function(content){
 						return '<a href=' + this.link() + ' target="_blank">' +
@@ -201,7 +180,7 @@ $(document).ready(function(){
 				})
 			};
 
-			var priceDivsHeartShapedBox = {
+			priceDivsHeartShapedBox = {
 				divs: [],
 				makeSimple: function(){
 					$.each(this.divs,function(){
@@ -212,11 +191,56 @@ $(document).ready(function(){
 					$.each(this.divs,function(){
 						this.toExpressDiv();
 					});
+				},
+				selectByClass: function(){
+					var that = this
+					var args = Array.prototype.slice.call(arguments)
+					return args.reduce(function(prev,curr){
+						return $.map(prev,function(i){
+							if(i.div.attr('class').match(curr)){
+								return i;
+							}
+						});
+					}, that.divs);
+				},
+				getIds: function(collection){
+					return collection.map(function(i){
+						return i.vendorId;
+					});
+				},
+				request: function(data){
+					return window.location.pathname + "/carts?" + $.param(data)
+				},
+				checkoutData: function(vendor){
+					if (vendor === "amazon"){
+						var response = { amazon: {} };
+						
+						var newBooks = this.selectByClass('amazon-new','selected')
+						if (newBooks.length != 0) {
+							response.amazon.new = this.getIds(newBooks);
+						}
+
+						var usedBooks = this.selectByClass('amazon-used','selected')
+						if (usedBooks.length != 0) {
+							response.amazon.used = this.getIds(usedBooks);
+						}
+
+					}	else if (vendor === "bn"){
+						var response = { bn: {} };
+						
+						var newBooks = this.selectByClass('bn-new','selected')
+						if (newBooks.length != 0) {
+							response.bn.new = this.getIds(newBooks);
+						}
+
+					}
+
+					return this.request(response);
 				}
 			}
 
 	//[----------===== ** Execution code (Async Book Prices) ** =====----------]
-
+		// Ataches the handler to swtich between simple and express mode
 		$('#simple').change(function(){
 			priceDivsHeartShapedBox.makeSimple();
 		});
@@ -224,6 +248,7 @@ $(document).ready(function(){
 			priceDivsHeartShapedBox.makeExpress();
 		});		
 
+		// Fires off an ajax request for each book, then builds a price div for each
 		$('.book-row').each(function(){
 			var el = this;
 
