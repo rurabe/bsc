@@ -13,7 +13,9 @@ class Book < ActiveRecord::Base
                   :amazon_new_price,
                   :amazon_new_offer_listing_id,
                   :amazon_used_price,
-                  :amazon_used_offer_listing_id
+                  :amazon_used_offer_listing_id,
+                  :bn_new_price,
+                  :bn_link
 
   belongs_to :course
 
@@ -26,14 +28,18 @@ class Book < ActiveRecord::Base
     parse_amazon_response(response)
   end
 
-  def clean_isbns
-    [isbn_10,isbn_13].each do |isbn|
-      isbn.gsub!(/[\W_]/,"") if isbn
-    end
+  def query_bn
+    query = BarnesAndNoble::ItemLookup.new(isbn_13)
+    assign_attributes(query.parsed_response)
   end
-    
 
   private
+
+    def clean_isbns
+      [isbn_10,isbn_13].each do |isbn|
+        isbn.gsub!(/[\W_]/,"") if isbn
+      end
+    end
 
     def amazon_item_search(keywords,options={})
       default_options = {:response_group => 'Offers',

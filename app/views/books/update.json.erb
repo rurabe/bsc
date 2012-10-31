@@ -1,8 +1,26 @@
 {
 	"id":	"<%= @book.id %>",
-	"asin": "<%= @book.asin %>",
-	"new_price": "<%= show_price(@book.amazon_new_price) %>",
-	"new_link": "<%= @book.amazon_new_link %>",
-	"used_price": "<%= show_price(@book.amazon_used_price) %>",
-	"used_link": "<%= @book.amazon_used_link %>"
+	"amazon": {
+		"new": {
+			"vendor": 						"amazon",
+			"vendorId":						"<%= @book.asin %>",
+			"price":							"<%= show_price(@book.amazon_new_price) %>",
+			"condition":					"new"
+		},
+		"used": {
+			"vendor": 						"amazon",
+			"vendorId":						"<%= @book.asin %>",
+			"price":							"<%= show_price(@book.amazon_used_price) %>",
+			"condition":					"used"
+		}
+	},
+	"bn": {
+		"new": {
+			"vendor": 						"bn",
+			"vendorId":						"<%= @book.isbn_13 %>",
+			"price":							"<%= show_price(@book.bn_new_price) %>",
+			"condition":					"new",
+			"link":								"<%= @book.bn_link %>"
+		}
+	}	
 }

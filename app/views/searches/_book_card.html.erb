@@ -15,6 +15,7 @@
 				</th>
 				<th class="header" colspan="2">Bookstore</th>
 				<th class="header" colspan="2"><%= image_tag 'amazon-icon.jpg' %></th>
+				<th class="header"><%= image_tag 'bn-icon.jpg' %></th>
 			</tr>
 			<tr class="subhead-row">
 				<th></th>
@@ -33,14 +34,16 @@
 				<th class="subheader">
 					<span class="label label-info">Used</span>
 				</th>
-
+				<th class="subheader">
+					<span class="label label-info">New</span>
+				</th>
 			</tr>
 
 		</thead>
 		
 		<% @search.courses.each do |course| %>
 			<tr>
-				<td class="course-header" colspan=6>
+				<td class="course-header" colspan=7>
 					<%= course.department %> <%= course.number %>
 				</td>
 			</tr>
@@ -78,6 +81,11 @@
 					</td>
 
 					<td class="book-query book-amazon amazon-used" id="amazon-used-<%= book.id %>">
+						<div class="loading"></div>
+
+					</td>
+
+					<td class="book-query book-bn bn-new" id="bn-new-<%= book.id %>">
 						<div class="loading"></div>
 
 					</td>

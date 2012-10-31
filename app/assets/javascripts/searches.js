@@ -73,28 +73,13 @@ $(document).ready(function(){
 			};
 
 			// Constructor for priceDiv objects, which are called in the ajax callback
-			var priceDiv = function(div,price,asin,condition){
+			// params = {div,vendor,vendorId,price,condition}
+			var priceDiv = function(div,params){
 				return {
-					div: div,
-					price: 			function(){
-												if (price === undefined){
-													return this.div.attr('data-price')
-												} else if (asin === ""){
-													return "Not found"
-												} else {
-													return price
-												}
-											}(),
-					asin: 			function(){
-												if (asin === undefined){
-													return this.div.attr('data-asin')
-												} else if (asin === ""){
-													return null
-												} else {
-													return asin
-												}
-											}(),
-					condition:	condition || this.div.attr("id").match(/-(\w+)-/)[1],
+					div: 				div,
+					vendor: 		params.vendor,
+					vendorId: 	params.vendorId,
+					condition:	params.condition,
 					changeContent: function(html,callback){
 						callback = callback || $.noop;
 						var that = this
@@ -142,23 +127,15 @@ $(document).ready(function(){
 						var that = this
 						this.makeToggleable();
 						this.setCheckoutLinkHandler();
-						this.addDataAttributes();
 						this.changeContent(this.price,function(){
 							that.div.removeClass("simple")
 						});
 					},
 					expressSoldOut: function(){
 						var that = this
-						this.addDataAttributes();
-						this.changeContent(
-							this.makeLabel(this.price),function(){
-								that.div.removeClass("simple")
-							}
-						)
-					},
-					addDataAttributes: function(){
-						this.div.attr('data-price',this.price)
-						this.div.attr('data-asin',this.asin)
+						this.changeContent(this.makeLabel(this.price),function(){
+							that.div.removeClass("simple")
+						});
 					},
 					makeToggleable: function(){
 						this.div.addClass("selectable");
@@ -169,8 +146,8 @@ $(document).ready(function(){
 					},
 					setCheckoutLinkHandler: function(){
 						this.div.click(function(){
-							$('a > #checkout-amazon').unwrap()
-							$('#checkout-amazon').wrap(
+							$('a > #checkout-' + this.vendor).unwrap()
+							$('#checkout-' + this.vendor).wrap(
 								'<a href="' + checkoutData() + '" target="_blank" data-method="post" rel="nofollow"/>'
 							)
 						})
@@ -184,36 +161,59 @@ $(document).ready(function(){
 						return '<span class="label">' + content + '</span>'
 					},
 					link: function(){
-						if (this.asin){
+						if (this.vendorId){
 							if (this.condition === "new") {
 								return this.newLink();
 							} else {
 								return this.usedLink();
 							}
 						}
-					},
-					newLink: function(){
-						return "https://www.amazon.com/dp/" + this.asin + "?tag=booksupply-20"
-					},
-					usedLink: function(){
-						return "http://www.amazon.com/gp/offer-listing/" + this.asin + "?tag=booksupply-20"
 					}
 				}
 			};
 
-		var priceDivsHeartShapedBox = {
-			divs: [],
-			makeSimple: function(){
-				$.each(this.divs,function(){
-					this.toSimpleDiv();
-				});
-			},
-			makeExpress: function(){
-				$.each(this.divs,function(){
-					this.toExpressDiv();
-				});
+			var amazonPriceDiv = function(div,params){
+				var obj = priceDiv(div,params);
+				return $.extend(obj,{
+					price:	function(){
+										if (params.vendorId === ""){ return "Not found" }
+										else { return params.price}
+									}(),
+					newLink: function(){
+						return "https://www.amazon.com/dp/" + this.vendorId + "?tag=booksupply-20"
+					},
+					usedLink: function(){
+						return "http://www.amazon.com/gp/offer-listing/" + this.vendorId + "?tag=booksupply-20"
+					}
+				})
+			};
+
+			var bnPriceDiv = function(div,params){
+				var obj = priceDiv(div,params);
+				return $.extend(obj,{
+					price:	function(){
+										if (params.link === ""){ return "Not found" }
+										else { return params.price}
+									}(),
+					link: function(){
+						return params.link
+					}
+				})
+			};
+
+			var priceDivsHeartShapedBox = {
+				divs: [],
+				makeSimple: function(){
+					$.each(this.divs,function(){
+						this.toSimpleDiv();
+					});
+				},
+				makeExpress: function(){
+					$.each(this.divs,function(){
+						this.toExpressDiv();
+					});
+				}
 			}
-		}
 
 	//[----------===== ** Execution code (Async Book Prices) ** =====----------]
 
@@ -232,20 +232,20 @@ $(document).ready(function(){
 				url: 	"/books/" + this.id.match(/\d+/),
 				dataType: "json",
 				success: function(data, textStatus, jqXHR){
-					newDiv 		= $(el).children(".amazon-new");
-					newPrice 	= data["new_price"];
-					asin 			= data["asin"];
+					newAmazonDiv	= $(el).children(".amazon-new");
+					usedAmazonDiv	= $(el).children(".amazon-used");
+					newBnDiv			= $(el).children(".bn-new");
 
-					newPriceDiv = priceDiv(newDiv,newPrice,asin,"new");
-					newPriceDiv.toExpressDiv();
+					newAmazonPriceDiv = amazonPriceDiv(newAmazonDiv,data.amazon.new);
+					newAmazonPriceDiv.toExpressDiv();
 
-					usedDiv		= $(el).children(".amazon-used");
-					usedPrice = data["used_price"];
+					usedAmazonPriceDiv = amazonPriceDiv(usedAmazonDiv,data.amazon.used);
+					usedAmazonPriceDiv.toExpressDiv();
 
-					usedPriceDiv = priceDiv(usedDiv,usedPrice,asin,"used");
-					usedPriceDiv.toExpressDiv();
+					newBnPriceDiv = bnPriceDiv(newBnDiv,data.bn.new);
+					newBnPriceDiv.toSimpleDiv();
 
-					priceDivsHeartShapedBox.divs.push(newPriceDiv,usedPriceDiv);
+					priceDivsHeartShapedBox.divs.push(newAmazonPriceDiv,usedAmazonPriceDiv,newBnPriceDiv);
 				},
 				error: function(jqXHR, textStatus, errorThrown){
 					$(el).children(".book-query").each(function(){
