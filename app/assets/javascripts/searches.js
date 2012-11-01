@@ -174,8 +174,11 @@ $(document).ready(function(){
 										if (params.link === ""){ return "Not found" }
 										else { return params.price}
 									}(),
-					link: function(){
-						return params.link
+					newLink: function(){
+						return "http://click.linksynergy.com/deeplink?mid=36889&id=BF/ADxwv1Mc&murl=http%3A%2F%2Fwww.barnesandnoble.com%2Fean%2F" + this.vendorId
+					},
+					usedLink: function(){
+						return this.newLink() + "?marketplace=all"
 					}
 				})
 			};
