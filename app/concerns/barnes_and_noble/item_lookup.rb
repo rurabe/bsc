@@ -47,7 +47,7 @@ module BarnesAndNoble
 
 			def parse_product(product)
 					{
-						:isbn_13      => product.xpath('./Ean').text,
+						:ean      => product.xpath('./Ean').text,
 						:bn_new_price => product.xpath('./Prices/BnPrice').text.to_d,
 						:bn_link			=> product.xpath('./Url').text
 					}

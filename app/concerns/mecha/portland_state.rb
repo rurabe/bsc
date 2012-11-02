@@ -111,7 +111,7 @@ module Mecha
 			def self.build_book(book_node,course)
 				course.books.build(:title => parse_book_title(book_node),
 													 :author => parse_book_author(book_node),
-													 :isbn_13 => parse_book_isbn_13(book_node),
+													 :ean => parse_book_ean(book_node),
 													 :edition => parse_book_edition(book_node),
 													 :requirement => parse_book_requirement(book_node),
 													 :bookstore_new_price => parse_book_new_price(book_node),
@@ -128,7 +128,7 @@ module Mecha
 				parse_node(book_node,"*[@class='book-meta book-author']")
 			end
 
-			def self.parse_book_isbn_13(book_node)
+			def self.parse_book_ean(book_node)
 				parse_node(book_node,"*[@class='isbn']")
 			end
 

@@ -11,29 +11,29 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121031001342) do
+ActiveRecord::Schema.define(:version => 20121102020205) do
 
   create_table "books", :force => true do |t|
     t.string   "title"
     t.string   "author"
-    t.string   "isbn_13"
     t.string   "isbn_10"
     t.string   "edition"
     t.string   "requirement"
     t.string   "asin"
     t.integer  "course_id"
-    t.datetime "created_at",                                                 :null => false
-    t.datetime "updated_at",                                                 :null => false
-    t.decimal  "bookstore_new_price",          :precision => 6, :scale => 2
-    t.decimal  "bookstore_new_rental_price",   :precision => 6, :scale => 2
-    t.decimal  "bookstore_used_price",         :precision => 6, :scale => 2
-    t.decimal  "bookstore_used_rental_price",  :precision => 6, :scale => 2
-    t.decimal  "amazon_new_price",             :precision => 6, :scale => 2
-    t.decimal  "amazon_used_price",            :precision => 6, :scale => 2
+    t.datetime "created_at",                                                               :null => false
+    t.datetime "updated_at",                                                               :null => false
+    t.decimal  "bookstore_new_price",                        :precision => 6, :scale => 2
+    t.decimal  "bookstore_new_rental_price",                 :precision => 6, :scale => 2
+    t.decimal  "bookstore_used_price",                       :precision => 6, :scale => 2
+    t.decimal  "bookstore_used_rental_price",                :precision => 6, :scale => 2
+    t.decimal  "amazon_new_price",                           :precision => 6, :scale => 2
+    t.decimal  "amazon_used_price",                          :precision => 6, :scale => 2
     t.string   "amazon_new_offer_listing_id"
     t.string   "amazon_used_offer_listing_id"
-    t.decimal  "bn_new_price",                 :precision => 6, :scale => 2
+    t.decimal  "bn_new_price",                               :precision => 6, :scale => 2
     t.string   "bn_link"
+    t.string   "ean",                          :limit => 13
   end
 
   create_table "courses", :force => true do |t|

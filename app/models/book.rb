@@ -3,7 +3,7 @@ class Book < ActiveRecord::Base
                   :author, 
                   :edition, 
                   :isbn_10, 
-                  :isbn_13, 
+                  :ean, 
                   :requirement, 
                   :title,
                   :bookstore_new_price,
@@ -24,19 +24,19 @@ class Book < ActiveRecord::Base
   before_create :clean_isbns
 
   def query_amazon
-    query = Amazon::ItemSearch.new(isbn_13)
+    query = Amazon::ItemSearch.new(ean)
     assign_attributes(query.parsed_response)
   end
 
   def query_bn
-    query = BarnesAndNoble::ItemLookup.new(isbn_13)
+    query = BarnesAndNoble::ItemLookup.new(ean)
     assign_attributes(query.parsed_response)
   end
 
   private
 
     def clean_isbns
-      [isbn_10,isbn_13].each do |isbn|
+      [isbn_10,ean].each do |isbn|
         isbn.gsub!(/[\W_]/,"") if isbn
       end
     end
