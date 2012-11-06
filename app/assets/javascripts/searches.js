@@ -5,7 +5,7 @@ $(document).ready(function(){
 
 		$('#about-handle').toggle(
 			function(){
-				var el = $(this)
+				var el = $(this);
 				$('.logo-inner').animate({'margin-top': '-350px'});
 				$('.about-info').slideToggle();
 				$(this).fadeOut(200,function(){
@@ -18,7 +18,7 @@ $(document).ready(function(){
 				$('.about-info').slideToggle();
 				$(this).fadeOut(200,function(){
 					$(this).text("Wait, what's this about again?").fadeIn();
-					$('#aboutlink').remove()
+					$('#aboutlink').remove();
 				});
 			}
 		);
@@ -35,7 +35,7 @@ $(document).ready(function(){
 			$('#icon-carousel').carousel({
 				interval: 2500,
 				pause: "false"
-			}).carousel('cycle')
+			}).carousel('cycle');
 			$('#loadingModal').modal('show');
 		})
 
@@ -43,20 +43,31 @@ $(document).ready(function(){
 	// [----------------------------------------===== #SHOW =====----------------------------------------]
 
 		// Format bookstore sold outs as labels on load
-		$('span:contains(Sold out)').addClass('label')
+		$('span:contains(Sold out)').addClass('label');
 	
 	// [----------=====Async Book Prices=====----------]
 	
 		// [----------===== ** Helper Methods (Async Book Prices) ** =====----------]
 
+
+			// Function to display prices
+			var showPrice = function(number){
+				return "$" + Number(number).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+			};
+
 			// Constructor for priceDiv objects, which are called in the ajax callback
 			// params = {vendor,vendorId,price,condition, *link}
-			var priceDiv = function(div,params){
+			var priceDiv = function(params){
 				return {
-					div: 				div,
+					div: 				params.div,
 					vendor: 		params.vendor,
 					vendorId: 	params.vendorId,
 					condition:	params.condition,
+					price:			function(){
+												if ( params.vendorId === null ){ return "Not found" }
+												else if ( params.price == null ){ return "Sold out" }
+												else { return showPrice(params.price) }
+											}(),
 					changeContent: function(html,callback){
 						callback = callback || $.noop;
 						var that = this
@@ -93,7 +104,6 @@ $(document).ready(function(){
 						);
 					},
 					toExpressDiv: function(){
-						this.div.addClass("selectable")
 						if (this.price === "Sold out" || this.price === "Not found"){
 							this.expressSoldOut();
 						} else {
@@ -103,6 +113,7 @@ $(document).ready(function(){
 					expressPrice: function(){
 						var that = this
 						this.makeToggleable();
+						this.div.addClass("selectable")
 						this.changeContent(this.price,function(){
 							that.div.removeClass("simple")
 						});
@@ -151,13 +162,9 @@ $(document).ready(function(){
 				}
 			};
 
-			var amazonPriceDiv = function(div,params){
-				var obj = priceDiv(div,params);
-				return $.extend(obj,{
-					price:	function(){
-										if (params.vendorId === ""){ return "Not found" }
-										else { return params.price}
-									}(),
+			var amazonPriceDiv = function(params){
+				var obj = priceDiv(params);
+				var thisDiv = $.extend(obj,{
 					newLink: function(){
 						return "https://www.amazon.com/dp/" + this.vendorId + "?tag=booksupply-20"
 					},
@@ -165,43 +172,42 @@ $(document).ready(function(){
 						return "http://www.amazon.com/gp/offer-listing/" + this.vendorId + "?tag=booksupply-20"
 					}
 				})
+				priceDivsHeartShapedBox.divs.push(thisDiv);
 			};
 
-			var bnPriceDiv = function(div,params){
-				var obj = priceDiv(div,params);
-				return $.extend(obj,{
-					price:	function(){
-										if (params.link === ""){ return "Not found" }
-										else { return params.price}
-									}(),
+			var bnPriceDiv = function(params){
+				var obj = priceDiv(params);
+				var thisDiv = $.extend(obj,{
 					newLink: function(){
 						return "http://click.linksynergy.com/deeplink?mid=36889&id=BF/ADxwv1Mc&murl=http%3A%2F%2Fwww.barnesandnoble.com%2Fean%2F" + this.vendorId
 					},
 					usedLink: function(){
 						return this.newLink() + "?marketplace=all"
-					}
+					},
+					toExpressDiv: this.toSimpleDiv
 				})
+				priceDivsHeartShapedBox.divs.push(thisDiv);
 			};
 
 			priceDivsHeartShapedBox = {
 				divs: [],
-				makeSimple: function(){
-					$.each(this.divs,function(){
+				makeSimple: function(filter){
+					$.each(this.selectByClass(filter),function(){
 						this.toSimpleDiv();
 					});
 				},
-				makeExpress: function(){
-					$.each(this.divs,function(){
+				makeExpress: function(filter){
+					$.each(this.selectByClass(filter),function(){
 						this.toExpressDiv();
 					});
 				},
 				selectByClass: function(){
 					var that = this
 					var args = Array.prototype.slice.call(arguments)
-					return args.reduce(function(prev,curr){
-						return $.map(prev,function(i){
-							if(i.div.attr('class').match(curr)){
-								return i;
+					return args.reduce(function(subset,className){
+						return $.map(subset,function(e){
+							if(e.div.attr('class').match(className)){
+								return e;
 							}
 						});
 					}, that.divs);
@@ -251,41 +257,71 @@ $(document).ready(function(){
 			priceDivsHeartShapedBox.makeExpress();
 		});		
 
-		// Fires off an ajax request for each book, then builds a price div for each
-		$('.book-row').each(function(){
-			var el = this;
+		$.ajax({ // Amazon
+			type: 'PUT',
+			dataType: "json",
+			data: {vendor: "amazon"},
+			success: function(data, textStatus, jqXHR){
+				var a = this;
+				$.each(data,function(){
+					amazonPriceDiv(a.amazonData(this,"new"));
+					amazonPriceDiv(a.amazonData(this,"used"));
+				});
 
-			$.ajax({
-				type: 'PUT',
-				url: 	"/books/" + this.id.match(/\d+/),
-				dataType: "json",
-				success: function(data, textStatus, jqXHR){
-					newAmazonDiv	= $(el).children(".amazon-new");
-					usedAmazonDiv	= $(el).children(".amazon-used");
-					newBnDiv			= $(el).children(".bn-new");
-
-					newAmazonPriceDiv = amazonPriceDiv(newAmazonDiv,data.amazon.new);
-					newAmazonPriceDiv.toExpressDiv();
-
-					usedAmazonPriceDiv = amazonPriceDiv(usedAmazonDiv,data.amazon.used);
-					usedAmazonPriceDiv.toExpressDiv();
-
-					newBnPriceDiv = bnPriceDiv(newBnDiv,data.bn.new);
-					newBnPriceDiv.toSimpleDiv();
-
-					priceDivsHeartShapedBox.divs.push(newAmazonPriceDiv,usedAmazonPriceDiv,newBnPriceDiv);
-				},
-				error: function(jqXHR, textStatus, errorThrown){
-					$(el).children(".book-query").each(function(){
-						// Fade out the loading divs
-						$(this).children(".loading")
-									 .fadeOut(function(){
-							$(this).parent().html('<span class="label">Error</span>').hide().fadeIn();
-							console.log(errorThrown);
-						});
-					})
+				priceDivsHeartShapedBox.makeExpress('book-amazon');
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				$(".book-amazon").each(function(){
+					// Fade out the loading divs
+					$(this).children(".loading")
+								 .fadeOut(function(){
+						$(this).parent().html('<span class="label">Error</span>').hide().fadeIn();
+						console.log(errorThrown);
+					});
+				})
+			},
+			amazonData: function(data,condition){
+				return {
+					div: $("#amazon-" + condition + "-" + data.id),
+					vendor: "amazon",
+					vendorId: data.ean,
+					price: data["amazon_" + condition +"_price"],
+					condition: condition
 				}
-			});
+			}
+		});
+
+		$.ajax({ // Barnes and Noble
+			type: 'PUT',
+			dataType: "json",
+			data: {vendor: "bn"},
+			success: function(data, textStatus, jqXHR){
+				var a = this;
+				$.each(data,function(){
+					bnPriceDiv(a.bnData(this,"new"))
+				});
+
+				priceDivsHeartShapedBox.makeSimple('book-bn');
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				$(".book-bn").each(function(){
+					// Fade out the loading divs
+					$(this).children(".loading")
+								 .fadeOut(function(){
+						$(this).parent().html('<span class="label">Error</span>').hide().fadeIn();
+						console.log(errorThrown);
+					});
+				})
+			},
+			bnData: function(data,condition){
+				return {
+					div: $("#bn-" + condition + "-" + data.id),
+					vendor: "bn",
+					vendorId: data.ean,
+					price: data["bn_" + condition +"_price"],
+					condition: condition
+				}
+			},
 		});
 
 });

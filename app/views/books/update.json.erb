@@ -1,5 +1,6 @@
+<% search.books.map do |book| %>
 {
-	"id":	"<%= @book.id %>",
+	"vendor_id":	"<%= @book.ean %>",
 	"amazon": {
 		"new": {
 			"vendor": 						"amazon",
@@ -22,5 +23,6 @@
 			"condition":					"new",
 			"link":								"<%= @book.bn_link %>"
 		}
-	}	
-}
+	}
+}	
+<% end %>

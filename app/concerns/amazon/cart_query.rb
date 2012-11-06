@@ -30,11 +30,9 @@ module Amazon
 			end
 
 			def build_item_params
-				hash = {}
-				get_item_offer_listing_ids.each_with_index do |id,i|
+				get_item_offer_listing_ids.each_with_index.inject({}) do |hash,(id,i)|
 					hash.merge!( :"Item.#{i+1}.OfferListingId" => id, :"Item.#{i+1}.Quantity" => 1 )
 				end
-				hash
 			end
 
 			def get_item_offer_listing_ids

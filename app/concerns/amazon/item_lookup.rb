@@ -10,14 +10,27 @@ module Amazon
 				:service 				=> 'AWSECommerceService',
 				:response_group => 'Offers,ItemAttributes',
 				:id_type 				=> 'EAN',
-				:search_index		=> 'Books'
-	    }
+				:search_index		=> 'Books'}
+	    @parsers = {
+				:asin => 'ASIN',
+				:ean => 'ItemAttributes/EAN',
+				:isbn_10 => 'ItemAttributes/ISBN',
+				:amazon_new_price => 'Offers/Offer/OfferListing/Price/Amount[../../../OfferAttributes/Condition="New"]',
+				:amazon_new_offer_listing_id => 'Offers/Offer/OfferListing/OfferListingId[../../OfferAttributes/Condition="New"]',
+				:amazon_used_price => 'Offers/Offer/OfferListing/Price/Amount[../../../OfferAttributes/Condition="Used"]',
+				:amazon_used_offer_listing_id => 'Offers/Offer/OfferListing/OfferListingId[../../OfferAttributes/Condition="Used"]'}
 	    @responses = []
 	    @parsed_response = {}
 	    control
 	 	end
 
-	 	private
+	 	def offer_listing_ids
+	 		@parsed_response.map do |id,info|
+	 			info.select {|key,value| key =~ /offer_listing_id/ }.values
+	 		end.flatten
+	 	end
+
+	 	# private
 
 			def control
 				build_params.map do |request_params|
@@ -39,18 +52,15 @@ module Amazon
 
 			def parse_response(response)
 				response.items.each do |item|
-					parse = {
-						:asin => item.get('ASIN'),
-						:ean => item.get('ItemAttributes/EAN'),
-						:isbn_10 => item.get('ItemAttributes/ISBN'),
-						:amazon_new_price => item.get('Offers/Offer/OfferListing/Price/Amount[../../../OfferAttributes/Condition="New"]'),
-						:amazon_new_offer_listing_id => item.get('Offers/Offer/OfferListing/OfferListingId[../../OfferAttributes/Condition="New"]'),
-						:amazon_used_price => item.get('Offers/Offer/OfferListing/Price/Amount[../../../OfferAttributes/Condition="Used"]'),
-						:amazon_used_offer_listing_id => item.get('Offers/Offer/OfferListing/OfferListingId[../../OfferAttributes/Condition="Used"]')
-					}.delete_if { |k,v| v == nil }
-					key = parse[base_params[:id_type].parameterize.to_sym]
-					@parsed_response[key] ? @parsed_response[key].merge!(parse) : @parsed_response[key] = parse
+					data = @parsers.inject({}) { |hash,(k,v)| item.get(v) ? hash.merge(k => item.get(v)) : hash }
+					format_prices!(data)
+					key = data[base_params[:id_type].parameterize.to_sym]
+					@parsed_response[key] ? @parsed_response[key].merge!(data) : @parsed_response[key] = data
 				end
+			end
+
+			def format_prices!(data)
+				data.select { |k,v| k =~ /price/i ? data[k] = v.to_d / 100 : nil } 
 			end
 
 			def base_params
@@ -74,17 +84,11 @@ module Amazon
 			end
 
 			def batch_ids
-				@lookup_ids.map do |condition,ids|
+				@lookup_ids.flat_map do |condition,ids|
 					ids.each_slice(10).map do |batch|
 						{condition => batch}
 					end
 				end
-				.flatten
 			end
-
-			def parse_amazon_price(xpath)
-        price = response.get(xpath)
-        price.to_d / 100 if price
-      end
 	end
 end
