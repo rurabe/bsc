@@ -15,10 +15,7 @@ module BarnesAndNoble
 		def update_books
 			@search.books.each do |book|
 				attributes = @parsed_response[book.ean]
-				p book
-				p attributes
 				book.update_attributes(attributes)
-				p book.update_attributes(attributes)
 			end
 		end
 
