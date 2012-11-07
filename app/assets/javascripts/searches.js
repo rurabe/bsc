@@ -162,7 +162,7 @@ $(document).ready(function(){
 							 	'<td>' +
 							 		this.makeCartLinkable(this.title()) + 
 							 	'</td>' + 
-							 	'<td>' + 
+							 	'<td class="bn-checkout-book">' + 
 							 		this.makeCartLinkable(this.price) + 
 							 	'</td>' +  
 						'</tr>'
