@@ -58,7 +58,7 @@
 
 					<td class="book-title">
 						<span>
-						<%= book.title %> 
+							<%= book.title %> 
 						</span>
 					</td>
 
@@ -93,16 +93,25 @@
 				</tr>
 			<% end %>
 		<% end %>
-		<tr>
+		<tr class="checkout-row">
 			<td></td>
 			<td></td>
 			<td colspan="2"></td>
 			<td id="checkout-amazon-td" colspan="2" class="centered">
 				<button type="submit" class="btn btn-info" id="checkout-amazon">
-					<span id="checkout-amazon-icon"><i class="icon-amazon "></i></span>
+					<span id="checkout-amazon-icon-span">
+						<i class="icon-amazon" id="checkout-amazon-icon"></i>
+					</span>
 					<span id="checkout-amazon-text">Checkout</span>
 				</button>
-			<td></td>
+			<td id="checkout-amazon-td" class="centered">
+				<button type="submit" class="btn btn-info" id="checkout-bn">
+					<span id="checkout-bn-icon-span">
+						<%= image_tag 'bn-icon-16-white.png', :id => "checkout-bn-icon" %>
+					</span>
+					<span id="checkout-bn-text">Checkout</span>
+				</button>
+			</td>
 			</td>
 		</tr>
 

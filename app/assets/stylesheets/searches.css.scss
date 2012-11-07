@@ -261,10 +261,16 @@ td.book-query {
 
 #checkout-amazon-icon {
 	font-size: 24px;
+	line-height: 12px;
 }
 
-#checkout-amazon-text {
-	line-height: 24px;
+#checkout-bn-td {
+	text-align: center;
+}
+
+#checkout-bn-icon {
+	position: relative;
+	top: -1px;
 }
 
 input.checkout-radio {
@@ -278,4 +284,8 @@ label.checkout-label {
 
 #express + span {
 	font-style: italic;
+}
+
+#bnModal table {
+	border-bottom: 1px solid #DDD;
 }
