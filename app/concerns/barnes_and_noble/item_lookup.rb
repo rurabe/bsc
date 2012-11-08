@@ -36,6 +36,7 @@ module BarnesAndNoble
 
 			def parse_lookup_response(response)
 				products = response.xpath('./ProductLookupResponse/ProductLookupResult/Product')
+				products.delete_if { |product| product.nil? }
 				if products.count == 1
 					data = parse_product(products)
 					key = data[:ean]
