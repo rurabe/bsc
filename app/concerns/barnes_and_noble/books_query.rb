@@ -2,12 +2,14 @@ module BarnesAndNoble
 	class BooksQuery
 		def initialize(search)
 			@search = search
+			@response = nil
 			@parsed_response = nil
 			control
 		end
 
 		def control
 			query = BarnesAndNoble::ItemLookup.new(pluck_attributes)
+			@response = query.response
 			@parsed_response = query.parsed_response
 			update_books
 		end
