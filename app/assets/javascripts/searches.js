@@ -146,10 +146,12 @@ $(document).ready(function(){
 					},
 					amazonCheckoutBehavior: function(){
 						var amazonTarget = priceDivsHeartShapedBox.amazonCheckoutData();
-						$('a > #checkout-amazon').unwrap();
-						$('#checkout-amazon').wrap(
-							'<a href="' + amazonTarget + '" target="_blank" data-method="post" rel="nofollow"/>'
-						);
+						if (amaztonTarget){
+							$('a > #checkout-amazon').unwrap();
+							$('#checkout-amazon').wrap(
+								'<a href="' + amazonTarget + '" target="_blank" data-method="post" rel="nofollow"/>'
+							);
+						}
 					},
 					bnCheckoutBehavior: function(){
 						priceDivsHeartShapedBox.bnCheckoutData();
@@ -201,6 +203,7 @@ $(document).ready(function(){
 					}
 				})
 				priceDivsHeartShapedBox.divs.push(thisDiv);
+				return thisDiv;
 			};
 
 			var bnPriceDiv = function(params){
@@ -210,11 +213,16 @@ $(document).ready(function(){
 						return "http://click.linksynergy.com/deeplink?mid=36889&id=BF/ADxwv1Mc&murl=http%3A%2F%2Fwww.barnesandnoble.com%2Fean%2F" + this.vendorId
 					},
 					usedLink: function(){
-						return this.newLink() + "?marketplace=all"
+						return "http://click.linksynergy.com/deeplink?mid=36889&id=BF/ADxwv1Mc&murl=http%3A%2F%2Fwww.barnesandnoble.com%2Flisting%2F" + this.vendorId
 					},
 					cartLink: function(){
-						return "http://click.linksynergy.com/deeplink?mid=36889&id=BF/ADxwv1Mc&murl=" + 
-									 "http%3A%2F%2Fcart2.barnesandnoble.com%2FShop%2Fxt_manage_cart.asp%3Fean%3D" + this.vendorId + "%26productcode%3DBK"
+						var baseUrl = "http://click.linksynergy.com/deeplink?mid=36889&id=BF/ADxwv1Mc&murl=" + 
+									 				"http%3A%2F%2Fcart2.barnesandnoble.com%2FShop%2Fxt_manage_cart.asp%3Fean%3D" + this.vendorId + "%26productcode%3D"
+						if(this.condition === "new") {
+							return baseUrl + "BK"
+						} else if (this.condition === "used"){
+							return baseUrl + "MP"
+						}
 					},
 					makeCartLinkable: function(content){
 						return '<a href="' + this.cartLink() + '" target="_blank">' +
@@ -223,6 +231,7 @@ $(document).ready(function(){
 					}
 				})
 				priceDivsHeartShapedBox.divs.push(thisDiv);
+				return thisDiv;
 			};
 
 			priceDivsHeartShapedBox = {
@@ -270,7 +279,9 @@ $(document).ready(function(){
 							response.amazon.used = this.getIds(usedBooks);
 						}
 
-					return window.location.pathname + "/carts?" + $.param(response);
+					if ( newBooks != 0 && usedBooks != 0 ){
+						return window.location.pathname + "/carts?" + $.param(response);
+					}
 				},
 				bnCheckoutData: function(){
 					$('#bnLinks').empty();
@@ -335,7 +346,7 @@ $(document).ready(function(){
 					bnPriceDiv(a.bnData(this,"new"))
 				});
 
-				priceDivsHeartShapedBox.makeExpress('book-bn');
+				priceDivsHeartShapedBox.makeExpress('bn-new');
 			},
 			error: function(jqXHR, textStatus, errorThrown){
 				$(".book-bn").each(function(){
@@ -358,4 +369,36 @@ $(document).ready(function(){
 			},
 		});
 
+		$('.bn-used').each(function(){
+			var div = $(this);
+			$.ajax({ // Barnes and Noble
+				type: 'PUT',
+				url: '/books/' + $(div).attr('id').match(/used-(\d+)/)[1],
+				dataType: "json",
+				success: function(data, textStatus, jqXHR){
+					var priceDiv = bnPriceDiv(this.bnData(data,"used"));
+					priceDiv.toExpressDiv();				
+				},
+				error: function(jqXHR, textStatus, errorThrown){
+					
+						// Fade out the loading divs
+					$(this).children(".loading")
+								 .fadeOut(function(){
+						$(this).parent().html('<span class="label">Error</span>').hide().fadeIn();
+						console.log(errorThrown);
+					});
+				},
+				bnData: function(data,condition){
+					return {
+						div: div,
+						vendor: "bn",
+						vendorId: data.bn_used_ean,
+						price: data["bn_" + condition +"_price"],
+						condition: condition
+					}
+				},
+			});
+		});
+
+		
 });

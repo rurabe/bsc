@@ -15,7 +15,8 @@ class Book < ActiveRecord::Base
                   :amazon_used_price,
                   :amazon_used_offer_listing_id,
                   :bn_new_price,
-                  :bn_link
+                  :bn_used_price,
+                  :bn_used_ean
 
   belongs_to :course
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121102020205) do
+ActiveRecord::Schema.define(:version => 20121109001749) do
 
   create_table "books", :force => true do |t|
     t.string   "title"
@@ -32,8 +32,9 @@ ActiveRecord::Schema.define(:version => 20121102020205) do
     t.string   "amazon_new_offer_listing_id"
     t.string   "amazon_used_offer_listing_id"
     t.decimal  "bn_new_price",                               :precision => 6, :scale => 2
-    t.string   "bn_link"
     t.string   "ean",                          :limit => 13
+    t.decimal  "bn_used_price",                              :precision => 6, :scale => 2
+    t.string   "bn_used_ean"
   end
 
   create_table "courses", :force => true do |t|

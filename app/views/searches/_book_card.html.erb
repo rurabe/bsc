@@ -15,7 +15,7 @@
 				</th>
 				<th class="header" colspan="2">Bookstore</th>
 				<th class="header" colspan="2"><%= image_tag 'amazon-icon.jpg' %></th>
-				<th class="header"><%= image_tag 'bn-icon.jpg' %></th>
+				<th class="header" colspan="2"><%= image_tag 'bn-icon.jpg' %></th>
 			</tr>
 			<tr class="subhead-row">
 				<th></th>
@@ -34,8 +34,12 @@
 				<th class="subheader">
 					<span class="label label-info">Used</span>
 				</th>
+				<!-- Barnes and Noble -->
 				<th class="subheader">
 					<span class="label label-info">New</span>
+				</th>
+				<th class="subheader">
+					<span class="label label-info">Used</span>
 				</th>
 			</tr>
 
@@ -43,7 +47,7 @@
 		
 		<% @search.courses.each do |course| %>
 			<tr>
-				<td class="course-header" colspan=7>
+				<td class="course-header" colspan=8>
 					<%= course.department %> <%= course.number %>
 				</td>
 			</tr>
@@ -84,8 +88,12 @@
 						<div class="loading"></div>
 
 					</td>
-
+					<!-- Barnes and Noble -->
 					<td class="book-query book-bn bn-new" id="bn-new-<%= book.id %>">
+						<div class="loading"></div>
+
+					</td>
+					<td class="book-query book-bn bn-used" id="bn-used-<%= book.id %>">
 						<div class="loading"></div>
 
 					</td>
@@ -104,7 +112,7 @@
 					</span>
 					<span id="checkout-amazon-text">Checkout</span>
 				</button>
-			<td id="checkout-amazon-td" class="centered">
+			<td id="checkout-amazon-td" colspan="2" class="centered">
 				<button type="submit" class="btn btn-info" id="checkout-bn">
 					<span id="checkout-bn-icon-span">
 						<%= image_tag 'bn-icon-16-white.png', :id => "checkout-bn-icon" %>
