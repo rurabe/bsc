@@ -24,8 +24,8 @@ module BarnesAndNoble
 			end
 
 			def send_request(ean)
-				@response = Net::HTTP.get_response(api_build_uri(ean))
-				api_parse_response(@response)
+				encoded_response = Net::HTTP.get_response(api_build_uri(ean))
+				@all_parsed_responses = api_parse_response(encoded_response)
 				@parsed_response = @all_parsed_responses.first if @all_parsed_responses
 			end
 
@@ -40,15 +40,13 @@ module BarnesAndNoble
 			end
 
 			def api_parse_response(response)
-				object_response = Nokogiri::HTML.parse(CGI::unescape(response.body))
-				used_offers = select_used_offers(object_response)
-				@all_parsed_responses = used_offers.map do |offer|
-					if parse_rating(offer) > 3
+				@response = Nokogiri::HTML.parse(CGI::unescape(response.body))
+				used_offers = select_used_offers(@response)
+				used_offers.reject { |offer| parse_rating(offer) < 3 }.map do |offer|
 						{
 							:bn_used_price => parse_offer_price(offer),
 							:bn_used_ean => parse_offer_ean(offer)
 						}
-					end
 				end
 			end
 
