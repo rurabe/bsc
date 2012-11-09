@@ -75,7 +75,7 @@ module BarnesAndNoble
 			end
 
 			def numberize(string)
-				string.gsub("$","").to_d
+				string.to_s.gsub("$","").to_d
 			end
 
 	end
