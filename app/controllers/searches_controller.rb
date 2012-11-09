@@ -44,7 +44,7 @@ class SearchesController < ApplicationController
 	private
 
 		def amazon_response_format
-			[ :id, :ean, :amazon_new_price, :amazon_used_price ]
+			[ :id, :asin, :amazon_new_price, :amazon_used_price ]
 		end
 
 		def bn_response_format

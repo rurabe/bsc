@@ -146,7 +146,7 @@ $(document).ready(function(){
 					},
 					amazonCheckoutBehavior: function(){
 						var amazonTarget = priceDivsHeartShapedBox.amazonCheckoutData();
-						if (amaztonTarget){
+						if (amazonTarget){
 							$('a > #checkout-amazon').unwrap();
 							$('#checkout-amazon').wrap(
 								'<a href="' + amazonTarget + '" target="_blank" data-method="post" rel="nofollow"/>'
@@ -155,19 +155,6 @@ $(document).ready(function(){
 					},
 					bnCheckoutBehavior: function(){
 						priceDivsHeartShapedBox.bnCheckoutData();
-					},
-					bnAppendCheckoutRow: function(){
-						$('#bnLinks').append(this.bnCheckoutRow())			
-					},
-					bnCheckoutRow: function(){
-						return '<tr id="bn-checkout-' + this.vendorId + '">' +
-							 	'<td>' +
-							 		this.makeCartLinkable(this.title()) + 
-							 	'</td>' + 
-							 	'<td class="bn-checkout-book">' + 
-							 		this.makeCartLinkable(this.price) + 
-							 	'</td>' +  
-						'</tr>'
 					},
 					makeLinkable: function(content){
 						return '<a href=' + this.link() + ' target="_blank">' +
@@ -228,6 +215,19 @@ $(document).ready(function(){
 						return '<a href="' + this.cartLink() + '" target="_blank">' +
 							content + 
 						'</a>'
+					},
+					bnAppendCheckoutRow: function(){
+						$('#bnLinks').append(this.bnCheckoutRow())			
+					},
+					bnCheckoutRow: function(){
+						return '<tr id="bn-checkout-' + this.vendorId + '">' +
+							 	'<td>' +
+							 		this.makeCartLinkable(this.title()) + 
+							 	'</td>' + 
+							 	'<td class="bn-checkout-book">' + 
+							 		this.makeCartLinkable(this.price) + 
+							 	'</td>' +  
+						'</tr>'
 					}
 				})
 				priceDivsHeartShapedBox.divs.push(thisDiv);
@@ -287,6 +287,7 @@ $(document).ready(function(){
 					$('#bnLinks').empty();
 					var selectedBnDivs = this.selectByClass('book-bn','selected');
 					$.each(selectedBnDivs,function(){
+						console.log(this);
 						this.bnAppendCheckoutRow();
 					});
 
@@ -329,7 +330,7 @@ $(document).ready(function(){
 				return {
 					div: $("#amazon-" + condition + "-" + data.id),
 					vendor: "amazon",
-					vendorId: data.ean,
+					vendorId: data.asin,
 					price: data["amazon_" + condition +"_price"],
 					condition: condition
 				}
