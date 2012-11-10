@@ -45,10 +45,6 @@ $(document).ready(function(){
 		// Format bookstore sold outs as labels on load
 		$('span:contains(Sold out)').addClass('label');
 
-
-		$('#checkout-bn').click(function(){
-			$('#bnModal').modal('show');
-		})
 	
 	// [----------=====Async Book Prices=====----------]
 	
@@ -146,15 +142,21 @@ $(document).ready(function(){
 					},
 					amazonCheckoutBehavior: function(){
 						var amazonTarget = priceDivsHeartShapedBox.amazonCheckoutData();
-						if (amazonTarget){
 							$('a > #checkout-amazon').unwrap();
+						if (amazonTarget){
 							$('#checkout-amazon').wrap(
 								'<a href="' + amazonTarget + '" target="_blank" data-method="post" rel="nofollow"/>'
 							);
 						}
 					},
 					bnCheckoutBehavior: function(){
-						priceDivsHeartShapedBox.bnCheckoutData();
+						var bnTarget = priceDivsHeartShapedBox.bnCheckoutData();
+							$('a > #checkout-bn').unwrap();
+						if (bnTarget) {
+							$('#checkout-bn').wrap(
+								'<a href="' + bnTarget + '" target="_blank" rel="nofollow"/>'
+							);
+						}
 					},
 					makeLinkable: function(content){
 						return '<a href=' + this.link() + ' target="_blank">' +
@@ -182,11 +184,12 @@ $(document).ready(function(){
 			var amazonPriceDiv = function(params){
 				var obj = priceDiv(params);
 				var thisDiv = $.extend(obj,{
+					asin: params.asin,
 					newLink: function(){
-						return "https://www.amazon.com/dp/" + this.vendorId + "?tag=booksupply-20"
+						return "https://www.amazon.com/dp/" + this.asin + "?tag=booksupply-20"
 					},
 					usedLink: function(){
-						return "http://www.amazon.com/gp/offer-listing/" + this.vendorId + "?tag=booksupply-20"
+						return "http://www.amazon.com/gp/offer-listing/" + this.asin + "?tag=booksupply-20"
 					}
 				})
 				priceDivsHeartShapedBox.divs.push(thisDiv);
@@ -196,39 +199,23 @@ $(document).ready(function(){
 			var bnPriceDiv = function(params){
 				var obj = priceDiv(params);
 				var thisDiv = $.extend(obj,{
+					productCode: function(){
+						if(this.condition === "new") { return "BK" }
+						else if (this.condition === "used") { return "MP" }
+					},
 					newLink: function(){
 						return "http://click.linksynergy.com/deeplink?mid=36889&id=BF/ADxwv1Mc&murl=http%3A%2F%2Fwww.barnesandnoble.com%2Fean%2F" + this.vendorId
 					},
 					usedLink: function(){
 						return "http://click.linksynergy.com/deeplink?mid=36889&id=BF/ADxwv1Mc&murl=http%3A%2F%2Fwww.barnesandnoble.com%2Flisting%2F" + this.vendorId
 					},
-					cartLink: function(){
-						var baseUrl = "http://click.linksynergy.com/deeplink?mid=36889&id=BF/ADxwv1Mc&murl=" + 
-									 				"http%3A%2F%2Fcart2.barnesandnoble.com%2FShop%2Fxt_manage_cart.asp%3Fean%3D" + this.vendorId + "%26productcode%3D"
-						if(this.condition === "new") {
-							return baseUrl + "BK"
-						} else if (this.condition === "used"){
-							return baseUrl + "MP"
-						}
-					},
 					makeCartLinkable: function(content){
 						return '<a href="' + this.cartLink() + '" target="_blank">' +
 							content + 
 						'</a>'
 					},
-					bnAppendCheckoutRow: function(){
-						$('#bnLinks').append(this.bnCheckoutRow())			
-					},
-					bnCheckoutRow: function(){
-						return '<tr id="bn-checkout-' + this.vendorId + '">' +
-							 	'<td>' +
-							 		this.makeCartLinkable(this.title()) + 
-							 	'</td>' + 
-							 	'<td class="bn-checkout-book">' + 
-							 		this.makeCartLinkable(this.price) + 
-							 	'</td>' +  
-						'</tr>'
-					}
+
+
 				})
 				priceDivsHeartShapedBox.divs.push(thisDiv);
 				return thisDiv;
@@ -267,30 +254,32 @@ $(document).ready(function(){
 					});
 				},
 				amazonCheckoutData: function(){
-						var response = {amazon:{}};
-						
-						var newBooks = this.selectByClass('amazon-new','selected')
-						if (newBooks.length != 0) {
-							response.amazon.new = this.getIds(newBooks);
-						}
+					var response = {amazon:{}};
+					
+					var newBooks = this.selectByClass('amazon-new','selected')
+					if (newBooks.length != 0) {
+						response.amazon.new = this.getIds(newBooks);
+					}
 
-						var usedBooks = this.selectByClass('amazon-used','selected')
-						if (usedBooks.length != 0) {
-							response.amazon.used = this.getIds(usedBooks);
-						}
+					var usedBooks = this.selectByClass('amazon-used','selected')
+					if (usedBooks.length != 0) {
+						response.amazon.used = this.getIds(usedBooks);
+					}
 
-					if ( newBooks != 0 && usedBooks != 0 ){
+					if ( newBooks.length != 0 || usedBooks.length != 0 ){
 						return window.location.pathname + "/carts?" + $.param(response);
 					}
 				},
 				bnCheckoutData: function(){
-					$('#bnLinks').empty();
-					var selectedBnDivs = this.selectByClass('book-bn','selected');
-					$.each(selectedBnDivs,function(){
-						console.log(this);
-						this.bnAppendCheckoutRow();
-					});
+					var bnBooks = this.selectByClass("book-bn","selected")
+					if ( bnBooks.length != 0 ) {
+						var paramsString = bnBooks.reduce(function(a,e,i){
+								a.push( "ean" + (i+1) + "=" + e.vendorId + "&productcode" + (i+1) + "=" + e.productCode() + "&qty" + (i+1) + "=1" )
+								return a
+						},[]).join("&")
 
+						return "http://cart4.barnesandnoble.com/op/request.aspx?" + paramsString + "&stage=fullCart&uiaction=multAddMoreToCart"
+					}
 				}
 			}
 
@@ -330,9 +319,10 @@ $(document).ready(function(){
 				return {
 					div: $("#amazon-" + condition + "-" + data.id),
 					vendor: "amazon",
-					vendorId: data.asin,
+					vendorId: data.ean,
 					price: data["amazon_" + condition +"_price"],
-					condition: condition
+					condition: condition,
+					asin: data.asin
 				}
 			}
 		});
