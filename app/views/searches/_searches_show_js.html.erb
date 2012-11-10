@@ -153,6 +153,7 @@
 						}
 					})
 					priceDivsHeartShapedBox.divs.push(thisDiv);
+					thisDiv.makeExpress();
 					return thisDiv;
 				};
 
@@ -178,6 +179,7 @@
 
 					})
 					priceDivsHeartShapedBox.divs.push(thisDiv);
+					thisDiv.makeExpress();
 					return thisDiv;
 				};
 
@@ -262,8 +264,6 @@
 						amazonPriceDiv(a.amazonData(this,"new"));
 						amazonPriceDiv(a.amazonData(this,"used"));
 					});
-
-					priceDivsHeartShapedBox.makeExpress('book-amazon');
 				},
 				error: function(jqXHR, textStatus, errorThrown){
 					$(".book-amazon").each(function(){
@@ -296,8 +296,6 @@
 					$.each(data,function(){
 						bnPriceDiv(a.bnData(this,"new"))
 					});
-
-					priceDivsHeartShapedBox.makeExpress('bn-new');
 				},
 				error: function(jqXHR, textStatus, errorThrown){
 					$(".book-bn").each(function(){
