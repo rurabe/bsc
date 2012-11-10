@@ -30,3 +30,9 @@
 
 	</div>
 </div>
+
+<%= content_for :head do %>
+	<script>
+		<%= render :partial => 'searches_new.js' %>
+	</script>
+<% end %>

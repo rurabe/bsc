@@ -13,14 +13,19 @@ class SearchesController < ApplicationController
 
 	def create
 		@search = Search.new
-		Mecha::PortlandState.execute(	:username => params[:search][:username], 
-																	:password => params[:search][:password],
-																	:search 	=> @search)
-		if @search.save
-			redirect_to search_url(@search, :protocol => "http")
-		else
-			flash[:error] = @search.errors.full_messages
-			redirect_to new_search_url
+		begin
+			Mecha::PortlandState.execute(	:username => params[:search][:username], 
+																		:password => params[:search][:password],
+																		:search 	=> @search)
+			if @search.save
+				redirect_to search_url(@search, :protocol => "http")
+			else
+				flash[:error] = @search.errors.full_messages
+				render :new
+			end
+		rescue
+			flash[:error] = [generic_error_message.html_safe]
+			render :new
 		end
 	end
 
@@ -54,7 +59,11 @@ class SearchesController < ApplicationController
 		# Error handling
 		def error_handling(error)
 			flash[:error] = [error.message]
-			redirect_to new_search_url
+			render :new
+		end
+
+		def generic_error_message
+			%q[Oh noes! Looks like something went wrong. Try logging in again, or if it still won't work, <a href="mailto:help@booksupply.co" target="_blank"><strong>send us an email</strong></a> and we'll get a'fixin.]
 		end
 
 		# SSL Redirects
