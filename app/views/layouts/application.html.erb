@@ -9,8 +9,6 @@
   <meta property="og:type" content="company"/> 
   <meta property="og:image" content="http://www.booksupply.co/assets/logo-square-200.png"/> 
   <meta property="fb:admins" content="3403944" />
-
- 	<%= yield :head %>
 </head>
 <body>
 	<div id="fb-root"></div>
@@ -21,9 +19,9 @@
 			<% flash.each do |key,array| %>
 				<div class="alert alert-<%= key %> fade in">
 					<a class="close" data-dismiss="alert" href="#">&times;</a>
-					<ul id="flash-list">
+					<ul>
 						<% array.each do |error| %>
-							<li class="flash-item"><%= error %></li>
+							<li><%= error %></li>
 						<% end %>
 					</ul>
 				</div>
@@ -38,6 +36,6 @@
 
 
 
-
+	<%= javascript_include_tag "application" %>
 </body>
 </html>
