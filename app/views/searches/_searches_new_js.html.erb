@@ -11,7 +11,6 @@
 					$('.about-info').slideToggle();
 					$(this).fadeOut(200,function(){
 						$(this).text("OK, I got it!").fadeIn();
-						// $(this).parent().append("<button id='aboutlink' class='btn btn-info'>Learn moretabout</button>");
 					});
 					resizeExplanationDivs();
 				},
@@ -48,6 +47,7 @@
 			var maxSize = Math.max.apply(null,sizes);
 			$('p.about-explanation').map(function(){$(this).height(maxSize)});
 		}
+		
 		$(window).resize(function(){ resizeExplanationDivs(); })
 
 
