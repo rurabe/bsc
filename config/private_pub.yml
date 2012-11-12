@@ -1,0 +1,10 @@
+development:
+  server: "http://booksupplypub.herokuapp.com/faye"
+  secret_token: "7d897b92d46726ee5f6cfe136bae5a3f56bb2adc468afd5c8b79222283dd14de"
+test:
+  server: "http://booksupplypub.herokuapp.com/faye"
+  secret_token: "7d897b92d46726ee5f6cfe136bae5a3f56bb2adc468afd5c8b79222283dd14de"
+production:
+  server: "http://booksupplypub.herokuapp.com/faye"
+  secret_token: "7d897b92d46726ee5f6cfe136bae5a3f56bb2adc468afd5c8b79222283dd14de"
+  signature_expiration: 3600 # one hour

@@ -3,7 +3,7 @@ BookSupply::Application.routes.draw do
   match "/about"        => 'staticpages#about'
   match '/channel.html' => Facebook::Channel
 
-  resources :searches,    :except => [:index,:edit,:destroy] do
+  resources :searches,    :except => [:index,:destroy] do
     resources :carts,     :only => :create
   end
   

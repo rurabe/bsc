@@ -40,6 +40,11 @@ class SearchesController < ApplicationController
 			render :json => @search.books.to_json( :only => response_format )
 	end
 
+	def edit
+		@search = Search.find(params[:id])
+
+	end
+
 
 	private
 
