@@ -41,14 +41,14 @@
 			})
 
 		// [----------=====Keep the divs the same size =====----------]
-	 // resizeExplanationDivs = function(){
-	 // 		$('p.about-explanation').map(function(){$(this).removeAttr("style")});
-		// 	var sizes = $('p.about-explanation').map(function(){ return $(this).height() }).get();
-		// 	var maxSize = Math.max.apply(null,sizes);
-		// 	$('p.about-explanation').map(function(){$(this).height(maxSize)});
-		// }
+	 resizeExplanationDivs = function(){
+	 		$('p.about-explanation').map(function(){$(this).removeAttr("style")});
+			var sizes = $('p.about-explanation').map(function(){ return $(this).height() }).get();
+			var maxSize = Math.max.apply(null,sizes);
+			$('p.about-explanation').map(function(){$(this).height(maxSize)});
+		}
 		
-		// $(window).resize(function(){ resizeExplanationDivs(); })
+		$(window).resize(function(){ resizeExplanationDivs(); })
 
 
 	});
