@@ -1,5 +1,6 @@
 module Amazon
 	class	BooksQuery
+		attr_reader :parsed_response
 		def initialize(search)
 			@search = search
 			@parsed_response = nil
@@ -9,6 +10,7 @@ module Amazon
 		def control
 			query = Amazon::ItemLookup.new(build_item_lookup_params)
 			@parsed_response = query.parsed_response
+			p @parsed_response
 			update_books
 		end
 

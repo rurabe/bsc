@@ -17,6 +17,7 @@ class SearchesController < ApplicationController
 																	:password => params[:search][:password],
 																	:search 	=> @search)
 		if @search.save
+			AmazonWorker.perform_async(@search.id)
 			redirect_to search_url(@search, :protocol => "http")
 		else
 			flash[:error] = @search.errors.full_messages
@@ -31,7 +32,7 @@ class SearchesController < ApplicationController
 	def update
 		@search = Search.find(params[:id])
 		if params[:vendor] == "amazon"
-			Amazon::BooksQuery.new(@search)
+			AmazonWorker.perform_async(@search.id)
 			response_format = amazon_response_format
 		elsif params[:vendor] == "bn"
 			BarnesAndNoble::BooksQuery.new(@search)

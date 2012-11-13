@@ -1,3 +1,4 @@
+require 'sidekiq/web'
 BookSupply::Application.routes.draw do
 
   match "/about"        => 'staticpages#about'
@@ -11,6 +12,8 @@ BookSupply::Application.routes.draw do
 
   
   root :to => 'searches#new'
+
+  mount Sidekiq::Web, at: "/sidekiq"
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

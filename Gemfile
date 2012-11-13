@@ -26,6 +26,9 @@ group :development do
 end
 
 gem 'jquery-rails'
+gem 'sidekiq'
+gem 'sinatra'
+gem 'slim'
 gem 'private_pub'
 gem 'thin'
 
