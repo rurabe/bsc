@@ -4,7 +4,7 @@ module SearchesHelper
 		if price
 			number_to_currency(price)
 		else
-			"Sold out"
+			'<span class="label">Sold out</span>'.html_safe
 		end
 	end
 

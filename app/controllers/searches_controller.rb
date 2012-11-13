@@ -32,7 +32,7 @@ class SearchesController < ApplicationController
 	def update
 		@search = Search.find(params[:id])
 		if params[:vendor] == "amazon"
-			AmazonWorker.perform_async(@search.id)
+			# AmazonWorker.perform_async(@search.id)
 			response_format = amazon_response_format
 		elsif params[:vendor] == "bn"
 			BarnesAndNoble::BooksQuery.new(@search)

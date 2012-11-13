@@ -21,41 +21,70 @@
 <script>
 
 	$(document).ready(function(){
+
+		var BOOKSUPPLYCO = function(){
+
+			// Initializers
+
+
+
+
+
+
+
+
+
+			// Return object. Includes all public methods
+			return {
+
+
+			}
+		};
+	});
+
+	$(document).ready(function(){
 		// [----------------------------------------===== #SHOW =====----------------------------------------]
 
-			// Format bookstore sold outs as labels on load
-			$('span:contains(Sold out)').addClass('label');
-
+			
 		
 		// [----------=====Async Book Prices=====----------]
 		
 			// [----------===== ** Helper Methods (Async Book Prices) ** =====----------]
 
 
-				// Function to display prices
-				var showPrice = function(number){
-					return "$" + Number(number).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-				};
+				
+
 
 				// Constructor for priceDiv objects, which are called in the ajax callback
 				// params = {vendor,vendorId,price,condition, *link}
 				var priceDiv = function(params){
+
+					// Instance variables
+					var $div 				= params.div;
+					var vendor 			= params.vendor;
+					var vendorId		= params.vendorId;
+					var condition 	= params.condition;
+					var price 			= params.price
+					
+					// Function to determine if the item is sold out or not found
+					var setPrice = function(){
+						if ( vendorId === null ){ price = "Not found" }
+						else if ( price == null ){ price = "Sold out" }
+					}()
+
+					// Function to format prices => $ 123,456.78
+					var showPrice = function(number){
+						return "$" + Number(number).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+					};
+
 					return {
-						div: 				params.div,
-						vendor: 		params.vendor,
-						vendorId: 	params.vendorId,
-						condition:	params.condition,
-						price:			function(){
-													if ( params.vendorId === null ){ return "Not found" }
-													else if ( params.price == null ){ return "Sold out" }
-													else { return showPrice(params.price) }
-												}(),
+
 						changeContent: function(html,callback){
 							callback = callback || $.noop;
 							var that = this
-							that.div.children()
+							$div.children()
 											.fadeOut(function(){
-												$(that.div).html(
+												$div.html(
 																		'<span class="priceDiv-content">' + html + '</span>')
 															 		 .hide()
 																	 .fadeIn();
@@ -64,10 +93,10 @@
 							
 						},
 						toSimpleDiv: function(){
-							this.div.off()
-							this.div.addClass("simple")
-							this.div.removeClass("selectable")
-							if (this.price === "Sold out" || this.price === "Not found"){
+							$div.off()
+							$div.addClass("simple")
+							$div.removeClass("selectable")
+							if (price === "Sold out" || price === "Not found"){
 								this.simpleSoldOut();
 							} else {
 								this.simplePrice();
@@ -76,17 +105,17 @@
 						simplePrice: function(){
 							this.changeContent(
 								'<a href=' + this.link() + ' target="_blank">' +
-									 this.price
+									 showPrice(price)
 								+ '</a>'
 							);
 						},
 						simpleSoldOut: function(){
 							this.changeContent(
-								this.makeLabel(this.price)
+								this.makeLabel(price)
 							);
 						},
 						toExpressDiv: function(){
-							if (this.price === "Sold out" || this.price === "Not found"){
+							if (price === "Sold out" || price === "Not found"){
 								this.expressSoldOut();
 							} else {
 								this.expressPrice();
@@ -95,28 +124,28 @@
 						expressPrice: function(){
 							var that = this
 							this.makeToggleable();
-							this.div.addClass("selectable")
-							this.changeContent(this.price,function(){
-								that.div.removeClass("simple")
+							$div.addClass("selectable")
+							this.changeContent(showPrice(price),function(){
+								$div.removeClass("simple")
 							});
 							this.setCheckoutLinkHandler();
 						},
 						expressSoldOut: function(){
 							var that = this
-							this.changeContent(this.makeLabel(this.price),function(){
-								that.div.removeClass("simple")
+							this.changeContent(this.makeLabel(price),function(){
+								$div.removeClass("simple")
 							});
 						},
 						makeToggleable: function(){
-							this.div.addClass("selectable");
-							this.div.click(function(){
+							$div.addClass("selectable");
+							$div.click(function(){
 								$(this).toggleClass("selected")
 								$(this).siblings(".selected").removeClass("selected")
 							});
 						},
 						setCheckoutLinkHandler: function(){
 							var that = this
-							this.div.click(function(){
+							$div.click(function(){
 								that.amazonCheckoutBehavior();
 								that.bnCheckoutBehavior();
 							});
@@ -148,11 +177,11 @@
 							return '<span class="label">' + content + '</span>'
 						},
 						title: function(){
-							return this.div.siblings('.book-title').children('span').text()
+							return $div.siblings('.book-title').children('span').text()
 						},
 						link: function(){
-							if (this.vendorId){
-								if (this.condition === "new") {
+							if (vendorId){
+								if (condition === "new") {
 									return this.newLink();
 								} else {
 									return this.usedLink();
@@ -182,14 +211,14 @@
 					var obj = priceDiv(params);
 					var thisDiv = $.extend(obj,{
 						productCode: function(){
-							if(this.condition === "new") { return "BK" }
-							else if (this.condition === "used") { return "MP" }
+							if(condition === "new") { return "BK" }
+							else if (condition === "used") { return "MP" }
 						},
 						newLink: function(){
-							return "http://click.linksynergy.com/deeplink?mid=36889&id=BF/ADxwv1Mc&murl=http%3A%2F%2Fwww.barnesandnoble.com%2Fean%2F" + this.vendorId
+							return "http://click.linksynergy.com/deeplink?mid=36889&id=BF/ADxwv1Mc&murl=http%3A%2F%2Fwww.barnesandnoble.com%2Fean%2F" + vendorId
 						},
 						usedLink: function(){
-							return "http://click.linksynergy.com/deeplink?mid=36889&id=BF/ADxwv1Mc&murl=http%3A%2F%2Fwww.barnesandnoble.com%2Flisting%2F" + this.vendorId
+							return "http://click.linksynergy.com/deeplink?mid=36889&id=BF/ADxwv1Mc&murl=http%3A%2F%2Fwww.barnesandnoble.com%2Flisting%2F" + vendorId
 						},
 						makeCartLinkable: function(content){
 							return '<a href="' + this.cartLink() + '" target="_blank">' +
