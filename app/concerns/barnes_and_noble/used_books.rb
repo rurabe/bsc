@@ -1,52 +1,64 @@
+# TODO Needs to be rewriten to output the common ui interface
+# The best way would be to run the loop until it sees 3 eans, then have the ui_method pick by score
+
 module BarnesAndNoble
 	class UsedBooks
-		attr_reader :response, :parsed_response, :all_parsed_responses
+		attr_reader :response, :response_options, :retries
 		def initialize(ean)
-			@default_params = {:sze => 3,
+			@default_params = {:sze => 5,
 												:view => 'isbnservice',
 												:template => 'textbooksinlay',
 												:usedpagetype => 'usedisbn',
 												:uiAction => 'isbnservice'}
 			@ean = ean
+			@retries = nil
 			@response = nil
-			@parsed_response = nil
-			@all_parsed_responses = nil
+			@response_options = []
 			control
 		end
 
-		private
+		def ui_data
+			@response_options.find { |offer| offer[:rating] > 3.5 }.reject {|k| k == :rating }
+		end
+
+		# private
 			def control # Super sketchy API
-				query = 3.times do |i|
+				query = 2.times do |i|
 					r = send_request(@ean)
-					next if r.nil?
-					return if r[:bn_used_ean].present?
+					if !r.include?(nil)
+						@retries = i
+						return
+					end
+					@retries = i
 				end
 			end
 
 			def send_request(ean)
 				encoded_response = Net::HTTP.get_response(api_build_uri(ean))
-				@all_parsed_responses = api_parse_response(encoded_response)
-				@parsed_response = @all_parsed_responses.first if @all_parsed_responses
+				@response = Nokogiri::HTML.parse(CGI::unescape(encoded_response.body))
+				api_parse_response
 			end
 
-			def api_build_uri(ean)
-				url = "http://search.barnesandnoble.com/used/results.aspx?" + api_build_params(ean)
-				URI(url)
-			end
+				def api_build_uri(ean)
+					url = "http://search.barnesandnoble.com/used/results.aspx?" + api_build_params(ean)
+					URI(url)
+				end
 
-			def api_build_params(ean)
-				request_params = @default_params.merge(:pean => ean)
-				request_params.map { |key,value| "#{key.to_s}=#{value.to_s}" }.join("&")
-			end
+					def api_build_params(ean)
+						request_params = @default_params.merge(:pean => ean)
+						request_params.map { |key,value| "#{key.to_s}=#{value.to_s}" }.join("&")
+					end
 
-			def api_parse_response(response)
-				@response = Nokogiri::HTML.parse(CGI::unescape(response.body))
+			def api_parse_response
+				@response_options = []
 				used_offers = select_used_offers(@response)
-				used_offers.reject { |offer| parse_rating(offer) < 3 }.map do |offer|
-						{
-							:bn_used_price => parse_offer_price(offer),
-							:bn_used_ean => parse_offer_ean(offer)
-						}
+				used_offers.map do |offer|
+						@response_options << {  :rating => parse_rating(offer),
+																		:condition => 'used',
+																		:ean => parse_offer_ean(offer),
+																		:price => parse_offer_price(offer),
+																		:vendor => 'bn' }
+						parse_offer_ean(offer)
 				end
 			end
 
@@ -63,8 +75,8 @@ module BarnesAndNoble
 			end
 
 			def parse_offer_ean(node)
-				form = node.xpath('./div/div/form/input[@name="EAN"]')
-				form.attr('value').text if form.present?
+				form = node.xpath('./div/div/p[@class="product-details"]/a')
+				parse_result(form.attr('href').text,/EAN=(\d+)/) if form.present?
 			end
 
 			def parse_result(string,regex)
@@ -73,7 +85,7 @@ module BarnesAndNoble
 			end
 
 			def numberize(string)
-				string.to_s.gsub("$","").to_d
+				string.to_s.gsub("$","").to_d if string
 			end
 
 	end

@@ -32,13 +32,13 @@ class SearchesController < ApplicationController
 	def update
 		@search = Search.find(params[:id])
 		if params[:vendor] == "amazon"
-			# AmazonWorker.perform_async(@search.id)
-			response_format = amazon_response_format
+			query = Amazon::ItemLookup.new(@search.eans)
+			p query.ui_data
 		elsif params[:vendor] == "bn"
-			BarnesAndNoble::BooksQuery.new(@search)
-			response_format = bn_response_format
+			query = BarnesAndNoble::ItemLookup.new(@search.eans)
+			p query.ui_data
 		end
-			render :json => @search.books.to_json( :only => response_format )
+		render :json => query.ui_data.to_json
 	end
 
 	def edit
@@ -48,14 +48,6 @@ class SearchesController < ApplicationController
 
 
 	private
-
-		def amazon_response_format
-			[ :id, :asin, :ean, :amazon_new_price, :amazon_used_price ]
-		end
-
-		def bn_response_format
-			[ :id, :ean, :bn_new_price ]
-		end
 
 		# Error handling
 		def error_handling(error)

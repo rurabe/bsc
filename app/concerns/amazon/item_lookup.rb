@@ -4,33 +4,46 @@ module Amazon
 
 		def initialize(params) #{:new => ["1..","2.."], :used => ["3..","4.."] :options={:id_type => "EAN"}}
 			@custom_options = params.delete(:options)
-			@lookup_ids = params
+			@params = params
 			@request_defaults = {
 				:operation			=> 'ItemLookup',
 				:service 				=> 'AWSECommerceService',
 				:response_group => 'Offers,ItemAttributes',
 				:id_type 				=> 'EAN',
 				:search_index		=> 'Books'}
-	    @parsers = {
+	    @ui_parsers = {
 				:asin => 'ASIN',
 				:ean => 'ItemAttributes/EAN',
-				:isbn_10 => 'ItemAttributes/ISBN',
-				:amazon_new_price => 'Offers/Offer/OfferListing/Price/Amount[../../../OfferAttributes/Condition="New"]',
-				:amazon_new_offer_listing_id => 'Offers/Offer/OfferListing/OfferListingId[../../OfferAttributes/Condition="New"]',
-				:amazon_used_price => 'Offers/Offer/OfferListing/Price/Amount[../../../OfferAttributes/Condition="Used"]',
-				:amazon_used_offer_listing_id => 'Offers/Offer/OfferListing/OfferListingId[../../OfferAttributes/Condition="Used"]'}
+				:condition => 'Offers/Offer/OfferAttributes/Condition',
+				:price => 'Offers/Offer/OfferListing/Price/Amount'}
+			@cart_parsers = {
+				:offer_listing_id => 'Offers/Offer/OfferListing/OfferListingId'}
 	    @responses = []
-	    @parsed_response = {}
 	    control
 	 	end
 
-	 	def offer_listing_ids
-	 		@parsed_response.map do |id,info|
-	 			info.select {|key,value| key =~ /offer_listing_id/ }.values
-	 		end.flatten
+	 	def cart_data
+	 		@responses.flat_map do |response|
+		 		response.items.map do |item|
+		 			item.get(@cart_parsers[:offer_listing_id])
+		 		end
+	 		end
 	 	end
 
-	 	# private
+	 def ui_data
+	 		@responses.flat_map do |response|
+		 		response.items.map do |item|
+		 			@ui_parsers.inject({}) do |hash,(k,v)|
+		 				parsed_result = item.get(v)
+		 				parsed_result = format_price(parsed_result) if k =~ /price/i && parsed_result
+		 				parsed_result = parsed_result.downcase if k =~ /condition/i && parsed_result
+		 				hash.merge(k => parsed_result)
+		 			end.merge(:vendor => "amazon")
+		 		end
+	 		end
+	 	end
+
+	 	private
 
 			def control
 				build_params.map do |request_params|
@@ -43,24 +56,14 @@ module Amazon
 			def lookup(request_params)
 				response = send_request(request_params)
 				@responses << response
-				parse_response(response)
 			end
 
 			def send_request(request_params)
 				Amazon::Ecs.send_request(base_params.merge(request_params))
 			end
 
-			def parse_response(response)
-				response.items.each do |item|
-					data = @parsers.inject({}) { |hash,(k,v)| item.get(v) ? hash.merge(k => item.get(v)) : hash }
-					format_prices!(data)
-					key = data[base_params[:id_type].parameterize.to_sym]
-					@parsed_response[key] ? @parsed_response[key].merge!(data) : @parsed_response[key] = data
-				end
-			end
-
-			def format_prices!(data)
-				data.select { |k,v| k =~ /price/i ? data[k] = v.to_d / 100 : nil } 
+			def format_price(data)
+				(data.to_d / 100) if data
 			end
 
 			def base_params
@@ -84,10 +87,19 @@ module Amazon
 			end
 
 			def batch_ids
-				@lookup_ids.flat_map do |condition,ids|
+				prepare_params.flat_map do |condition,ids|
 					ids.each_slice(10).map do |batch|
 						{condition => batch}
 					end
+				end
+			end
+
+			def prepare_params
+				if @params.class == Array
+					{	:new => @params,
+						:used => @params}
+				else
+					@params
 				end
 			end
 	end

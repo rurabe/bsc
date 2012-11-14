@@ -15,6 +15,10 @@ class Search < ActiveRecord::Base
   	"http://book_supply.dev/searches/" + self.slug
   end
 
+  def eans
+    self.books.pluck(:ean)
+  end
+
   private  
 	  def set_slug
 	  	self.slug = SecureRandom.urlsafe_base64(7)

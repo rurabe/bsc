@@ -30,13 +30,13 @@ module Amazon
 			end
 
 			def build_item_params
-				get_item_offer_listing_ids.each_with_index.inject({}) do |hash,(id,i)|
+				cart_data.each_with_index.inject({}) do |hash,(id,i)|
 					hash.merge!( :"Item.#{i+1}.OfferListingId" => id, :"Item.#{i+1}.Quantity" => 1 )
 				end
 			end
 
-			def get_item_offer_listing_ids
-				Amazon::ItemLookup.new(@books).offer_listing_ids
+			def cart_data
+				Amazon::ItemLookup.new(@books).cart_data
 			end
 
 			def parse_cart_response(response)

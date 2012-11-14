@@ -52,7 +52,7 @@
 				</td>
 			</tr>
 			<% course.books.each do |book| %>
-				<tr class="book-row" id="book-row-<%= book.id %>">
+				<tr class="book-row" id="book-row-<%= book.ean %>">
 
 					<td class="book-requirement">
 							<span class="label requirement <%= requirement_class(book.requirement) %>">
@@ -67,33 +67,33 @@
 					</td>
 
 					<!-- Bookstore -->
-					<td class="book-bookstore bookstore-new" id="bookstore-new-<%= book.id %>">
+					<td class="book-bookstore bookstore-new">
 						<span>
 						<%= show_price(book.bookstore_new_price) %>
 						</span>
 					</td>
 
-					<td class="book-bookstore bookstore-used" id="bookstore-used-<%= book.id %>">
+					<td class="book-bookstore bookstore-used">
 						<span>
 						<%= show_price(book.bookstore_used_price) %>
 						</span>
 					</td>
 
 					<!-- Amazon -->
-					<td class="book-query book-amazon amazon-new" id="amazon-new-<%= book.id %>">
+					<td class="book-query book-amazon amazon-new">
 						<div class="loading"></div>
 					</td>
 
-					<td class="book-query book-amazon amazon-used" id="amazon-used-<%= book.id %>">
+					<td class="book-query book-amazon amazon-used">
 						<div class="loading"></div>
 
 					</td>
 					<!-- Barnes and Noble -->
-					<td class="book-query book-bn bn-new" id="bn-new-<%= book.id %>">
+					<td class="book-query book-bn bn-new">
 						<div class="loading"></div>
 
 					</td>
-					<td class="book-query book-bn bn-used" id="bn-used-<%= book.id %>">
+					<td class="book-query book-bn bn-used">
 						<div class="loading"></div>
 
 					</td>

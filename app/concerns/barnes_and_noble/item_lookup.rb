@@ -15,11 +15,19 @@ module BarnesAndNoble
 			control
 		end
 
+		def ui_data
+			products = response.xpath('./ProductLookupResponse/ProductLookupResult/Product')
+			if products.count == 1
+				ui_data_parsers(products)
+			else
+				products.map { |product| ui_data_parsers(product) }
+			end
+		end
+
 		private
 
 			def control
 				@response = send_request(build_lookup_params)
-				parse_lookup_response(@response)
 			end
 
 			def build_lookup_params
@@ -34,25 +42,12 @@ module BarnesAndNoble
 				end
 			end
 
-			def parse_lookup_response(response)
-				products = response.xpath('./ProductLookupResponse/ProductLookupResult/Product')
-				if products.count == 1
-					data = parse_product(products)
-					key = data[:ean]
-					@parsed_response[key] ? @parsed_response[key].merge!(data) : @parsed_response[key] = data
-				else
-					products.map do |product|
-						data = parse_product(product)
-						key = data[:ean]
-						@parsed_response[key] ? @parsed_response[key].merge!(data) : @parsed_response[key] = data
-					end
-				end
-			end
-
-			def parse_product(product)
+			def ui_data_parsers(product)
 					{
 						:ean      		=> product.xpath('./Ean').text,
-						:bn_new_price => product.xpath('./Prices/BnPrice').text.to_d,
+						:price 				=> product.xpath('./Prices/BnPrice').text.to_d,
+						:condition 		=> "new",
+						:vendor				=> "bn"
 					}
 			end
 	end
