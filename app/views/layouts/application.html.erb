@@ -34,8 +34,11 @@
 	<div>
 		
 
+		<div id="jses">
+			<%= javascript_include_tag "application" %>
+			<%= yield :page_js %>
+		</div>
 
 
-	<%= javascript_include_tag "application" %>
 </body>
 </html>

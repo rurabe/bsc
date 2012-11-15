@@ -1,6 +1,3 @@
-# TODO Needs to be rewriten to output the common ui interface
-# The best way would be to run the loop until it sees 3 eans, then have the ui_method pick by score
-
 module BarnesAndNoble
 	class UsedBooks
 		attr_reader :response, :response_options, :retries
@@ -56,6 +53,7 @@ module BarnesAndNoble
 						@response_options << {  :rating => parse_rating(offer),
 																		:condition => 'used',
 																		:ean => parse_offer_ean(offer),
+																		:parent_ean => @ean,
 																		:price => parse_offer_price(offer),
 																		:vendor => 'bn' }
 						parse_offer_ean(offer)
