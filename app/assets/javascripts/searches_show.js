@@ -1,5 +1,10 @@
 $(document).ready(function(){
 
+	$.ajax({
+		
+	})
+
+
 	(BOOKSUPPLYCO = function(){
 
 		// Set handlers for link/express switch

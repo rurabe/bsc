@@ -35,10 +35,6 @@ class SearchesController < ApplicationController
 		render :json => query.ui_data.to_json
 	end
 
-	def edit
-		@search = Search.find(params[:id])
-	end
-
 
 	private
 
