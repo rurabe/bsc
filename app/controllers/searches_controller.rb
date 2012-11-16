@@ -17,7 +17,6 @@ class SearchesController < ApplicationController
 																	:password => params[:search][:password],
 																	:search 	=> @search)
 		if @search.save
-			AmazonWorker.perform_async(@search.id)
 			redirect_to search_url(@search, :protocol => "http")
 		else
 			flash[:error] = @search.errors.full_messages
@@ -27,6 +26,7 @@ class SearchesController < ApplicationController
 
 	def show
 		@search = Search.find(params[:id])
+		@search.push_book_info
 	end
 
 	def update

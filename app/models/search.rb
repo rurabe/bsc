@@ -10,6 +10,12 @@ class Search < ActiveRecord::Base
  	extend FriendlyId
  	friendly_id :slug, :use => :slugged
 
+  def push_book_info
+    BookLookupWorker.perform_async(:amazon,id)
+    BookLookupWorker.perform_async(:bn,id)
+    eans.each { |ean| UsedBnBookLookupWorker.perform_async(ean,id) }
+  end
+
   def lookup(vendor)
     case vendor
       when "amazon" then Amazon::ItemLookup.new(eans)
