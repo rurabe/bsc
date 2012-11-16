@@ -13,4 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require private_pub
-//= require_tree .
+//= require bootstrap.min.js
+//= require facebook.js
+//= require twitter.js
