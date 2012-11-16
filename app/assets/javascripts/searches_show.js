@@ -1,9 +1,68 @@
 $(document).ready(function(){
 
-	$.ajax({
-		
-	})
+	$.ajax({ // Amazon
+			type: 'PUT',
+			dataType: "json",
+			data: {vendor: "amazon"},
+			success: function(data, textStatus, jqXHR){
+				$.each(data,function(){
+					BOOKSUPPLYCO.importData(this);
+				});
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				$(".book-amazon").each(function(){
+					// Fade out the loading divs
+					$(this).children(".loading")
+								 .fadeOut(function(){
+						$(this).parent().html('<span class="label">Error</span>').hide().fadeIn();
+						console.log(errorThrown);
+					});
+				})
+			}
+		});
 
+		$.ajax({ // Barnes and Noble
+			type: 'PUT',
+			dataType: "json",
+			data: {vendor: "bn"},
+			success: function(data, textStatus, jqXHR){
+				var a = this;
+				$.each(data,function(){
+					BOOKSUPPLYCO.importData(this)
+				});
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				$(".book-bn").each(function(){
+					// Fade out the loading divs
+					$(this).children(".loading")
+								 .fadeOut(function(){
+						$(this).parent().html('<span class="label">Error</span>').hide().fadeIn();
+						console.log(errorThrown);
+					});
+				})
+			}
+		});
+
+		$('.bn-used').each(function(){
+			var div = this;
+			$.ajax({ // Barnes and Noble
+				type: 'PUT',
+				url: '/books/' + $(div).parent().attr('id').match(/book-row-(\d+)/)[1],
+				dataType: "json",
+				success: function(data, textStatus, jqXHR){
+					BOOKSUPPLYCO.importData(data);			
+				},
+				error: function(jqXHR, textStatus, errorThrown){
+					
+						// Fade out the loading divs
+					$(this).children(".loading")
+								 .fadeOut(function(){
+						$(this).parent().html('<span class="label">Error</span>').hide().fadeIn();
+						console.log(errorThrown);
+					});
+				}
+			});
+		});
 
 	(BOOKSUPPLYCO = function(){
 

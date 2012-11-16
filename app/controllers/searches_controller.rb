@@ -26,7 +26,6 @@ class SearchesController < ApplicationController
 
 	def show
 		@search = Search.find(params[:id])
-		@search.push_book_info
 	end
 
 	def update
