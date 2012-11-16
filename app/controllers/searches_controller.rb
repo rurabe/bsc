@@ -31,19 +31,12 @@ class SearchesController < ApplicationController
 
 	def update
 		@search = Search.find(params[:id])
-		if params[:vendor] == "amazon"
-			query = Amazon::ItemLookup.new(@search.eans)
-			p query.ui_data
-		elsif params[:vendor] == "bn"
-			query = BarnesAndNoble::ItemLookup.new(@search.eans)
-			p query.ui_data
-		end
+		query = @search.lookup(params[:vendor])
 		render :json => query.ui_data.to_json
 	end
 
 	def edit
 		@search = Search.find(params[:id])
-
 	end
 
 

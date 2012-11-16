@@ -10,16 +10,19 @@ class Search < ActiveRecord::Base
  	extend FriendlyId
  	friendly_id :slug, :use => :slugged
 
-
-  def permalink
-  	"http://book_supply.dev/searches/" + self.slug
+  def lookup(vendor)
+    case vendor
+      when "amazon" then Amazon::ItemLookup.new(eans)
+      when "bn" then BarnesAndNoble::ItemLookup.new(eans)
+    end
   end
 
-  def eans
-    self.books.pluck(:ean)
-  end
+  private
+  
+    def eans
+      books.pluck(:ean)
+    end
 
-  private  
 	  def set_slug
 	  	self.slug = SecureRandom.urlsafe_base64(7)
 	  end
