@@ -28,9 +28,9 @@ module Mecha
 				login_page = mecha.get('https://banweb.pdx.edu/pls/oprd/twbkwbis.P_WWWLogin')
 
 				login_form = login_page.form('loginform')
-					login_form.sid = username
-					login_form.PIN = password
-
+				login_form.sid = username
+				login_form.PIN = password
+				
 				main_page = login_form.submit
 
 				if login_failed?(main_page)

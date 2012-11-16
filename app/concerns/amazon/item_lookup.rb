@@ -2,20 +2,20 @@ module Amazon
 	class ItemLookup
 		attr_reader :responses, :parsed_response
 
-		def initialize(params) #{:new => ["1..","2.."], :used => ["3..","4.."] :options={:id_type => "EAN"}}
+		def initialize(params) #{:new => ["1..","2.."], :used => ["3..","4.."] :options=>{:id_type => "EAN"}}
 			@custom_options = params.delete(:options)
 			@params = params
 			@request_defaults = {
 				:operation			=> 'ItemLookup',
 				:service 				=> 'AWSECommerceService',
-				:response_group => 'Offers,ItemAttributes',
+				:response_group => 'Offers,ItemAttributes,Request',
 				:id_type 				=> 'EAN',
 				:search_index		=> 'Books'}
 	    @ui_parsers = {
-				:asin => 'ASIN',
-				:ean => 'ItemAttributes/EAN',
-				:condition => 'Offers/Offer/OfferAttributes/Condition',
-				:price => 'Offers/Offer/OfferListing/Price/Amount'}
+				:asin 					=> 'ASIN',
+				:ean 						=> 'ItemAttributes/EAN',
+				:condition 			=> 'Offers/Offer/OfferAttributes/Condition',
+				:price 					=> 'Offers/Offer/OfferListing/Price/Amount'}
 			@cart_parsers = {
 				:offer_listing_id => 'Offers/Offer/OfferListing/OfferListingId'}
 	    @responses = []
@@ -31,31 +31,67 @@ module Amazon
 	 	end
 
 	 def ui_data
-	 		@responses.flat_map do |response|
-		 		response.items.map do |item|
-		 			@ui_parsers.inject({}) do |hash,(k,v)|
-		 				parsed_result = item.get(v)
-		 				parsed_result = format_price(parsed_result) if k =~ /price/i && parsed_result
-		 				parsed_result = parsed_result.downcase if k =~ /condition/i && parsed_result
-		 				hash.merge(k => parsed_result)
-		 			end.merge(:vendor => "amazon")
+	 		@responses.each_with_index.flat_map do |response,responses_index|
+		 		response.items.each_with_index.map do |item,item_index|
+		 			parse_ui_data(item,item_index,responses_index)
 		 		end
 	 		end
 	 	end
 
-	 	private
+	 	# private
+
+	 		def parse_ui_data(item,item_index,responses_index)
+	 			{
+	 				:asin 			=> parse_asin(item),
+	 				:ean 				=> parse_ean(item),
+	 				:condition  => parse_condition(item,item_index,responses_index),
+	 				:price 			=> parse_price(item),
+	 				:vendor			=> "amazon"
+	 			}
+	 		end
+
+	 		def parse_asin(item)
+	 			item.get('ASIN')
+	 		end
+
+	 		def parse_ean(item)
+	 			item.get('ItemAttributes/EAN')
+	 		end
+
+	 		def parse_condition(item,item_index,responses_index)
+	 			condition = item.get('Offers/Offer/OfferAttributes/Condition') || condition_index[responses_index][item_index]
+	 			condition.downcase if condition
+	 		end
+
+	 		def parse_price(item)
+	 			format_price(item.get('Offers/Offer/OfferListing/Price/Amount'))
+	 		end
+
+	 		def custom_options
+	 			@custom_options ||= {}
+	 		end
 
 			def control
 				build_params.map do |request_params|
 					# {:"ItemLookup.1.Condition"=>"New", :"ItemLookup.1.ItemId"=>"1428312234,1604067454,0781760038,1604060441", 
 					#  :"ItemLookup.1.MerchantId"=>"Amazon", :"ItemLookup.2.Condition"=>"Used", :"ItemLookup.2.ItemId"=>"160406062X,1604062908"}
-					lookup(request_params)
+					@responses << lookup(request_params)
+				end
+
+			end
+
+			def condition_index
+				batch_ids.each_slice(2).map do |slice|
+					slice.flat_map do |hash|
+						hash.flat_map do |k,v|
+							v.length.times.map { k.to_s }
+						end
+					end
 				end
 			end
 
 			def lookup(request_params)
-				response = send_request(request_params)
-				@responses << response
+				send_request(request_params)
 			end
 
 			def send_request(request_params)
@@ -67,7 +103,7 @@ module Amazon
 			end
 
 			def base_params
-				@custom_options ? @request_defaults.merge(@custom_options) : @request_defaults
+				@request_defaults.merge(custom_options)
 			end
 
 			def build_params
