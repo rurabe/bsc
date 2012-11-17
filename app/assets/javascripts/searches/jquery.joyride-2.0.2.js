@@ -494,6 +494,7 @@
       },
 
       pos_modal : function ($nub) {
+        console.log("this fucker")
         methods.center();
         $nub.hide();
 

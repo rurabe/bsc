@@ -3,6 +3,7 @@ $(document).ready(function(){
 	(BOOKSUPPLYCO = function(){
 
 		var takeTour = function(){
+			console.log("tour!!!")
 			// Start the tour
 			$('#tour').joyride({
 				tipLocation: 'top',
@@ -18,8 +19,10 @@ $(document).ready(function(){
 		}
 
 		if (!$.cookie('boooksupplyco_tour')){
-			$('#tour-button').hide()
+			$('#tour-button').hide().off()`
 			takeTour();
+		}else{
+			$('#tour-button').on('click',function(){ takeTour(); })
 		}
 
 	$.ajax({ // Amazon
