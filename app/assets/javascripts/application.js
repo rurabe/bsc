@@ -15,3 +15,4 @@
 //= require bootstrap.min.js
 //= require facebook.js
 //= require twitter.js
+//= require jquery.cookie.js
