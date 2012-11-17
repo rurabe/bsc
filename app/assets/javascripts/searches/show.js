@@ -10,8 +10,5 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
-//= require jquery
-//= require jquery_ujs
-//= require bootstrap.min.js
-//= require facebook.js
-//= require twitter.js
+//= require ./jquery.joyride-2.0.2.js
+//= require ./show_page.js
