@@ -1,5 +1,9 @@
 $(document).ready(function(){
 
+	$('#tour').joyride({
+		tipLocation: 'top',
+	})
+
 	$.ajax({ // Amazon
 			type: 'PUT',
 			dataType: "json",

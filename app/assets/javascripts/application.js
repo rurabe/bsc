@@ -12,7 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require private_pub
 //= require bootstrap.min.js
 //= require facebook.js
 //= require twitter.js
+// require jquery.joyride-2.0.2.js

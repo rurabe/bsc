@@ -29,8 +29,6 @@ gem 'jquery-rails'
 gem 'sidekiq'
 gem 'sinatra'
 gem 'slim'
-gem 'private_pub'
-gem 'thin'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

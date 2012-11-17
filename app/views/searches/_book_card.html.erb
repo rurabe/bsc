@@ -6,11 +6,11 @@
 				<th colspan="2">
 					<label class="checkout-label">
 						<input type="radio" id="simple" name="checkout-option" value="simple" class="checkout-radio">
-						<span class="label">Just links</span>
+						<span class="label simple-button" id="simple-button">Just links</span>
 					</label>
 					<label class="checkout-label">
 						<input type="radio" id="express" name="checkout-option" value="express" class="checkout-radio" checked="checked"> 
-						<span class="label label-info">Express mode</span>
+						<span class="label label-info express-button" id="express-button">Express mode</span>
 					</label>
 				</th>
 				<th class="header" colspan="2">Bookstore</th>
@@ -51,7 +51,7 @@
 					<%= course.department %> <%= course.number %>
 				</td>
 			</tr>
-			<% course.books.each do |book| %>
+			<% course.books.each_with_index do |book,i| %>
 				<tr class="book-row" id="book-row-<%= book.ean %>">
 
 					<td class="book-requirement">
@@ -80,7 +80,7 @@
 					</td>
 
 					<!-- Amazon -->
-					<td class="book-query book-amazon amazon-new">
+					<td class="book-query book-amazon amazon-new <%= "first" if i == 0 %>">
 						<div class="loading"></div>
 					</td>
 

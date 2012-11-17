@@ -255,6 +255,10 @@ td.book-query {
 	color: #FFFFFF;
 }
 
+#checkout-amazon {
+	min-width: 117px
+}
+
 #checkout-amazon-td {
 	text-align: center;
 }
@@ -262,6 +266,10 @@ td.book-query {
 #checkout-amazon-icon {
 	font-size: 24px;
 	line-height: 12px;
+}
+
+#checkout-bn {
+	min-width: 117px
 }
 
 #checkout-bn-td {
@@ -292,4 +300,8 @@ label.checkout-label {
 
 table#bnLinks tr td.bn-checkout-book{
 	text-align: right;
+}
+
+#tour {
+	display: none
 }
