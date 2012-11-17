@@ -19,7 +19,7 @@ $(document).ready(function(){
 		}
 
 		if (!$.cookie('boooksupplyco_tour')){
-			$('#tour-button').hide().off()`
+			$('#tour-button').hide().off()
 			takeTour();
 		}else{
 			$('#tour-button').on('click',function(){ takeTour(); })
