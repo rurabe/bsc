@@ -156,12 +156,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord-jdbcpostgresql-adapter
   amazon-ecs
   coffee-rails (~> 3.2.1)
   friendly_id
   jquery-rails
-  jruby-openssl
   mechanize
   newrelic_rpm
   pg
@@ -172,5 +170,4 @@ DEPENDENCIES
   sidekiq
   sinatra
   slim
-  therubyrhino
   uglifier (>= 1.0.3)
