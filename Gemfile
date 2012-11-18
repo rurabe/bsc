@@ -4,8 +4,17 @@ gem 'rails', '3.2.7'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
+
+platforms :jruby do
+	gem 'activerecord-jdbcpostgresql-adapter'
+	gem 'jruby-openssl'
+end
+
+platforms :ruby do
+	gem 'pg'
+end
+
 gem 'puma'
-gem 'pg'
 gem 'mechanize'
 gem 'amazon-ecs'
 gem 'friendly_id'
@@ -19,6 +28,7 @@ group :assets do
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platforms => :ruby
   gem 'uglifier', '>= 1.0.3'
+  gem 'therubyrhino', :platforms => :jruby
 end
 
 group :development do
