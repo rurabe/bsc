@@ -30,6 +30,6 @@ class Search < ActiveRecord::Base
     end
 
 	  def set_slug
-	  	self.slug = SecureRandom.urlsafe_base64(7)
+	  	self.slug = SecureRandom.urlsafe_base64(7) if self.new_record?
 	  end
 end
