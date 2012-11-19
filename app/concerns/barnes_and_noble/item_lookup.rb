@@ -16,12 +16,12 @@ module BarnesAndNoble
 		end
 
 		def ui_data
+			@parsed_response = request_items
 			products = response.xpath('./ProductLookupResponse/ProductLookupResult/Product')
-			if products.count == 1
-				ui_data_parsers(products)
-			else
-				products.map { |product| ui_data_parsers(product) }
+			products.map do |product| 
+				set_price_information(product)
 			end
+			@parsed_response
 		end
 
 		private
@@ -35,10 +35,21 @@ module BarnesAndNoble
 			end
 
 			def parameterized_eans
-				if @eans.class == String
-					@eans
-				elsif @eans.class == Array
-					@eans.delete_if { |product| product.nil? }.join(",")
+				@eans.delete_if { |product| product.nil? }.join(",")
+			end
+
+			def set_price_information(product)
+				product_matches = @parsed_response.select { |book| book[:ean] == product.xpath('./Ean').text }
+				product_matches.each do |match|
+					match.merge!( :price  => product.xpath('./Prices/BnPrice').text,
+											  :vendor => "bn" )
+				end
+			end
+
+			def request_items
+				@eans.flat_map do |ean|
+					{:condition 	=> "new",
+					 :ean 			 	=> ean}
 				end
 			end
 

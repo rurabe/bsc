@@ -12,6 +12,7 @@ $(document).ready(function(){
 					$(this).text("OK, I got it!").fadeIn();
 				});
 				resizeExplanationDivs();
+				$(window).resize(resizeExplanationDivs);
 			},
 			function(){
 				$('.logo-inner').animate({'margin-top': '-250px'});
@@ -40,11 +41,12 @@ $(document).ready(function(){
 		})
 
 	// [----------=====Keep the divs the same size =====----------]
- var resizeExplanationDivs = function(){
- 		$('p.about-explanation').map(function(){$(this).removeAttr("style")});
-		var sizes = $('p.about-explanation').map(function(){ return $(this).height() }).get();
-		var maxSize = Math.max.apply(null,sizes);
-		$('p.about-explanation').map(function(){$(this).height(maxSize)});
-	}
+
+	  var resizeExplanationDivs = function(){
+	 		$('p.about-explanation').map(function(){$(this).removeAttr("style")});
+			var sizes = $('p.about-explanation').map(function(){ return $(this).height() }).get();
+			var maxSize = Math.max.apply(null,sizes);
+			$('p.about-explanation').map(function(){$(this).height(maxSize)});
+		}
 	
 });

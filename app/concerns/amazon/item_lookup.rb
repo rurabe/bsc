@@ -34,6 +34,7 @@ module Amazon
  					set_vendor_information(item)
  				end
  			end
+ 			@parsed_response
 	 	end
 
 	 	private
