@@ -51,6 +51,7 @@
 					<%= course.department %> <%= course.number %>
 				</td>
 			</tr>
+
 			<% course.books.each_with_index do |book,i| %>
 				<tr class="book-row" id="book-row-<%= book.ean %>">
 

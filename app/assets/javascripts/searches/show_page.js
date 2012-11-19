@@ -1,38 +1,11 @@
 $(document).ready(function(){
 
-	(BOOKSUPPLYCO = function(){
-
-		var takeTour = function(){
-			console.log("tour!!!")
-			// Start the tour
-			$('#tour').joyride({
-				tipLocation: 'top',
-				postRideCallback: function(){
-					$('#tour-button').fadeIn();
-					$('#tour-button').on('click',function(){ takeTour(); })
-				}
-			});
-
-			$.cookie('boooksupplyco_tour','taken', {
-				expires: 90
-			});
-		}
-
-		if (!$.cookie('boooksupplyco_tour')){
-			$('#tour-button').hide().off()
-			takeTour();
-		}else{
-			$('#tour-button').on('click',function(){ takeTour(); })
-		}
-
 	$.ajax({ // Amazon
 			type: 'PUT',
 			dataType: "json",
 			data: {vendor: "amazon"},
 			success: function(data, textStatus, jqXHR){
-				$.each(data,function(){
-					BOOKSUPPLYCO.importData(this);
-				});
+				BOOKSUPPLYCO.importData(data);
 			},
 			error: function(jqXHR, textStatus, errorThrown){
 				$(".book-amazon").each(function(){
@@ -51,10 +24,7 @@ $(document).ready(function(){
 			dataType: "json",
 			data: {vendor: "bn"},
 			success: function(data, textStatus, jqXHR){
-				var a = this;
-				$.each(data,function(){
-					BOOKSUPPLYCO.importData(this)
-				});
+				BOOKSUPPLYCO.importData(data);
 			},
 			error: function(jqXHR, textStatus, errorThrown){
 				$(".book-bn").each(function(){
@@ -88,6 +58,31 @@ $(document).ready(function(){
 				}
 			});
 		});
+
+	(BOOKSUPPLYCO = function(){
+
+		var takeTour = function(){
+			console.log("tour!!!")
+			// Start the tour
+			$('#tour').joyride({
+				tipLocation: 'top',
+				postRideCallback: function(){
+					$('#tour-button').fadeIn();
+					$('#tour-button').on('click',function(){ takeTour(); })
+				}
+			});
+
+			$.cookie('boooksupplyco_tour','taken', {
+				expires: 90
+			});
+		}
+
+		if (!$.cookie('boooksupplyco_tour')){
+			$('#tour-button').hide().off()
+			takeTour();
+		}else{
+			$('#tour-button').on('click',function(){ takeTour(); })
+		}
 
 		// Set handlers for link/express switch
 		$('#simple').change(function(){
