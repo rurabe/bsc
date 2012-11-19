@@ -1,5 +1,5 @@
 class Search < ActiveRecord::Base
-  attr_accessible :username, :password, :slug
+  attr_accessible :username, :password
 
   has_many :courses
   has_many :books, :through => :courses

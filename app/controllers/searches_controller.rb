@@ -12,15 +12,21 @@ class SearchesController < ApplicationController
 	end
 
 	def create
-		@search = Search.new
-		Mecha::PortlandState.execute(	:username => params[:search][:username], 
-																	:password => params[:search][:password],
-																	:search 	=> @search)
-		if @search.save
-			redirect_to search_url(@search, :protocol => "http")
+		case params[:search][:username]
+		when "test"
+			@search = Search.find("example")
+			redirect_to search_url(@search,:protocol => "http")
 		else
-			flash[:error] = @search.errors.full_messages
-			redirect_to new_search_url
+			@search = Search.new
+			Mecha::PortlandState.execute(	:username => params[:search][:username], 
+																		:password => params[:search][:password],
+																		:search 	=> @search)
+			if @search.save
+				redirect_to search_url(@search, :protocol => "http")
+			else
+				flash[:error] = @search.errors.full_messages
+				redirect_to new_search_url
+			end
 		end
 	end
 
