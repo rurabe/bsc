@@ -1,11 +1,11 @@
 <div class="row-fluid">
-	<div class="logo">
+	<div class="logo-box">
 		<%= link_to root_url do %>
-			<%= image_tag 'logo.png' %>
+			<h1 class="logo">BOOK SUPPLY CO.</h1>
 		<% end %>
 	</div>
-	<div class="school">
-		<%= image_tag 'psu-sublogo.png' %>
+	<div class="school-box">
+		<h2 class="school-name"><%= @school.name.upcase %></h2>
 	</div>
 	<div class="subtag">
 		All your books, online, for cheap. No lines, no wait!

@@ -1,0 +1,8 @@
+<h1 class="logo">BOOK SUPPLY CO.</h1>
+<p>Find me in app/views/schools/index.html.erb</p>
+
+<% @schools.each do |school| %>
+	<%= link_to new_search_url :school => school.slug do %>
+		<h2 class="school-name"><%= school.name.upcase %></h2>
+	<% end %>
+<% end %>

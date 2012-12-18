@@ -6,12 +6,13 @@ class SearchesController < ApplicationController
 
 	rescue_from Mecha::AuthenticationError, :with => :error_handling
 
-
 	def new
 		@search = Search.new
+		@school = School.find(params[:school])
 	end
 
 	def create
+		@school = params[:school]
 		case params[:search][:username]
 		when "test"
 			@search = Search.find("example")
@@ -22,7 +23,7 @@ class SearchesController < ApplicationController
 																		:password => params[:search][:password],
 																		:search 	=> @search)
 			if @search.save
-				redirect_to search_url(@search, :protocol => "http")
+				redirect_to search_url(@search, :protocol => "http", :school => @school)
 			else
 				flash[:error] = @search.errors.full_messages
 				redirect_to new_search_url
@@ -31,11 +32,13 @@ class SearchesController < ApplicationController
 	end
 
 	def show
+		@school = params[:school]
 		@search = Search.find(params[:id])
 	end
 
 	def update
 		@search = Search.find(params[:id])
+		@school = params[:school]
 		query = @search.lookup(params[:vendor])
 		render :json => query.ui_data.to_json
 	end

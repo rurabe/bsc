@@ -16,3 +16,6 @@
 //= require facebook.js
 //= require twitter.js
 //= require jquery.cookie.js
+//= require jquery.arctext.js
+
+$('.logo').arctext({radius:2000})
