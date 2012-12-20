@@ -1,6 +1,6 @@
 
 module Mecha
-	class PortlandState
+	class Pdx
 
 		def self.execute(options = {}) #{:username => 'foo', :password => 'blah', :search => #<Search>}
 			username 	= options.fetch(:username)

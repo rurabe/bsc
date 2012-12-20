@@ -12,18 +12,18 @@ class SearchesController < ApplicationController
 	end
 
 	def create
-		@school = params[:school]
+		@school = School.find(params[:school])
 		case params[:search][:username]
 		when "test"
 			@search = Search.find("example")
-			redirect_to search_url(@search,:protocol => "http")
+			redirect_to search_url(@search,:protocol => "http", :school => @school.slug )
 		else
 			@search = Search.new
 			Mecha::PortlandState.execute(	:username => params[:search][:username], 
 																		:password => params[:search][:password],
 																		:search 	=> @search)
 			if @search.save
-				redirect_to search_url(@search, :protocol => "http", :school => @school)
+				redirect_to search_url(@search, :protocol => "http", :school => @school.slug )
 			else
 				flash[:error] = @search.errors.full_messages
 				redirect_to new_search_url
