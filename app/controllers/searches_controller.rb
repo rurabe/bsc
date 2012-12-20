@@ -32,7 +32,7 @@ class SearchesController < ApplicationController
 	end
 
 	def show
-		@school = params[:school]
+		@school = School.find(params[:school])
 		@search = Search.find(params[:id])
 	end
 

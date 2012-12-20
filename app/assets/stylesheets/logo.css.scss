@@ -1,20 +1,11 @@
-// CSS Styles for the logos
+// This file contains the default styles for the logo.
 
-@font-face {
-  font-family:  'FuturaBold';
-  src:          url(font-path('futura_bold_bt-webfont.eot') + '?#iefix') format('embedded-opentype'),
-                url(font-path('futura_bold_bt-webfont.woff')) format('woff'),
-                url(font-path('futura_bold_bt-webfont.ttf')) format('truetype'),
-                url(font-path('futura_bold_bt-webfont.svg') + '#FuturaBold') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
 
 h1.logo {
 	font-family: "FuturaBold";
 	font-size: 44pt;
 	text-shadow: 0.05em 0.07em 0.07em black;
-	color: rgba(106,127,16,1);
+	color: #6A7F10;
 	margin: 0 auto 0 auto;
 }
 
@@ -26,6 +17,7 @@ h2.school-name {
 	font-family: "FuturaBold";
 	font-size: 36pt;
 	text-shadow: 0.05em 0.07em 0.06em black;
-	color: rgba(168,180,0,1);
-		margin: 0 auto 0 auto;
+	margin: 0 auto 0 auto;
 }
+
+.school-box {}

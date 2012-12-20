@@ -1,4 +1,15 @@
-// Place all the styles related to the Schools controller here.
+// Place all the styles related to the schools controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+div.schools-index-box{
+	margin-top: 20px;
+}
+
+div.school-row {
+	margin: 20px auto 20px auto;
+}
+
+.schools-index-box a{
+	text-decoration: none;
+}

@@ -1,6 +1,8 @@
 class School < ActiveRecord::Base
   attr_accessible :name,
-  								:slug
+  								:slug,
+  								:primary_color,
+  								:secondary_color
   
   extend FriendlyId
  	friendly_id :slug, :use => :slugged

@@ -1,0 +1,11 @@
+// USC
+
+// This file defines the primary and secondary colors for the schools,
+// and imports the styles from the schools SCSS partial.
+
+// Variables ----------------------------|
+
+$school-primary-color: #6A7F10 ;
+$school-secondary-color: #A8B400 ;
+
+@import "schools";

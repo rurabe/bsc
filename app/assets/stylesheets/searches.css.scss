@@ -2,11 +2,6 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-// VARIABLES ------------/
-
-$psu-primary-color: rgba(106,127,16,1);
-$psu-secondary-color: rgba(168,180,0,1);
-
 
 // COMMON ---------------/
 
@@ -56,10 +51,8 @@ body {
 	top: 50%;
 	width: 100%;
 	margin-top: -250px;
-	background-image: url(bubble.png);
 	background-repeat: no-repeat;
 	background-position: center -110px;
-
 }
 
 .logo-front {
@@ -87,22 +80,6 @@ body {
 	background-color: #FAFFBD;
 }
 
-.about-info{
-	padding: 20px;
-	
-}
-
-.about-point{
-	margin: 20px auto;
-}
-
-.about-explanation{
-	padding: 10px;
-	background-color: transparentize($psu-secondary-color,0.3);
-	-webkit-border-radius: 10px 10px 10px 10px;
-	-moz-border-radius: 10px 10px 10px 10px;
-	border-radius: 10px 10px 10px 10px;
-}
 
 #loadingModal {
 	overflow: visible;
@@ -121,37 +98,7 @@ body {
 	font-size: 48pt;
 }
 
-.btn-school {
-  color: #ffffff;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-  background-color: $psu-primary-color;
-  *background-color: $psu-primary-color;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(lighten($psu-primary-color,7)), to($psu-primary-color));
-  background-image: -webkit-linear-gradient(top, lighten($psu-primary-color,7), $psu-primary-color);
-  background-image: -o-linear-gradient(top, lighten($psu-primary-color,7), $psu-primary-color);
-  background-image: linear-gradient(to bottom, lighten($psu-primary-color,7), $psu-primary-color);
-  background-image: -moz-linear-gradient(top, lighten($psu-primary-color,7), $psu-primary-color);
-  background-repeat: repeat-x;
-  border-color: $psu-primary-color $psu-primary-color #387038;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);
-  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
-}
 
-.btn-school:hover,
-.btn-school:active,
-.btn-school.active,
-.btn-school.disabled,
-.btn-school[disabled] {
-  color: #ffffff;
-  background-color: lighten($psu-primary-color,0.5);
-  *background-color: #499249;
-}
-
-.btn-school:active,
-.btn-school.active {
-  background-color: #408140 \9;
-}
 
 // #SHOW ---------------/
 
