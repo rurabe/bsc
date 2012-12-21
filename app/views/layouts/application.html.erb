@@ -3,6 +3,9 @@
 <head>
   <title>BookSupply</title>
   <%= stylesheet_link_tag "application", :media => "all" %>
+  <% if @school %>
+  	<%= stylesheet_link_tag "schools/" + @school.slug, :media => "all" %>
+  <% end %>
   <%= csrf_meta_tags %>
   <meta property="og:title" content="Book Supply Co."/> 
   <meta property="og:type" content="company"/> 

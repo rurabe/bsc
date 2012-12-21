@@ -1,4 +1,4 @@
-class SearchesController < ApplicationController
+class BooklistsController < ApplicationController
 
 	before_filter :root_redirect, :only => [:new]
 	before_filter :https_redirect, :only => [:create]
@@ -6,37 +6,40 @@ class SearchesController < ApplicationController
 
 	rescue_from Mecha::AuthenticationError, :with => :error_handling
 
-
 	def new
-		@search = Search.new
+		@booklist = Booklist.new
+		@school = School.find(params[:school])
 	end
 
 	def create
-		case params[:search][:username]
+		@school = School.find(params[:school])
+		case params[:booklist][:username]
 		when "test"
-			@search = Search.find("example")
-			redirect_to search_url(@search,:protocol => "http")
+			@booklist = Booklist.find("example")
+			redirect_to booklist_url(@booklist,:protocol => "http", :school => @school.slug )
 		else
-			@search = Search.new
-			Mecha::PortlandState.execute(	:username => params[:search][:username], 
-																		:password => params[:search][:password],
-																		:search 	=> @search)
-			if @search.save
-				redirect_to search_url(@search, :protocol => "http")
+			@booklist = Booklist.new
+			Mecha::Pdx.execute(	:username => params[:booklist][:username], 
+																		:password => params[:booklist][:password],
+																		:booklist 	=> @booklist)
+			if @booklist.save
+				redirect_to booklist_url(@booklist, :protocol => "http", :school => @school.slug )
 			else
-				flash[:error] = @search.errors.full_messages
-				redirect_to new_search_url
+				flash[:error] = @booklist.errors.full_messages
+				redirect_to new_booklist_url
 			end
 		end
 	end
 
 	def show
-		@search = Search.find(params[:id])
+		@school = School.find(params[:school])
+		@booklist = Booklist.find(params[:id])
 	end
 
 	def update
-		@search = Search.find(params[:id])
-		query = @search.lookup(params[:vendor])
+		@booklist = Booklist.find(params[:id])
+		@school = params[:school]
+		query = @booklist.lookup(params[:vendor])
 		render :json => query.ui_data.to_json
 	end
 
@@ -46,7 +49,7 @@ class SearchesController < ApplicationController
 		# Error handling
 		def error_handling(error)
 			flash[:error] = [error.message]
-			redirect_to new_search_url
+			redirect_to new_booklist_url
 		end
 
 		# SSL Redirects

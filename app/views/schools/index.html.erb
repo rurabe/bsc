@@ -1,0 +1,26 @@
+<div class="row-fluid pagination-centered">
+	<div class="span12">
+		<div class="logo-box">
+			<h1 class="logo">BOOK SUPPLY CO.</h1>
+		</div>
+
+		<p>Choose your school!</p>
+
+		<div class="schools-index-box">
+			<% @schools.each do |school| %>
+				<%= link_to new_booklist_url :school => school.slug do %>
+					<div class="school-row" style="color: #<%= school.primary_color %>" data-primary-color="#<%= school.primary_color %>" data-secondary-color="#<%= school.secondary_color %>">
+						<h2 class="school-name">
+							<%= school.name.upcase %>
+						</h2>
+					</div>
+				<% end %>
+			<% end %>
+		</div>
+	</div>
+</div>
+
+
+<%= content_for :page_js do %>
+	<%= javascript_include_tag "schools" %>
+<% end %>

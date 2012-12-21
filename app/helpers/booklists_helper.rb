@@ -1,4 +1,4 @@
-module SearchesHelper
+module BooklistsHelper
 
 	def show_price(price)
 		if price
@@ -7,7 +7,6 @@ module SearchesHelper
 			'<span class="label">Sold out</span>'.html_safe
 		end
 	end
-
 
 	def requirement_class(requirement)
 		case requirement

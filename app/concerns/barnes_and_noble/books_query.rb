@@ -1,7 +1,7 @@
 module BarnesAndNoble
 	class BooksQuery
-		def initialize(search)
-			@search = search
+		def initialize(booklist)
+			@booklist = booklist
 			@response = nil
 			@parsed_response = nil
 			control
@@ -15,14 +15,14 @@ module BarnesAndNoble
 		end
 
 		def update_books
-			@search.books.each do |book|
+			@booklist.books.each do |book|
 				new_book_info = @parsed_response[book.ean]
 				book.update_attributes(new_book_info)
 			end
 		end
 
 		def pluck_attributes
-			@search.books.pluck(:ean)
+			@booklist.books.pluck(:ean)
 		end
 
 	end

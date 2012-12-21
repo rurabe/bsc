@@ -1,14 +1,14 @@
 
 module Mecha
-	class PortlandState
+	class Pdx
 
-		def self.execute(options = {}) #{:username => 'foo', :password => 'blah', :search => #<Search>}
+		def self.execute(options = {}) #{:username => 'foo', :password => 'blah', :booklist => #<booklist>}
 			username 	= options.fetch(:username)
 			password 	= options.fetch(:password)
-			search 		= options.fetch(:search)
+			booklist 		= options.fetch(:booklist)
 
 			booklist_page = navigate(:username => username, :password => password)
-			create_courses_and_books(:search => search,:page => booklist_page)
+			create_courses_and_books(:booklist => booklist,:page => booklist_page)
 		end
 
 		private
@@ -55,8 +55,8 @@ module Mecha
 				booklist_page = booklist_submit_page.forms[0].submit
 			end
 
-			def self.create_courses_and_books(options = {}) #{:search => #<Search>, :page => #<Mechanize::Page>}
-				search 				= options.fetch(:search)
+			def self.create_courses_and_books(options = {}) #{:booklist => #<booklist>, :page => #<Mechanize::Page>}
+				booklist 			= options.fetch(:booklist)
 				booklist_page = options.fetch(:page)
 
 				book_list = collect_elements(booklist_page)
@@ -65,7 +65,7 @@ module Mecha
 				book_list.each do |node|
 					if node.name == "span"
 						#then its a course!
-	          courses << build_course(node,search)
+	          courses << build_course(node,booklist)
 					elsif node.name == "tr"
 						#then its a book!
 						course = courses[-1]
@@ -81,10 +81,10 @@ module Mecha
 
 			# Course helper methods
 
-			def self.build_course(node, search)
+			def self.build_course(node, booklist)
 				course_info = node.content
 
-	      search.courses.build(	:department => parse_course_department(course_info), 
+	      booklist.courses.build(	:department => parse_course_department(course_info), 
 			 												:number => parse_course_number(course_info), 
 														  :section => parse_course_section(course_info), 
 			 												:instructor => parse_course_instructor(course_info))

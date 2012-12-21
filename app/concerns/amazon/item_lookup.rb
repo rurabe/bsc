@@ -145,13 +145,13 @@ module Amazon
 
 			def request_items
 				if @params.first.class == String
-					build_product_hashes
+					build_product_hashes_from_array
 				else
 					@params
 				end
 			end
 
-			def build_product_hashes
+			def build_product_hashes_from_array
 				@params.flat_map do |ean|
 					[{:condition 	=> "new",
 						:ean 			 	=> ean},
