@@ -137,6 +137,7 @@ module Amazon
 			end
 
 			def ids_sliced_by_ten
+				p request_items
 				["new","used"].flat_map do |condition|
 					books = request_items.select { |book| book[:condition] == condition }
 					books.each_slice(10).map { |slice| slice }				
@@ -144,14 +145,14 @@ module Amazon
 			end
 
 			def request_items
-				if @params.first.class != Hash
-					build_product_hashes
+				if @params.first.class == String
+					build_product_hashes_from_array
 				else
 					@params
 				end
 			end
 
-			def build_product_hashes
+			def build_product_hashes_from_array
 				@params.flat_map do |ean|
 					[{:condition 	=> "new",
 						:ean 			 	=> ean},

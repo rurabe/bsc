@@ -36,7 +36,8 @@ module Amazon
 			end
 
 			def cart_data
-				Amazon::ItemLookup.new(@books).cart_data
+				x = Amazon::ItemLookup.new(@books).cart_data
+
 			end
 
 			def parse_cart_response(response)
