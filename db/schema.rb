@@ -11,7 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121218225925) do
+ActiveRecord::Schema.define(:version => 20121220234655) do
+
+  create_table "booklists", :force => true do |t|
+    t.string   "password"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.string   "username"
+    t.string   "slug"
+  end
+
+  add_index "booklists", ["slug"], :name => "index_booklists_on_slug", :unique => true
 
   create_table "books", :force => true do |t|
     t.string   "title"
@@ -35,9 +45,9 @@ ActiveRecord::Schema.define(:version => 20121218225925) do
     t.string   "number"
     t.string   "section"
     t.string   "instructor"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.integer  "search_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.integer  "booklist_id"
   end
 
   create_table "schools", :force => true do |t|
@@ -48,15 +58,5 @@ ActiveRecord::Schema.define(:version => 20121218225925) do
     t.string   "primary_color",   :limit => 6
     t.string   "secondary_color", :limit => 6
   end
-
-  create_table "searches", :force => true do |t|
-    t.string   "password"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.string   "username"
-    t.string   "slug"
-  end
-
-  add_index "searches", ["slug"], :name => "index_searches_on_slug", :unique => true
 
 end

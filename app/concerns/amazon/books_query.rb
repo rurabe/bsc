@@ -1,8 +1,8 @@
 module Amazon
 	class	BooksQuery
 		attr_reader :parsed_response
-		def initialize(search)
-			@search = search
+		def initialize(booklist)
+			@booklist = booklist
 			@parsed_response = nil
 			control
 		end
@@ -15,7 +15,7 @@ module Amazon
 		end
 
 		def update_books
-			@search.books.each do |book|
+			@booklist.books.each do |book|
 				attributes = @parsed_response[book.ean]
 				book.update_attributes(attributes)
 			end
@@ -29,7 +29,7 @@ module Amazon
 		end
 
 		def pluck_attributes
-			@search.books.pluck(:ean)
+			@booklist.books.pluck(:ean)
 		end
 
 

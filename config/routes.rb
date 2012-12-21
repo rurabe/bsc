@@ -3,24 +3,16 @@ BookSupply::Application.routes.draw do
   match "/about"        => 'staticpages#about'
   match '/channel.html' => Facebook::Channel
 
-
-  # scope :constraints => CurrentSchools do
-  #   match '/:school'              => 'searches#new'
-  #   match '/:school/searches/:id' => 'searches#show',   :via => :get
-  #   match '/:school/searches/:id' => 'searches#update', :via => :put
-  # end
-
   scope :constraints => School do
     scope ':school' do
-      match '/searches' => 'searches#create', :via => 'post', :as => 'searches'
-      match '/'         => 'searches#new', :as => 'new_search'
-      match '/:id'      => 'searches#show', :via => 'get', :as => 'search'
-      match '/:id'      => 'searches#update', :via => 'put', :as => 'update_search'
+      match '/booklists' => 'booklists#create', :via => 'post', :as => 'booklists'
+      match '/'          => 'booklists#new',                    :as => 'new_booklist'
+      match '/:id'       => 'booklists#show',   :via => 'get',  :as => 'booklist'
+      match '/:id'       => 'booklists#update', :via => 'put',  :as => 'update_booklist'
+      match '/:id/carts' => 'carts#create',     :via => 'post', :as => 'carts'
     end
   end
 
-
-  # resources :searches,    :except => [:index,:destroy]
   resources :books,       :only => :update
 
   root :to => 'schools#index'
