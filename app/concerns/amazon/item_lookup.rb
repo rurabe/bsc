@@ -137,7 +137,6 @@ module Amazon
 			end
 
 			def ids_sliced_by_ten
-				p request_items
 				["new","used"].flat_map do |condition|
 					books = request_items.select { |book| book[:condition] == condition }
 					books.each_slice(10).map { |slice| slice }				
