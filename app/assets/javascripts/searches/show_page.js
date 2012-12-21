@@ -318,21 +318,15 @@ $(document).ready(function(){
 					});
 				},
 				amazonCheckoutData: function(){
-					var response = {amazon:{}};
-					
-					var newBooks = this.selectByClass('amazon-new','selected')
-					if (newBooks.length != 0) {
-						response.amazon.new = this.getIds(newBooks);
-					}
+					var conditionString = "amazon%5B%5D%5Bcondition%5D="
+					var eanString = "amazon%5B%5D%5Bean%5D="
+					var books = this.selectByClass('book-amazon','selected')
 
-					var usedBooks = this.selectByClass('amazon-used','selected')
-					if (usedBooks.length != 0) {
-						response.amazon.used = this.getIds(usedBooks);
-					}
+					var bookData = books.map(function(book){
+						return conditionString + book.condition + "&" + eanString + book.ean
+					});
 
-					if ( newBooks.length != 0 || usedBooks.length != 0 ){
-						return window.location.pathname + "/carts?" + $.param(response);
-					}
+					return window.location.pathname + "/carts?" + bookData.join("&")
 				},
 				bnCheckoutData: function(){
 					var bnBooks = this.selectByClass("book-bn","selected")

@@ -144,7 +144,7 @@ module Amazon
 			end
 
 			def request_items
-				if @params.first.class != Hash
+				if @params.first.class == String
 					build_product_hashes
 				else
 					@params
