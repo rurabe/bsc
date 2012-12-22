@@ -1,14 +1,18 @@
 class Booklist < ActiveRecord::Base
-  attr_accessible :username, :password
 
+  belongs_to :school
   has_many :courses
   has_many :books, :through => :courses
-  has_many :carts
 
-  before_create :set_slug
+  after_create :set_slug
 
  	extend FriendlyId
  	friendly_id :slug, :use => :slugged
+
+  def get_books(options={})
+    shitty_options = options.merge( :booklist => self )
+    get_mecha.execute( shitty_options )
+  end
 
   def lookup(vendor)
     case vendor
@@ -24,6 +28,31 @@ class Booklist < ActiveRecord::Base
     end
 
 	  def set_slug
-	  	self.slug = SecureRandom.urlsafe_base64(7) if self.new_record?
+	  	self.slug = slugger if self.new_record?
 	  end
+
+    def slugger
+      slug = assemble_slug
+      return slug if !Booklist.find_by_slug(slug)
+      slugger
+    end
+
+    def assemble_slug
+      words = school_words.shuffle
+      slug = 2.times.inject([]) { |array| array << words.pop }
+      slug << rand(1000)
+      slug.join("-")
+    end
+
+    def school_words
+      get_mecha.words
+    end
+
+    def get_mecha
+      ("mecha/"+ school.slug).classify.constantize
+    end
+
+
+
+
 end

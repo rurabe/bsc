@@ -18,10 +18,8 @@ class BooklistsController < ApplicationController
 			@booklist = Booklist.find("example")
 			redirect_to booklist_url(@booklist,:protocol => "http", :school => @school.slug )
 		else
-			@booklist = Booklist.new
-			Mecha::Pdx.execute(	:username => params[:booklist][:username], 
-																		:password => params[:booklist][:password],
-																		:booklist 	=> @booklist)
+			@booklist = @school.booklists.build
+			@booklist.get_books(params[:booklist])
 			if @booklist.save
 				redirect_to booklist_url(@booklist, :protocol => "http", :school => @school.slug )
 			else
@@ -38,13 +36,16 @@ class BooklistsController < ApplicationController
 
 	def update
 		@booklist = Booklist.find(params[:id])
-		@school = params[:school]
 		query = @booklist.lookup(params[:vendor])
 		render :json => query.ui_data.to_json
 	end
 
 
 	private
+
+		def define_school
+
+		end
 
 		# Error handling
 		def error_handling(error)

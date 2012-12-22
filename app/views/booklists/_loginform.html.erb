@@ -1,21 +1,21 @@
-<%= form_for @booklist do |f| %>
+<%= form_tag( booklists_path, :action => :post ) do %>
 	<table class="login">
 		<tr>
 			<td class="form-label-cell">
-				<%= f.label :username, "PSUid" %>
+				<%= label_tag(:username, "PSUid") %>
 			</td>
 			<td class="form-field-cell">
-				<%= f.text_field :username, :class => 'form-field' %>
+				<%= text_field_tag "booklist[username]" %>
 			</td>
 		</tr>
 		<tr>
 			<td class="form-label-cell">
-				<%= f.label :password %>
+				<%= label_tag(:password) %>
 			</td>
 			<td class="form-field-cell">
-				<%= f.password_field :password, :class => 'form-field' %>
+				<%= password_field_tag "booklist[password]" %>
 			</td>
 		</tr>
 	</table>
-	<%= f.submit "Find my books!", :class => 'btn btn-large btn-school', :id => 'login-button' %>
+	<%= submit_tag "Find my books!", :class => 'btn btn-large btn-school', :id => 'login-button' %>
 <% end %>

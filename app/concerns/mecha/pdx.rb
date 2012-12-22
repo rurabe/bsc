@@ -1,6 +1,13 @@
-
 module Mecha
 	class Pdx
+
+		def self.words
+		  %w( portland stumptown burnside voodoo zupans vikings viking salmon microbrew rogue deschutes
+		      multnomah hood tabor rose omsi powells hoyt alberta mississippi ne nw sw se blazers
+		      timbers max portlandia bird local hazelnut blackberry 1890s 90s cascades hawthorne wonder
+		      crystal roseland aladdin lloyd pearl foodtruck bagdad baileys hopworks laurelwood fullsail
+		      widmer bike )
+		end
 
 		def self.execute(options = {}) #{:username => 'foo', :password => 'blah', :booklist => #<booklist>}
 			username 	= options.fetch(:username)

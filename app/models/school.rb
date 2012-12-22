@@ -3,9 +3,12 @@ class School < ActiveRecord::Base
   								:slug,
   								:primary_color,
   								:secondary_color
+
+ 	has_many :booklists
   
   extend FriendlyId
  	friendly_id :slug, :use => :slugged
+
 
 	# Method used in the as the default for the constraint School.
 	# Seeks to limit non-404 requests to only those schools listed below.

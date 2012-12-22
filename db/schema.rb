@@ -11,14 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121220234655) do
+ActiveRecord::Schema.define(:version => 20121222200100) do
 
   create_table "booklists", :force => true do |t|
-    t.string   "password"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.string   "username"
     t.string   "slug"
+    t.integer  "school_id"
   end
 
   add_index "booklists", ["slug"], :name => "index_booklists_on_slug", :unique => true
