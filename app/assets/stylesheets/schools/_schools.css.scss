@@ -52,7 +52,13 @@ h2.school-name {
 	margin: 20px auto;
 }
 
+@mixin about-text($bg_color) {
+  @if lightness($bg_color) > 35 {color: black;}
+  @else                         {color: white;}
+}
+
 .about-explanation{
+  @include about-text($school-secondary-color);
 	padding: 10px;
 	background-color: transparentize($school-secondary-color,0.3);
 	-webkit-border-radius: 10px 10px 10px 10px;
