@@ -21,7 +21,7 @@ module BarnesAndNoble
 			products.map do |product| 
 				set_price_information(product)
 			end
-			@parsed_response
+			@parsed_response.to_json
 		end
 
 		private

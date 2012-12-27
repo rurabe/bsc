@@ -1,56 +1,63 @@
 class BooklistsController < ApplicationController
 
-	before_filter :root_redirect, :only => [:new]
-	before_filter :https_redirect, :only => [:create]
-	before_filter :http_redirect, :only => [:show]
+	before_filter :root_redirect,   :only 		=> [:new]
+	before_filter :https_redirect,  :only 		=> [:create]
+	before_filter :http_redirect,   :only 		=> [:show]
+	before_filter :define_school,   :only 		=> [:new, :create]
+	before_filter :define_booklist,	:only			=> [:show, :update]
 
 	rescue_from Mecha::AuthenticationError, :with => :error_handling
 
 	def new
-		@booklist = Booklist.new
-		@school = School.find(params[:school])
 	end
 
 	def create
-		@school = School.find(params[:school])
-		case params[:booklist][:username]
-		when "test"
-			@booklist = Booklist.find("example")
-			redirect_to booklist_url(@booklist,:protocol => "http", :school => @school.slug )
+		if params[:booklist][:username] == "test"
+			show_example
 		else
 			@booklist = @school.booklists.build
 			@booklist.get_books(params[:booklist])
 			if @booklist.save
-				redirect_to booklist_url(@booklist, :protocol => "http", :school => @school.slug )
+				redirect_to booklist_url(@booklist, :protocol => "http")
 			else
-				flash[:error] = @booklist.errors.full_messages
-				redirect_to new_booklist_url
+				rerender_and_show_error
 			end
 		end
 	end
 
 	def show
-		@school = School.find(params[:school])
-		@booklist = Booklist.find(params[:id])
+		@school = @booklist.school
 	end
 
 	def update
-		@booklist = Booklist.find(params[:id])
 		query = @booklist.lookup(params[:vendor])
-		render :json => query.ui_data.to_json
+		render :json => query.ui_data
 	end
-
 
 	private
 
-		def define_school
+		def define_booklist
+			@booklist = Booklist.find(params[:id])
+		end
 
+		def define_school
+			@school = School.find(params[:school])
+		end
+
+		def show_example
+			@booklist = Booklist.find("example")
+			redirect_to booklist_url(@booklist,:protocol => "http", :school => @school.slug)
+		end
+
+		def rerender_and_show_error
+			flash[:error] = @booklist.errors.full_messages
+			render 'new'
 		end
 
 		# Error handling
 		def error_handling(error)
 			flash[:error] = [error.message]
-			redirect_to new_booklist_url
+			render 'new'
 		end
 
 		# SSL Redirects

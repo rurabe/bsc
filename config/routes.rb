@@ -7,13 +7,14 @@ BookSupply::Application.routes.draw do
     scope ':school' do
       match '/booklists' => 'booklists#create', :via => 'post', :as => 'booklists'
       match '/'          => 'booklists#new',                    :as => 'new_booklist'
-      match '/:id'       => 'booklists#show',   :via => 'get',  :as => 'booklist'
-      match '/:id'       => 'booklists#update', :via => 'put',  :as => 'update_booklist'
-      match '/:id/carts' => 'carts#create',     :via => 'post', :as => 'carts'
     end
   end
 
   resources :books,       :only => :update
+
+  match '/:id'       => 'booklists#show',   :via => 'get',  :as => 'booklist'
+  match '/:id'       => 'booklists#update', :via => 'put',  :as => 'update_booklist'
+  match '/:id/carts' => 'carts#create',     :via => 'post', :as => 'carts'
 
   root :to => 'schools#index'
 
