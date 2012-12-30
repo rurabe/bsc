@@ -31,6 +31,8 @@ gem 'sidekiq'
 gem 'sinatra'
 gem 'slim'
 
+gem 'fast-aes'
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
