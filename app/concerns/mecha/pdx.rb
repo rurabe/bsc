@@ -69,10 +69,10 @@ module Mecha
 			# Course helper methods
 			def build_course(node)
 				course_info = node.content
-	      { :department => parse_course_department(course_info), 
-					:number => parse_course_number(course_info), 
-			  	:section => parse_course_section(course_info), 
-					:instructor => parse_course_instructor(course_info),
+	      { :department 			=> parse_course_department(course_info), 
+					:number 					=> parse_course_number(course_info), 
+			  	:section 					=> parse_course_section(course_info), 
+					:instructor 			=> parse_course_instructor(course_info),
 					:books_attributes => [] }
 			end
 
@@ -94,14 +94,14 @@ module Mecha
 
 			# Book helper methods
 			def build_book(node)
-				{:title => parse_book_title(node),
-				 :author => parse_book_author(node),
-				 :ean => parse_book_ean(node),
-				 :edition => parse_book_edition(node),
-				 :requirement => parse_book_requirement(node),
-				 :bookstore_new_price => parse_book_new_price(node),
-				 :bookstore_new_rental_price => parse_book_new_rental_price(node),
-				 :bookstore_used_price => parse_book_used_price(node),
+				{:title 											=> parse_book_title(node),
+				 :author 											=> parse_book_author(node),
+				 :ean 												=> parse_book_ean(node),
+				 :edition 										=> parse_book_edition(node),
+				 :requirement 								=> parse_book_requirement(node),
+				 :bookstore_new_price 				=> parse_book_new_price(node),
+				 :bookstore_new_rental_price 	=> parse_book_new_rental_price(node),
+				 :bookstore_used_price 				=> parse_book_used_price(node),
 				 :bookstore_used_rental_price => parse_book_used_rental_price(node)}
 			end
 
