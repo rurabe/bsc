@@ -2,7 +2,8 @@ class School < ActiveRecord::Base
   attr_accessible :name,
   								:slug,
   								:primary_color,
-  								:secondary_color
+  								:secondary_color,
+                  :user_id_label
 
  	has_many :booklists
   

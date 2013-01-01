@@ -2,7 +2,7 @@
 	<table class="login">
 		<tr>
 			<td class="form-label-cell">
-				<%= label_tag(:username, "PSUid") %>
+				<%= label_tag(:username, @school.user_id_label) %>
 			</td>
 			<td class="form-field-cell">
 				<%= text_field_tag "booklist[username]" %>
