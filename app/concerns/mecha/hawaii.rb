@@ -10,9 +10,18 @@ module Mecha
       @booklist_page = navigate(options)
     end
 
-    def parse
-      courses = get_course_nodes(@bookslist_page)
-
+    def parse(page)
+      courses = get_course_nodes(page)
+      courses.map do |course|
+        course_hash = build_course(course)
+        quantity_of_books = course.search("./div[@class='material_info']").count
+        quantity_of_books.times do |i|
+          book_info_node = course.search("./div[@class='material_info'][#{i+1}]")
+          pricing_node   = course.search("./div[@class='pricing_wrapper'][#{i+1}]")
+          course_hash[:books_attributes] << build_book(book_info_node,pricing_node)
+        end
+        course_hash
+      end
     end
 
     def navigate(options={})      
@@ -85,6 +94,33 @@ module Mecha
       parse_result(course_info,/Course ID:\s+(\w+)\s+Location:/)
     end
 
+    def build_book(material_info_node,pricing_node)
+      { :title                       => parse_book_title(material_info_node),
+        :author                      => parse_book_attribute(material_info_node,:Author),
+        :ean                         => parse_book_attribute(material_info_node,:ISBN),
+        :edition                     => parse_book_attribute(material_info_node,:Edition),
+        :requirement                 => parse_book_requirement(material_info_node),
+        :bookstore_new_price         => parse_book_price(pricing_node,:new),
+        :bookstore_used_price        => parse_book_price(pricing_node,:used)}
+    end
+
+    def parse_book_title(node)
+      parse_node(node,'./h3')
+    end
+
+    def parse_book_attribute(node,attribute)
+      parse_node(node,"./div/table/tr/td[@class='right_side']/span[../../td[@class='left_side']/text() = '#{attribute.to_s}']")
+    end
+
+    def parse_book_requirement(node)
+      parse_node(node,'./div[@class="material_label"]/span')
+    end
+
+    def parse_book_price(node,condition)
+      price = parse_node(node,"./div/div[@class='pricing_area']/div/div/div/p[@class='price']/span[../../p[@class='price_label']/text() = '#{condition.to_s.capitalize}']")
+      numberize_price(price)
+    end
+
     # BOOKSTORE URL BUILDER
 
     def bookstore_url(page)
@@ -142,12 +178,12 @@ module Mecha
     # Parse helpers
     def parse_node(node,xpath)
       result = node.search(xpath).first
-      result.content if result
+      result.text.strip if result
     end
 
     def parse_result(string,regex)
       match = string.match(regex) if string
-      match[1] if match
+      match[1].strip if match
     end
 
     def numberize_price(string)

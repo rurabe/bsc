@@ -146,26 +146,26 @@ module Mecha
 				numberize_price(price)
 			end
 
-			# Parse helpers
-			def parse_node(node,xpath)
-				result = node.search(xpath).first
-				result.content if result
-			end
+	    # Parse helpers
+	    def parse_node(node,xpath)
+	      result = node.search(xpath).first
+	      result.text.strip if result
+	    end
 
-			def parse_result(string,regex)
-				match = string.match(regex) if string
-				match[1] if match
-			end
+	    def parse_result(string,regex)
+	      match = string.match(regex) if string
+	      match[1].strip if match
+	    end
 
-			def numberize_price(string)
-				if string =~ /\$/
-					number = string.gsub("$","")
-					BigDecimal.new(number)
-				else
-					nil
-				end
-			end
-
+	    def numberize_price(string)
+	      if string =~ /\$/
+	        number = string.gsub("$","")
+	        BigDecimal.new(number)
+	      else
+	        nil
+	      end
+	    end
+    
 			# Error handling
 			def login_failed?(page)
 				page.search("//*[text()[contains(.,'Invalid User ID or Password')]]").present?
