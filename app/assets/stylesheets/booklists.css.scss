@@ -102,6 +102,15 @@ input#booklist_password {
 	font-size: 48pt;
 }
 
+.other-school{
+	width: 100px;
+	position: fixed;
+	bottom: 10px;
+	left: 50%;
+	margin: 0px 0px 0px -50px;
+	
+
+}
 
 
 
@@ -225,6 +234,13 @@ td.book-query {
 
 input.checkout-radio {
 	vertical-align: middle;
+}
+
+input#express {
+	margin: 0px;
+}
+
+input#simple {
 	margin: 0px;
 }
 

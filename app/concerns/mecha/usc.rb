@@ -1,5 +1,7 @@
 module Mecha
   class Usc
+    include ParserHelpers
+    
     def navigate(options={})
       username = options.fetch(:username)
       password = options.fetch(:password)

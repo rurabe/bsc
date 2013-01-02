@@ -6,7 +6,7 @@ class BooklistsController < ApplicationController
 	before_filter :define_school,   :only 		=> [:new, :create]
 	before_filter :define_booklist,	:only			=> [:show, :update]
 
-	rescue_from Mecha::AuthenticationError, :with => :error_handling
+	rescue_from StandardError, :with => :error_handling
 
 	def new
 	end
@@ -23,6 +23,7 @@ class BooklistsController < ApplicationController
 				rerender_and_show_error
 			end
 		end
+
 	end
 
 	def show
@@ -57,6 +58,8 @@ class BooklistsController < ApplicationController
 		# Error handling
 		def error_handling(error)
 			flash[:error] = [error.message]
+			pp error
+			pp error.backtrace
 			render 'new'
 		end
 

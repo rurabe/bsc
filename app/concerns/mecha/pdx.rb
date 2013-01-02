@@ -1,5 +1,6 @@
 module Mecha
 	class Pdx
+		include ParserHelpers
 
 		def self.words
 		  %w( portland stumptown burnside voodoo zupans vikings ipa salmon microbrew rogue deschutes
@@ -10,6 +11,7 @@ module Mecha
 		end
 
 		def initialize(options = {})
+			@mecha = Mechanize.new { |mecha| mecha.follow_meta_refresh = true }
 			@booklist_page = navigate(options)
 		end
 
@@ -32,33 +34,30 @@ module Mecha
 		private
 
 			def navigate(options = {}) #{:username => 'foo', :password => 'blah'}
+				login(options)
+				get_course_schedule
+				get_books_page
+			end
+
+			def login(options = {})
 				username = options.fetch(:username)
 				password = options.fetch(:password)
-
-				if username.blank? || password.blank?
-					raise Mecha::AuthenticationError
-				end
-
-				mecha = Mechanize.new
-				mecha.follow_meta_refresh = true
-
-				login_page = mecha.get('https://banweb.pdx.edu/pls/oprd/twbkwbis.P_WWWLogin')
-
+				raise Mecha::AuthenticationError if username.blank? || password.blank?
+				login_page = @mecha.get('https://banweb.pdx.edu/pls/oprd/twbkwbis.P_WWWLogin')
 				login_form = login_page.form('loginform')
 				login_form.sid = username
 				login_form.PIN = password
-				
-				main_page = login_form.submit
+				login_form.submit
+				raise Mecha::AuthenticationError if login_failed?
+			end
 
-				if login_failed?(main_page)
-					raise Mecha::AuthenticationError
-				end
+			def get_course_schedule
+				@mecha.post('https://banweb.pdx.edu/pls/oprd/bwskfshd.P_CrseSchdDetl', 'term_in' => '201301')
+			end
 
-				schedule_page = mecha.post('https://banweb.pdx.edu/pls/oprd/bwskfshd.P_CrseSchdDetl', 'term_in' => '201301')
-
-				booklist_link = schedule_page.link_with(:text => 'Booklist and course materials')
+			def get_books_page
+				booklist_link = @mecha.current_page.link_with(:text => 'Booklist and course materials')
 				booklist_submit_page = booklist_link.click
-
 				booklist_page = booklist_submit_page.forms[0].submit
 			end
 
@@ -145,30 +144,10 @@ module Mecha
 				price = parse_node(book_node,"./td[@class='book-pref']/table/tbody/tr[starts-with(@id,'tr-radio-radio-sku-used-rental')]/td[@class='price']/label")
 				numberize_price(price)
 			end
-
-	    # Parse helpers
-	    def parse_node(node,xpath)
-	      result = node.search(xpath).first
-	      result.text.strip if result
-	    end
-
-	    def parse_result(string,regex)
-	      match = string.match(regex) if string
-	      match[1].strip if match
-	    end
-
-	    def numberize_price(string)
-	      if string =~ /\$/
-	        number = string.gsub("$","")
-	        BigDecimal.new(number)
-	      else
-	        nil
-	      end
-	    end
-    
+	    
 			# Error handling
-			def login_failed?(page)
-				page.search("//*[text()[contains(.,'Invalid User ID or Password')]]").present?
+			def login_failed?
+				@mecha.current_page.search("//*[text()[contains(.,'Invalid User ID or Password')]]").present?
 			end
 	end
 end

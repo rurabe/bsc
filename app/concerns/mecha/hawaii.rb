@@ -1,16 +1,22 @@
 module Mecha
   class Hawaii
+    include ParserHelpers
 
     def self.words
-      %w(rainbow warriors manoa aloha dole metcalf stansheriff kuykendall klum murakami anuenue 
-         halawai kahawai kuahine laulima noelani wainani hamilton)
+      %w(manoa makiki palolo moilili kaimuki stlouis kahala ainahaina hawaiikai makapuu waimanalo
+         kailua lanikai maunawili kaneohe laie waimea sunset haleiwa wailua wahiawa mililani waipio
+         aiea pearlridge airport nimitz downtown chinatown kakaako alamoana waikiki mcully waialae 
+         pauoa tantalus nuuanu liliha kalihi halawa moanalua waipahu ewa waikele makakilo nanakuli
+         waianae kapolei waimalu waiahole kahaluu kaaawa hauula kahuku pupukea kahuku mokuleia sandisland
+         kualoa pearlharbor)
     end
 
     def initialize(options={})
-      @booklist_page = navigate(options)
+      @mecha = Mechanize.new { |mecha| mecha.follow_meta_refresh = true }
+      @books_page = navigate(options)
     end
 
-    def parse(page)
+    def parse(page=@books_page)
       courses = get_course_nodes(page)
       courses.map do |course|
         course_hash = build_course(course)
@@ -19,59 +25,74 @@ module Mecha
       end
     end
 
-    private
+    # private
       
       def navigate(options={})      
+        login(options)
+        schedule = get_course_schedule
+        get_books_page(schedule)
+      end
+      
+      # Navigate helpers
+      def login(options)
+        initial_login(options)
+        aes_login
+      end
+
+      def initial_login(options)
+        login_page = @mecha.get('https://www.sis.hawaii.edu/uhdad/twbkwbis.P_WWWLogin')
+        login_form = login_page.form('uhloginform')
         username = options.fetch(:username)
         password = options.fetch(:password)
+        raise Mecha::AuthenticationError if username.blank? || password.blank?
+        login_form.sid = username
+        login_form.pin = password
+        login_form.submit
+        raise Mecha::AuthenticationError if login_failed?
+      end
 
-        if username.blank? || password.blank?
-          raise Mecha::AuthenticationError
-        end
-
-        mecha = Mechanize.new
-        mecha.follow_meta_refresh = true
-
-        login_page = mecha.get('https://www.sis.hawaii.edu/uhdad/twbkwbis.P_WWWLogin')
-
-        login_form = login_page.form('uhloginform')
-          login_form.sid = username
-          login_form.pin = password
-        aes_page = login_form.submit
-
+      def aes_login   
+        raise Mecha::ServiceDownError if service_down?
+        aes_page = @mecha.current_page
         aes_login_form = aes_page.form('loginform')
-
-        key    = aes_key_from_cookies(mecha.cookie_jar.jar)
+        key    = aes_key_from_cookies(@mecha.cookie_jar.jar)
         cipher = aes_page.form.field('cipherhex').value
-
-        main_page = mecha.post('https://www.sis.hawaii.edu/uhdad/twbkwbis.P_ValLogin', aes_decrypt(key,cipher))
-
-        course_detail_page = mecha.post('https://www.sis.hawaii.edu/uhdad/bwskfshd.P_CrseSchdDetl','term_in' => '201330')
-
-        bookstore_page = mecha.get(bookstore_url(course_detail_page))
+        p key
+        p cipher
+        @mecha.post('https://www.sis.hawaii.edu/uhdad/twbkwbis.P_ValLogin', aes_decrypt(key,cipher))
       end
 
-      # Master parse helpers
-      def parse_course_books(course_node)
-        quantity_of_books = course_node.search("./div[@class='material_info']").count
-        quantity_of_books.times.map do |i|
-          book_info_node = course_node.search("./div[@class='material_info'][#{i+1}]")
-          pricing_node   = course_node.search("./div[@class='pricing_wrapper'][#{i+1}]")
-          build_book(book_info_node,pricing_node)
-        end
+      def get_course_schedule
+        @mecha.post('https://www.sis.hawaii.edu/uhdad/bwskfshd.P_CrseSchdDetl','term_in' => '201330')
+        raise Mecha::NoClassesError if no_classes?
       end
 
-      # Bookstore Url Generator
-      def bookstore_url(page)
-        'http://www.bookstore.hawaii.edu/manoa/SelectCourses.aspx?src=2&type=2&stoid=105&trm=SPRING%2013&cid=' + get_crns(page).to_s
+      def get_books_page(schedule)
+        @mecha.get(bookstore_url(schedule))
+        raise Mecha::ClassesNotInSystemError if books_not_found?
       end
 
-        def get_crns(page)
-          nodes = page.search("//td[../th[@class='ddlabel']/acronym/text()[.='CRN']]")
-          nodes.map { |node| node.content }.join(",") if nodes.present?
-        end
+      def login_failed?
+        @mecha.current_page.search('//*[contains(.,"You have entered an incorrect Username or Password")]').present?
+      end
 
-      # Encryption Helpers
+      def no_classes?
+        @mecha.current_page.search('//*[contains(.,"You are not currently registered for the term")]').present?
+      end
+
+      def books_not_found?
+        @mecha.current_page.search('//*[contains(.,"No Unique IDs match your search request")]').present?
+      end
+
+      def no_books?(nodes)
+        nodes.empty?
+      end
+
+      def service_down?
+        @mecha.current_page.search('//*[contains(.,"Service Temporarily Unavailable")]')
+      end
+
+       # Encryption Helpers
       def aes_key_from_cookies(cookies)
         find_in_hash("rkeyhex",cookies).value
       end
@@ -93,27 +114,48 @@ module Mecha
         aes.decrypt(hex_to_string(data))
       end
 
-        def hex_to_string(hex)
-          bytes = hex_to_bytes(hex)
-          bytes_to_string(bytes)
-        end
+      def hex_to_string(hex)
+        bytes = hex_to_bytes(hex)
+        bytes_to_string(bytes)
+      end
 
-        def hex_to_bytes(hex)
-          hex.split('').each_slice(2).map {|b| b.join('').hex}
-        end
+      def hex_to_bytes(hex)
+        hex.split('').each_slice(2).map {|b| b.join('').hex}
+      end
 
-        def bytes_to_string(bytes)
-          bytes.map {|a| a.chr}.join("")
-        end
+      def bytes_to_string(bytes)
+        bytes.map {|a| a.chr}.join("")
+      end
 
       def parse_decrypted_data(data)
         match_data = data.match /\d+ (\w+)\t(\w+)<*/
         { :sid => match_data[1], :pin => match_data[2] }
       end
 
+      # Bookstore Url Generator
+      def bookstore_url(page)
+        'http://www.bookstore.hawaii.edu/manoa/SelectCourses.aspx?src=2&type=2&stoid=105&trm=SPRING%2013&cid=' + get_crns(page).to_s
+      end
+
+        def get_crns(page)
+          nodes = page.search("//td[../th[@class='ddlabel']/acronym/text()[.='CRN']]")
+          nodes.map { |node| node.content }.join(",") if nodes.present?
+        end
+     
+      # Master parse helpers
+      def parse_course_books(course_node)
+        quantity_of_books = course_node.search("./div[@class='material_info']").count
+        quantity_of_books.times.map do |i|
+          book_info_node = course_node.search("./div[@class='material_info'][#{i+1}]")
+          pricing_node   = course_node.search("./div[@class='pricing_wrapper'][#{i+1}]")
+          build_book(book_info_node,pricing_node)
+        end
+      end
+
       # Parsers
       def get_course_nodes(page)
-        page.search("//div[@class='course_info']")
+        nodes = page.search("//div[@class='course_info']")
+        raise Mecha::NoBooksError if no_books?(nodes)
       end
 
       def get_isbns(page)
@@ -175,26 +217,6 @@ module Mecha
       def parse_book_price(node,condition)
         price = parse_node(node,"./div/div[@class='pricing_area']/div/div/div/p[@class='price']/span[../../p[@class='price_label']/text() = '#{condition.to_s.capitalize}']")
         numberize_price(price)
-      end
-
-      # Parse helpers
-      def parse_node(node,xpath)
-        result = node.search(xpath).first
-        result.text.strip if result
-      end
-
-      def parse_result(string,regex)
-        match = string.match(regex) if string
-        match[1].strip if match
-      end
-
-      def numberize_price(string)
-        if string =~ /\$/
-          number = string.gsub("$","")
-          BigDecimal.new(number)
-        else
-          nil
-        end
       end
 
   end
