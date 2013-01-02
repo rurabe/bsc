@@ -27,7 +27,7 @@ class BooklistsController < ApplicationController
 	end
 
 	def show
-		@school = @booklist.school
+		@school = @booklist.school || School.find(params[:school])
 	end
 
 	def update
