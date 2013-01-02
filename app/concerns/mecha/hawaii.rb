@@ -29,8 +29,8 @@ module Mecha
       
       def navigate(options={})      
         login(options)
-        schedule = get_course_schedule
-        get_books_page(schedule)
+        get_course_schedule
+        get_books_page
       end
       
       # Navigate helpers
@@ -57,8 +57,6 @@ module Mecha
         aes_login_form = aes_page.form('loginform')
         key    = aes_key_from_cookies(@mecha.cookie_jar.jar)
         cipher = aes_page.form.field('cipherhex').value
-        p key
-        p cipher
         @mecha.post('https://www.sis.hawaii.edu/uhdad/twbkwbis.P_ValLogin', aes_decrypt(key,cipher))
       end
 
@@ -67,11 +65,12 @@ module Mecha
         raise Mecha::NoClassesError if no_classes?
       end
 
-      def get_books_page(schedule)
-        @mecha.get(bookstore_url(schedule))
+      def get_books_page
+        @mecha.get(bookstore_url)
         raise Mecha::ClassesNotInSystemError if books_not_found?
       end
 
+      # Error definitions
       def login_failed?
         @mecha.current_page.search('//*[contains(.,"You have entered an incorrect Username or Password")]').present?
       end
@@ -89,7 +88,7 @@ module Mecha
       end
 
       def service_down?
-        @mecha.current_page.search('//*[contains(.,"Service Temporarily Unavailable")]')
+        @mecha.current_page.search('//*[contains(.,"Service Temporarily Unavailable")]').present?
       end
 
        # Encryption Helpers
@@ -133,12 +132,12 @@ module Mecha
       end
 
       # Bookstore Url Generator
-      def bookstore_url(page)
-        'http://www.bookstore.hawaii.edu/manoa/SelectCourses.aspx?src=2&type=2&stoid=105&trm=SPRING%2013&cid=' + get_crns(page).to_s
+      def bookstore_url
+        'http://www.bookstore.hawaii.edu/manoa/SelectCourses.aspx?src=2&type=2&stoid=105&trm=SPRING%2013&cid=' + get_crns.to_s
       end
 
-        def get_crns(page)
-          nodes = page.search("//td[../th[@class='ddlabel']/acronym/text()[.='CRN']]")
+        def get_crns
+          nodes = @mecha.current_page.search("//td[../th[@class='ddlabel']/acronym/text()[.='CRN']]")
           nodes.map { |node| node.content }.join(",") if nodes.present?
         end
      

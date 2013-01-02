@@ -39,6 +39,7 @@ module Mecha
 				get_books_page
 			end
 
+			 # Navigate helpers
 			def login(options = {})
 				username = options.fetch(:username)
 				password = options.fetch(:password)
@@ -61,6 +62,12 @@ module Mecha
 				booklist_page = booklist_submit_page.forms[0].submit
 			end
 
+			# Error definitions
+			def login_failed?
+				@mecha.current_page.search("//*[text()[contains(.,'Invalid User ID or Password')]]").present?
+			end
+
+			# Parse helpers
 			def collect_elements
 				@booklist_page.search("//table[starts-with(@id,'section')]/tbody/tr[contains(concat(' ',@class,' '),'book course')] | //span[@id='course-bookdisplay-coursename']")
 			end
@@ -145,9 +152,6 @@ module Mecha
 				numberize_price(price)
 			end
 	    
-			# Error handling
-			def login_failed?
-				@mecha.current_page.search("//*[text()[contains(.,'Invalid User ID or Password')]]").present?
-			end
+
 	end
 end
