@@ -25,7 +25,7 @@ module Mecha
       end
     end
 
-    # private
+    private
       
       def navigate(options={})      
         login(options)

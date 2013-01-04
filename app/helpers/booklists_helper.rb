@@ -18,4 +18,8 @@ module BooklistsHelper
 			"label-success"
 		end
 	end
+
+	def titleize(title)
+		title.gsub(/\.$/,"").titlecase
+	end
 end
