@@ -40,11 +40,11 @@ module Mecha
       end
 
       def initial_login(options)
-        login_page = @mecha.get('https://www.sis.hawaii.edu/uhdad/twbkwbis.P_WWWLogin')
-        login_form = login_page.form('uhloginform')
         username = options.fetch(:username)
         password = options.fetch(:password)
         raise Mecha::AuthenticationError if username.blank? || password.blank?
+        login_page = @mecha.get('https://www.sis.hawaii.edu/uhdad/twbkwbis.P_WWWLogin')
+        login_form = login_page.form('uhloginform')
         login_form.sid = username
         login_form.pin = password
         login_form.submit

@@ -3,7 +3,8 @@ class Course < ActiveRecord::Base
   								:instructor, 
   								:number, 
   								:section,
-  								:books_attributes
+  								:books_attributes,
+                  :school_unique_id
 
   belongs_to :booklist
   has_many :books
