@@ -77,7 +77,7 @@ class BooklistsController < ApplicationController
 			if ENV["ENABLE_HTTPS"] == "yes"
 		    if !request.ssl?
 		      flash.keep
-		      redirect_to protocol: "https", status: :moved_permanently
+		      redirect_to( {:protocol => "https", :status => :moved_permanently}.merge(params) )
 			  end
 			end
 		end
@@ -86,7 +86,7 @@ class BooklistsController < ApplicationController
 			if ENV["ENABLE_HTTPS"] == "yes"
 		    if request.ssl?
 		      flash.keep
-		      redirect_to protocol: "http", status: :moved_permanently
+		      redirect_to( {:protocol => "http", :status => :moved_permanently}.merge(params) )
 			  end
 			end
 		end
