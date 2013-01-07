@@ -85,6 +85,8 @@ input#booklist_password {
 }
 
 
+// For loading modal
+
 #loadingModal {
 	overflow: visible;
 }
@@ -97,6 +99,16 @@ input#booklist_password {
 	width: 100%;
 	height: 300px;
 }
+
+button.search-icon {
+	width: 130px;
+	height: 110px;
+	font-size: 16pt;
+	font-weight: bold;
+}
+
+
+// For about
 
 .icon-image {
 	font-size: 48pt;

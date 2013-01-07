@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130101044533) do
+ActiveRecord::Schema.define(:version => 20130106003119) do
 
   create_table "booklists", :force => true do |t|
     t.datetime "created_at", :null => false
@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(:version => 20130101044533) do
     t.string   "primary_color",   :limit => 6
     t.string   "secondary_color", :limit => 6
     t.string   "user_id_label"
+    t.string   "bookstore_name"
   end
 
 end

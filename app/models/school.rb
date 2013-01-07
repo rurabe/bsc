@@ -3,7 +3,8 @@ class School < ActiveRecord::Base
   								:slug,
   								:primary_color,
   								:secondary_color,
-                  :user_id_label
+                  :user_id_label,
+                  :bookstore_name
 
  	has_many :booklists
   
