@@ -204,15 +204,21 @@ $(document).ready(function(){
 				}
 
 
+			var schoolAmazonTag = function(){
+				var slug = $('h2.school-name').attr('data-slug')
+				return 'bsc-' + slug + '-20'
+			}
+
+
 			var vendorMethods = {
 			 	amazon: {
 					vendor: "amazon",
 					asin: params.asin,
 					newLink: function(){
-						return "https://www.amazon.com/dp/" + this.asin + "?tag=booksupply-20"
+						return "https://www.amazon.com/dp/" + this.asin + "?tag=" + schoolAmazonTag();
 					},
 					usedLink: function(){
-						return "http://www.amazon.com/gp/offer-listing/" + this.asin + "?tag=booksupply-20"
+						return "http://www.amazon.com/gp/offer-listing/" + this.asin + "?tag=" + schoolAmazonTag();
 					}
 				},
 				bn: {
