@@ -69,7 +69,6 @@ $(document).ready(function(){
 			// Start the tour
 			$('#tour').joyride({
 				tipLocation: 'top',
-				randomToggleId: null,
 				postStepCallback: function(){
 					var that = this
 					if( $('.joyride-tip-guide[data-index=0]').is(':visible') ){
@@ -77,16 +76,21 @@ $(document).ready(function(){
 						setTimeout(function(){
 							$('.first')[0].click();
 						},1200);
-						var numBooks = $('.book-query').length;
-						// setTimeout(function(){
-							that.randomToggleId = setInterval(function(){
-								$('.book-query').eq(Math.round(Math.random()*numBooks)).click();
-							},1200);
-						// },1200);
-					}
-					if ( $('.joyride-tip-guide[data-index=0]').is(':hidden') ){
+
+						setTimeout(function(){
+							$('.first~.book-query')[0].click();
+						},2400);
+
+						setTimeout(function(){
+							$('.first')[0].click();
+						},3600);
+
+						setTimeout(function(){
+							$('.first')[0].click();
+						},4800);
+
+					} else {
 						// Then it has moved on to step 3
-						clearInterval(this.randomToggleId);
 						$('.book-query').removeClass("selected");
 					}
 				},
