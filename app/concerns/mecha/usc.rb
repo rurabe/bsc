@@ -1,7 +1,7 @@
 module Mecha
   class Usc
     include ParserHelpers
-    attr_reader :mecha
+    attr_reader :mecha, :books_page
 
     def self.words
       %w( trojan tommy coliseum leavey doheny evk parkside cafe84 )
@@ -20,7 +20,7 @@ module Mecha
       end
     end
 
-    private
+    # private
     
       def navigate(options={})
         login(options)
@@ -46,11 +46,12 @@ module Mecha
       end
 
       def continue_login
-        @mecha.current_page.form.submit 
+        @mecha.current_page.form.submit
+        @mecha.get('https://my.usc.edu/portal/render.userLayoutRootNode.uP') 
       end
 
       def get_course_page
-        @mecha.get('https://camel2.usc.edu/OASISprtlchnlTest/PortalBridge.aspx')
+        @mecha.current_page.link_with(:href => "https://camel2.usc.edu/OASISprtlchnlTest/PortalBridge.aspx").click
       end
 
       # Error handlers
@@ -65,19 +66,22 @@ module Mecha
 
       # Parsers
       def build_course(node)
-        { :department       => parse_class(node,:department), 
-          :number           => parse_class(node,:number), 
+        { :department       => parse_course_department(node), 
+          :number           => parse_course_number(node), 
           :section          => parse_course_section(node), 
         # :instructor       => parse_course_instructor(node),
           :school_unique_id => parse_course_section(node),
           :books_attributes => get_books(node) }
       end
 
-      def parse_class(node,attribute)
+      def parse_course_department(node)
         string = parse_node(node,'./h4/strong')
-        match = string.match(/^(\D+) (\d+)$/) if string
-        results = { :department => match[1], :number => match[2] } if match
-        results[attribute]
+        parse_result(string, /^(\w+) \w+$/)
+      end
+
+      def parse_course_number(node)
+        string = parse_node(node,'./h4/strong')
+        parse_result(string, /^\w+ (\w+)$/)
       end
 
       def parse_course_section(node)
