@@ -4,7 +4,11 @@ module Mecha
     attr_reader :mecha, :books_page
 
     def self.words
-      %w( trojan tommy coliseum leavey doheny evk parkside cafe84 )
+      %w( trojan tommy coliseum leavey doheny evk parkside cafe84 viterbi marshall thornton
+          rossier annenberg new north pardee marks troy cardinal gold heritage vkc bovard 
+          commons traddies nineoh therow uv century conquest lyons roski gould keck thornton
+          taper leventhal psx psa psb psd figueroa expo vermont jefferson chanos deltaco
+          la tirebiter watts birnkrant fluor carlsjr )
     end
 
     def initialize(options={})
