@@ -3,7 +3,8 @@ module Amazon
 		attr_reader :link
 
 		def initialize(params)
-			@books = params
+			@books = params[:books]
+			@associate_tag = params[:tag]
 			@request_defaults = {
 				:operation		=> 'CartCreate',
 				:service 			=> 'AWSECommerceService' 	 
@@ -26,7 +27,11 @@ module Amazon
 			end
 
 			def build_request
-				@request_defaults.merge(build_item_params)
+				@request_defaults.merge(build_associate_tag_param)
+			end
+
+			def build_associate_tag_param
+				build_item_params.merge(:associate_tag => @associate_tag)
 			end
 
 			def build_item_params

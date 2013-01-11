@@ -1,8 +1,8 @@
 class CartsController < ApplicationController
 
 	def create
-		# params = {"amazon"=>{"new"=>["1604067454", "0781760038"], "used"=>["1428312234", "1604062908"]}, "booklist_id"=>"EGeq16wUNg"}
-		@query = Amazon::CartQuery.new(params[:amazon])
+		# params = {"cart"=> {"books"=>[{"condition" => "used", "ean" => "123..."}], "tag" => "bsc-usc-20"}}
+		@query = Amazon::CartQuery.new(params[:cart])
 		redirect_to @query.link, :status => 303
 	end
 end

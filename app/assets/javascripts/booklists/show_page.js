@@ -1,5 +1,5 @@
 $(document).ready(function(){
-
+(BOOKSUPPLYCO = function(){
 	$.ajax({ // Amazon
 			type: 'PUT',
 			dataType: "json",
@@ -59,7 +59,11 @@ $(document).ready(function(){
 			});
 		});
 
-	(BOOKSUPPLYCO = function(){
+		var schoolAmazonTag = function(){
+			var slug = $('h2.school-name').attr('data-slug');
+			return 'bsc-' + slug + '-20'
+		};
+
 
 		var takeTour = function(){
 			console.log("tour!!!")
@@ -204,12 +208,6 @@ $(document).ready(function(){
 				}
 
 
-			var schoolAmazonTag = function(){
-				var slug = $('h2.school-name').attr('data-slug')
-				return 'bsc-' + slug + '-20'
-			}
-
-
 			var vendorMethods = {
 			 	amazon: {
 					vendor: "amazon",
@@ -324,15 +322,17 @@ $(document).ready(function(){
 					});
 				},
 				amazonCheckoutData: function(){
-					var conditionString = "amazon%5B%5D%5Bcondition%5D="
-					var eanString = "amazon%5B%5D%5Bean%5D="
-					var books = this.selectByClass('book-amazon','selected')
+					var conditionString = "cart%5Bbooks%5D%5B%5D%5Bcondition%5D=";
+					var eanString = "cart%5Bbooks%5D%5B%5D%5Bean%5D=";
+					var books = this.selectByClass('book-amazon','selected');
 
 					var bookData = books.map(function(book){
-						return conditionString + book.condition + "&" + eanString + book.ean
+						return conditionString + book.condition + "&" + eanString + book.ean;
 					});
 
-					return window.location.pathname + "/carts?" + bookData.join("&")
+					var associateTag = "&cart%5Btag%5D=" + schoolAmazonTag();
+
+					return window.location.pathname + "/carts?" + bookData.join("&") + associateTag
 				},
 				bnCheckoutData: function(){
 					var bnBooks = this.selectByClass("book-bn","selected")
