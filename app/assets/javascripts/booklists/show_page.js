@@ -66,15 +66,36 @@ $(document).ready(function(){
 
 
 		var takeTour = function(){
-			console.log("tour!!!")
 			// Start the tour
 			$('#tour').joyride({
 				tipLocation: 'top',
+				randomToggleId: null,
+				postStepCallback: function(){
+					var that = this
+					if( $('.joyride-tip-guide[data-index=0]').is(':visible') ){
+						// Then it is on step 2
+						setTimeout(function(){
+							$('.first')[0].click();
+						},1200);
+						var numBooks = $('.book-query').length;
+						setTimeout(function(){
+							that.randomToggleId = setInterval(function(){
+								$('.book-query').eq(Math.round(Math.random()*numBooks)).click();
+							},1200);
+						},1200);
+					}
+					if ( $('.joyride-tip-guide[data-index=0]').is(':hidden') ){
+						// Then it has moved on to step 3
+						clearInterval(this.randomToggleId);
+						$('.book-query').removeClass("selected");
+					}
+				},
 				postRideCallback: function(){
 					$('#tour-button').fadeIn();
 					$('#tour-button').on('click',function(){ takeTour(); })
 				}
 			});
+
 
 			$.cookie('boooksupplyco_tour','taken', {
 				expires: 90
