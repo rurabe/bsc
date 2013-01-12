@@ -1,6 +1,7 @@
 module Mecha
   class Hawaii
     include ParserHelpers
+    attr_reader :mecha, :books_page
 
     def self.words
       %w(manoa makiki palolo moilili kaimuki stlouis kahala ainahaina hawaiikai makapuu waimanalo
@@ -17,6 +18,7 @@ module Mecha
     end
 
     def parse(page=@books_page)
+      raise Mecha::ClassesNotInSystemError if books_not_found?
       courses = get_course_nodes(page)
       courses.map do |course|
         course_hash = build_course(course)
@@ -25,7 +27,7 @@ module Mecha
       end
     end
 
-    private
+    # private
       
       def navigate(options={})      
         login(options)
@@ -62,12 +64,11 @@ module Mecha
 
       def get_course_schedule
         @mecha.post('https://www.sis.hawaii.edu/uhdad/bwskfshd.P_CrseSchdDetl','term_in' => '201330')
-        raise Mecha::NoClassesError if no_classes?
       end
 
       def get_books_page
+        raise Mecha::NoClassesError if no_classes?
         @mecha.get(bookstore_url)
-        raise Mecha::ClassesNotInSystemError if books_not_found?
       end
 
       # Error definitions
@@ -155,6 +156,7 @@ module Mecha
       def get_course_nodes(page)
         nodes = page.search("//div[@class='course_info']")
         raise Mecha::NoBooksError if no_books?(nodes)
+        nodes
       end
 
       def get_isbns(page)
