@@ -261,7 +261,7 @@ $(document).ready(function(){
 
 
 
-				thisDiv = $.extend(
+				var thisDiv = $.extend(
 					{},
 					vendorMethods[vendor],
 					{
@@ -307,7 +307,7 @@ $(document).ready(function(){
 						}
 					}
 				);
-
+				
 				priceDivsHeartShapedBox.divs.push(thisDiv);
 				thisDiv.toExpressDiv();
 				return thisDiv

@@ -15,7 +15,8 @@ module BarnesAndNoble
 		end
 
 		def ui_data
-			@response_options.find { |offer| offer[:rating] > 3.5 }.reject {|k| k == :rating }
+			best_offer = @response_options.find { |offer| offer[:rating] > 3.5 }
+			best_offer.reject {|k| k == :rating } if best_offer
 		end
 
 		# private
