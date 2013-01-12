@@ -1,6 +1,5 @@
 class BooklistsController < ApplicationController
 
-  # before_filter :root_redirect,   :only 		=> [:new]
   before_filter :https_redirect,  :only 		=> [:new, :create]
   before_filter :http_redirect,   :only 		=> [:show]
   before_filter :define_school,   :only 		=> [:new, :create]
@@ -64,14 +63,6 @@ class BooklistsController < ApplicationController
   end
 
   # SSL Redirects
-  def root_redirect
-    if ENV["ENABLE_HTTPS"] == "yes"
-      if !request.ssl?
-        flash.keep
-        redirect_to( root_url(protocol: "https"), { status: :moved_permanently }.merge(params) )
-      end
-    end
-  end
 
   def https_redirect
     if ENV["ENABLE_HTTPS"] == "yes"

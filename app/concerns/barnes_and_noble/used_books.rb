@@ -15,8 +15,9 @@ module BarnesAndNoble
 		end
 
 		def ui_data
-			best_offer = @response_options.find { |offer| offer[:rating] > 3.5 }
-			best_offer.reject {|k| k == :rating } if best_offer
+			response = response_base
+			response.merge!(best_offer) if best_offer
+			response
 		end
 
 		# private
@@ -48,7 +49,6 @@ module BarnesAndNoble
 					end
 
 			def api_parse_response
-				@response_options = []
 				used_offers = select_used_offers(@response)
 				used_offers.map do |offer|
 						@response_options << {  :rating => parse_rating(offer),
@@ -61,22 +61,43 @@ module BarnesAndNoble
 				end
 			end
 
+			def response_base
+				{
+					:vendor => "bn",
+					:condition => "used",
+					:price => nil,
+					:parent_ean => @ean,
+					:ean => nil
+				}
+			end
+
+			def best_offer
+				best_offer = @response_options.find { |offer| offer[:rating] > 3.5 }
+				best_offer.reject {|k| k == :rating } if best_offer
+			end
+
 			def select_used_offers(response)
 				response.xpath('//div[@class="w-box wgt-product-listing-textbooks-item product-root-node"]')
 			end
 
 			def parse_offer_price(node)
-				numberize(node.xpath('./div/span[@class="price"]').text)
+				numberize(parse_node(node,'./div/span[@class="price"]'))
 			end
 
 			def parse_rating(node)
-				numberize(parse_result(node.xpath('./div/div/p/span[@class="feedback"]').text,/\((.+) out/))
+				rating = numberize(parse_result(parse_node(node,'./div/div/p/span[@class="feedback"]'),/\((.+) out/))
+				rating ? rating : 0
 			end
 
 			def parse_offer_ean(node)
 				form = node.xpath('./div/div/p[@class="product-details"]/a')
 				parse_result(form.attr('href').text,/EAN=(\d+)/) if form.present?
 			end
+
+		  def parse_node(node,xpath)
+	      result = node.search(xpath).first
+	      result.text.strip if result
+	    end
 
 			def parse_result(string,regex)
 				match = string.match(regex) if string

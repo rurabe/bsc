@@ -27,7 +27,7 @@ module Amazon
 	 	end
 
 	 def ui_data
- 			@parsed_response = request_items
+ 			@parsed_response = response_base
  			@responses.flat_map do |response|
  				response.items.flat_map do |item|
  					set_price_information(item)
@@ -68,6 +68,12 @@ module Amazon
 			end
 
 			# Parsers and parsing helper methods
+
+			def response_base
+				request_items.each do |item|
+					item.merge!({ :price => nil, :vendor => "amazon", :asin => nil })
+				end
+			end
 
 	 		def set_price_information(item)
 	 			offer_matches = @parsed_response.select { |book| book[:ean] == parse_ean(item) && book[:condition] == parse_condition(item) }

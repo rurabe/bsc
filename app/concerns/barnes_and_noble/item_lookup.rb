@@ -16,7 +16,7 @@ module BarnesAndNoble
 		end
 
 		def ui_data
-			@parsed_response = request_items
+			@parsed_response = response_base
 			products = response.xpath('./ProductLookupResponse/ProductLookupResult/Product')
 			products.map do |product| 
 				set_price_information(product)
@@ -56,10 +56,14 @@ module BarnesAndNoble
 			def ui_data_parsers(product)
 					{
 						:ean      		=> product.xpath('./Ean').text,
-						:price 				=> product.xpath('./Prices/BnPrice').text.to_d,
-						:condition 		=> "new",
-						:vendor				=> "bn"
+						:price 				=> product.xpath('./Prices/BnPrice').text.to_d
 					}
+			end
+
+			def response_base
+				request_items.each do |item|
+					item.merge!({ :price => nil, :vendor => "bn" })
+				end
 			end
 	end
 end
