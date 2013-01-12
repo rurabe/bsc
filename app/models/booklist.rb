@@ -16,9 +16,14 @@ class Booklist < ActiveRecord::Base
 
   def lookup(vendor)
     case vendor
-      when "amazon" then Amazon::ItemLookup.new(eans)
-      when "bn"     then BarnesAndNoble::ItemLookup.new(eans)
+      when "amazon"  then Amazon::ItemLookup.new(eans)
+      when "bn"      then BarnesAndNoble::ItemLookup.new(eans)
+      when "bn-used" then BarnesAndNoble::UsedBooks.new(eans)
     end
+  end
+
+  def used_bn
+    eans.map { |e| BarnesAndNoble::UsedBooks.new(e).ui_data }
   end
 
   private

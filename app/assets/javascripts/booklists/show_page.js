@@ -1,23 +1,23 @@
 $(document).ready(function(){
-(BOOKSUPPLYCO = function(){
-	$.ajax({ // Amazon
-			type: 'PUT',
-			dataType: "json",
-			data: {vendor: "amazon"},
-			success: function(data, textStatus, jqXHR){
-				BOOKSUPPLYCO.importData(data);
-			},
-			error: function(jqXHR, textStatus, errorThrown){
-				$(".book-amazon").each(function(){
-					// Fade out the loading divs
-					$(this).children(".loading")
-								 .fadeOut(function(){
-						$(this).parent().html('<span class="label">Error</span>').hide().fadeIn();
-						console.log(errorThrown);
-					});
-				})
-			}
-		});
+	(BOOKSUPPLYCO = function(){
+		$.ajax({ // Amazon
+				type: 'PUT',
+				dataType: "json",
+				data: {vendor: "amazon"},
+				success: function(data, textStatus, jqXHR){
+					BOOKSUPPLYCO.importData(data);
+				},
+				error: function(jqXHR, textStatus, errorThrown){
+					$(".book-amazon").each(function(){
+						// Fade out the loading divs
+						$(this).children(".loading")
+									 .fadeOut(function(){
+							$(this).parent().html('<span class="label">Error</span>').hide().fadeIn();
+							console.log(errorThrown);
+						});
+					})
+				}
+			});
 
 		$.ajax({ // Barnes and Noble
 			type: 'PUT',
@@ -27,7 +27,7 @@ $(document).ready(function(){
 				BOOKSUPPLYCO.importData(data);
 			},
 			error: function(jqXHR, textStatus, errorThrown){
-				$(".book-bn").each(function(){
+				$(".bn-new").each(function(){
 					// Fade out the loading divs
 					$(this).children(".loading")
 								 .fadeOut(function(){
@@ -38,25 +38,23 @@ $(document).ready(function(){
 			}
 		});
 
-		$('.bn-used').each(function(){
-			var div = this;
-			$.ajax({ // Barnes and Noble
-				type: 'PUT',
-				url: '/books/' + $(div).parent().attr('id').match(/book-row-(\d+)/)[1],
-				dataType: "json",
-				success: function(data, textStatus, jqXHR){
-					BOOKSUPPLYCO.importData(data);			
-				},
-				error: function(jqXHR, textStatus, errorThrown){
-					
-						// Fade out the loading divs
+		$.ajax({ // Barnes and Noble Used Books
+			type: 'PUT',
+			dataType: "json",
+			data: {vendor: "bn-used"},
+			success: function(data, textStatus, jqXHR){
+				BOOKSUPPLYCO.importData(data);
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				$(".bn-used").each(function(){
+					// Fade out the loading divs
 					$(this).children(".loading")
 								 .fadeOut(function(){
 						$(this).parent().html('<span class="label">Error</span>').hide().fadeIn();
 						console.log(errorThrown);
 					});
-				}
-			});
+				})
+			}
 		});
 
 		var schoolAmazonTag = function(){
