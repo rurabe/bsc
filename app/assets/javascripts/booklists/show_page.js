@@ -124,7 +124,7 @@ $(document).ready(function(){
 			$('.loading').fadeOut(function(){
 				$(this).replaceWith('<span class="label">Not Found</span>').hide().fadeIn()
 			})
-		},15000)
+		},20000)
 		
 		// Constructor for priceDiv objects
 		// params = {vendor,vendorId,price,condition, }
