@@ -4,6 +4,8 @@
 
 div.schools-index-box{
 	margin-top: 20px;
+  max-height: 500px;
+  overflow: scroll;
 }
 
 div.school-row {
@@ -12,4 +14,47 @@ div.school-row {
 
 .schools-index-box a{
 	text-decoration: none;
+  text-align: right;
+}
+
+h3.school-listing{
+  font-size: 30pt;
+  font-family: "FuturaBold";
+  text-shadow: 0.05em 0.07em 0.06em black;
+  margin: 0 auto 0 auto;
+}
+
+.front-carousel{
+  height:500px;
+}
+
+.main-front-row{
+  margin: 25px auto;
+  height:500px;
+  padding: 10px;
+}
+
+#slide-ssl{
+  height: 500px;
+  background-image: url(/assets/ssl.jpg);
+  background-position: center center;
+  background-size: cover; 
+}
+
+#slide-time{
+  height: 500px;
+  background-image: url(/assets/time.jpg);
+  background-position: center center;
+  background-size: cover; 
+}
+
+.caption-header{
+  font-family: "FuturaBold";
+  color: white;
+  margin-top: 0px;
+}
+
+.carousel-caption{
+  text-align: left;
+
 }

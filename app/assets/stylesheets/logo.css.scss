@@ -6,21 +6,48 @@ div.logo-container a{
 
 h1.logo {
 	font-family: "FuturaBold";
-	font-size: 44pt;
+	font-size: 48pt;
 	text-shadow: 0.05em 0.07em 0.07em black;
 	color: #6A7F10;
 	margin: 0 auto 0 auto;
 }
 
 .logo-box {
-	margin: 20px auto 40px auto;
+	margin: 20px auto 60px auto;
 }
 
-h2.school-name {
+.school-name {
 	font-family: "FuturaBold";
-	font-size: 36pt;
 	text-shadow: 0.05em 0.07em 0.06em black;
-	margin: 0 auto 0 auto;
+	margin: 20px auto 0px auto;
 }
 
-.school-box {}
+h2.school-name{
+	font-size: 42pt;
+}
+
+@media(max-width:480px){
+	h1.logo{
+		font-size: 28pt;
+	}
+
+	h2.school-name{
+		font-size: 24pt;
+	}
+	.logo-box {
+	margin: 20px auto 20px auto;
+	}
+}
+
+@media(max-width:640px){
+	h1.logo{
+		font-size: 28pt;
+	}
+
+	h2.school-name{
+		font-size: 24pt;
+	}
+	.logo-box {
+	margin: 20px auto 20px auto;
+	}
+}

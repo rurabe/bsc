@@ -1,22 +1,82 @@
 <div class="row-fluid pagination-centered">
 	<div class="span12">
+
+		<div class="row">
 		<div class="logo-box">
 			<h1 class="logo">BOOK SUPPLY CO.</h1>
 		</div>
+	</div>
 
-		<p>Choose your school!</p>
 
-		<div class="schools-index-box">
-			<% @schools.each do |school| %>
-				<%= link_to new_booklist_url :school => school.slug do %>
-					<div class="school-row" style="color: #<%= school.primary_color %>" data-primary-color="#<%= school.primary_color %>" data-secondary-color="#<%= school.secondary_color %>">
-						<h2 class="school-name">
-							<%= school.name.upcase %>
-						</h2>
-					</div>
+	<div class="row main-front-row">
+
+		<div class="span4" >
+			<div class="schools-index-box">
+ 				<% @schools.each do |school| %>
+					<%= link_to new_booklist_url :school => school.slug do %>
+						<div class="school-row" style="color: #<%= school.primary_color %>" data-primary-color="#<%= school.primary_color %>" data-secondary-color="#<%= school.secondary_color %>">
+							<h3 class="school-listing">
+								<%= school.name.upcase %>
+							</h3>
+						</div>
+					<% end %>
 				<% end %>
-			<% end %>
-		</div>
+
+				</div>
+			</div>
+			
+			<div id="myCarousel" class="carousel slide span8 front-carousel">
+			  <!-- Carousel items -->
+			  <div class="carousel-inner">
+
+			  	<div class="active item" id="slide-time">
+			    	<div class="carousel-caption">
+			    		<h3 class="caption-header">SAVE TIME</h3>
+			    		<p>
+			    			You have better things to do than waiting in line all day. Like video games. And drinking.
+			    		</p>
+			    	</div>
+			    </div>
+
+			    <div class="item" id="slide-time">
+			    	<div class="carousel-caption">
+			    		<h3 class="caption-header">SAVE MONEY</h3>
+			    		<p>
+			    			Everyone knows that books are cheaper online. Let us make that time consuming chore easy for you.
+			    		</p>
+			    	</div>
+			    </div>
+
+			    <div class="item " id="slide-ssl">
+			    	<div class="carousel-caption">
+			    		<h3 class="caption-header">STAY SAFE</h3>
+			    		<p>
+			    			Book Supply Co. takes your security very seriously. We <i>never</i> store your information, so it cannot be lost or stolen. We also use the latest web security standards (https and SSL) to ensure that it won't be stolen in transit.
+			    		</p>
+			    	</div>
+			    </div>
+
+
+			  </div>
+			  <!-- Carousel nav -->
+			  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+			  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+			</div>
+
+	</div>
+
+
+<!-- 		<div class="about-info">
+			<%= render :partial => 'shared/about_info' %>
+		</div> -->
+</div>
+
+				<div class="socials">
+					<%= render :partial => 'shared/socials' %>
+				</div>
+
+
+
 	</div>
 </div>
 
