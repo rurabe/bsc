@@ -12,4 +12,10 @@ $(document).ready(function(){
 		var color = $(this).attr('data-primary-color');
 		$(this).css('color',color);
 	});
+
+  $('#schoolsCarousel').carousel({
+    interval: 8000
+  })
+
+
 });
