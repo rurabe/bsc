@@ -1,6 +1,7 @@
 module BarnesAndNoble
 	class ItemLookup
 		include ApiMethods
+		include Mecha::ParserHelpers
 
 		attr_reader :response, :parsed_response
 
@@ -8,20 +9,14 @@ module BarnesAndNoble
 			@eans = eans
 			@default_params = {
 				:operation => 'ProductLookup',
-				:product_code => 'Book'
-			}
+				:product_code => 'Book' }
 			@response = nil
 			@parsed_response = {}
 			control
 		end
 
 		def ui_data
-			@parsed_response = response_base
-			products = response.xpath('./ProductLookupResponse/ProductLookupResult/Product')
-			products.map do |product| 
-				set_price_information(product)
-			end
-			@parsed_response.to_json
+			parse_ui_data.to_json
 		end
 
 		private
@@ -38,32 +33,49 @@ module BarnesAndNoble
 				@eans.delete_if { |product| product.nil? }.join(",")
 			end
 
-			def set_price_information(product)
-				product_matches = @parsed_response.select { |book| book[:ean] == product.xpath('./Ean').text }
-				product_matches.each do |match|
-					match.merge!( :price  => product.xpath('./Prices/BnPrice').text,
-											  :vendor => "bn" )
-				end
-			end
-
 			def request_items
 				@eans.flat_map do |ean|
-					{:condition 	=> "new",
-					 :ean 			 	=> ean}
+					{ :condition => "new", :ean => ean }
 				end
-			end
-
-			def ui_data_parsers(product)
-					{
-						:ean      		=> product.xpath('./Ean').text,
-						:price 				=> product.xpath('./Prices/BnPrice').text.to_d
-					}
 			end
 
 			def response_base
 				request_items.each do |item|
 					item.merge!({ :price => nil, :vendor => "bn" })
 				end
+			end
+
+			def find_product_data(ean)
+				@response.search(".//Product[.//Ean[text()=#{ean}]]").first
+			end
+
+			def parse_ui_data
+				response_base.map do |book|
+					product_data = find_product_data(book[:ean])
+					book.merge(ui_data_parsers(product_data))
+				end
+			end
+
+			def ui_data_parsers(product)
+				if product
+					{	:ean     => parse_ean(product),
+						:price   => parse_price(product) }
+				else
+					{}
+				end
+			end
+
+			def parse_ean(product)
+				parse_node(product,'.//Ean')
+			end
+
+			def parse_price(product)
+				price = parse_node(product,".//Prices//BnPrice")
+				price.to_d if price && available?(product)
+			end
+
+			def available?(product)
+				parse_node(product,'.//Availability') != "Not Available"
 			end
 	end
 end
