@@ -1,5 +1,3 @@
-require ''
-
 module BarnesAndNoble
   class UsedBooks
     def initialize(eans)
