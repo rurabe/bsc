@@ -1,130 +1,116 @@
 $(document).ready(function(){
+
+	// BOOKSUPPLYCO is the master object, accessible from the gloabal scope.
+	// Only public methods should be exposed in this object, but all JS
+	// activity should be contained within this object
 	(BOOKSUPPLYCO = function(){
-		$.ajax({ // Amazon
-				type: 'PUT',
-				dataType: "json",
-				data: {vendor: "amazon"},
-				success: function(data, textStatus, jqXHR){
-					BOOKSUPPLYCO.importData(data);
-				},
-				error: function(jqXHR, textStatus, errorThrown){
-					$(".book-amazon").each(function(){
-						// Fade out the loading divs
-						$(this).children(".loading")
-									 .fadeOut(function(){
-							$(this).parent().html('<span class="label">Error</span>').hide().fadeIn();
-							console.log(errorThrown);
-						});
-					})
+// [----------------------------------------===== #Private Methods =====----------------------------------------]
+		var initialize = function(){
+			// Ajax requests for the book prices, returns JSON which is imported by 
+			// the global object.
+			$.each(['amazon','bn','bn-used'],function(i,vendor){
+				$.ajax({ // Amazon
+					type: 'PUT',
+					dataType: "json",
+					data: {vendor: vendor},
+					success: function(data, textStatus, jqXHR){
+						BOOKSUPPLYCO.importData(data);
+					},
+					error: function(jqXHR, textStatus, errorThrown){
+						$(".book-amazon").each(function(){
+							// Fade out the loading divs
+							$(this).children(".loading")
+										 .fadeOut(function(){
+								$(this).parent().html('<span class="label">Error</span>').hide().fadeIn();
+								console.log(errorThrown);
+							});
+						})
+					}
+				});
+			});
+
+			// Sets behavior for the checkout button
+			$('#checkout-button').click(function(){
+				if( bnTarget = priceDivsHeartShapedBox.bnCheckoutData() ){
+					var bnBooks = window.open(bnTarget,'amazonBooks','height=650,width=800');
+				}
+				if( amazonTarget = priceDivsHeartShapedBox.amazonCheckoutData() ){
+					var amazonBooks = window.open(amazonTarget,'bnBooks','height=650,width=800');
+					if ( bnTarget ){
+						amazonBooks.moveTo(0,200);
+					}
+				}
+				if( !amazonTarget && !bnTarget ){
+					// Action if no books are selected
 				}
 			});
 
-		$.ajax({ // Barnes and Noble
-			type: 'PUT',
-			dataType: "json",
-			data: {vendor: "bn"},
-			success: function(data, textStatus, jqXHR){
-				BOOKSUPPLYCO.importData(data);
-			},
-			error: function(jqXHR, textStatus, errorThrown){
-				$(".bn-new").each(function(){
-					// Fade out the loading divs
-					$(this).children(".loading")
-								 .fadeOut(function(){
-						$(this).parent().html('<span class="label">Error</span>').hide().fadeIn();
-						console.log(errorThrown);
-					});
-				})
-			}
-		});
+			// Checks for the tour taken cookie, and starts the tour or sets the button
+			if (!$.cookie('boooksupplyco_tour')){
+				$('#tour-button').hide().off();
+				takeTour();
+			}else{
+				$('#tour-button').on('click',function(){ takeTour(); });
+			};
 
-		$.ajax({ // Barnes and Noble Used Books
-			type: 'PUT',
-			dataType: "json",
-			data: {vendor: "bn-used"},
-			success: function(data, textStatus, jqXHR){
-				BOOKSUPPLYCO.importData(data);
-			},
-			error: function(jqXHR, textStatus, errorThrown){
-				$(".bn-used").each(function(){
-					// Fade out the loading divs
-					$(this).children(".loading")
-								 .fadeOut(function(){
-						$(this).parent().html('<span class="label">Error</span>').hide().fadeIn();
-						console.log(errorThrown);
-					});
-				})
-			}
-		});
+			// Set handlers for link/express switch
+			$('#simple').change(function(){
+				priceDivsHeartShapedBox.makeSimple();
+			});
+			$('#express').change(function(){
+				priceDivsHeartShapedBox.makeExpress();
+			});	
 
+			// Replaces loading divs with Not Found after 20 secs
+			setTimeout(function(){
+				$('.loading').fadeOut(function(){
+					$(this).replaceWith('<span class="label">Not Found</span>').hide().fadeIn()
+				})
+			},20000);
+		}();	
+
+
+		// Pulls the school slug from the school subhead. This is the way the 
+		// backend communicates which school is set @school.
 		var schoolAmazonTag = function(){
 			var slug = $('h2.school-name').attr('data-slug');
 			return 'bsc-' + slug + '-20'
 		};
 
-
+		// Defines the tour object and starts the tour.
 		var takeTour = function(){
 			// Start the tour
 			$('#tour').joyride({
 				tipLocation: 'top',
 				postStepCallback: function(){
-					var that = this
-					if( $('.joyride-tip-guide[data-index=0]').is(':visible') ){
+					var that = this;
+					setTimeout(function(){
+						if( $('.joyride-tip-guide[data-index=1]').is(':visible') ){
 						// Then it is on step 2
-						setTimeout(function(){
-							$('.first')[0].click();
-						},1200);
-
-						setTimeout(function(){
-							$('.first~.book-query')[0].click();
-						},2400);
-
-						setTimeout(function(){
-							$('.first')[0].click();
-						},3600);
-
-						setTimeout(function(){
-							$('.first')[0].click();
-						},4800);
-
-					} else {
-						// Then it has moved on to step 3
-						$('.book-query').removeClass("selected");
-					}
+							setTimeout(function(){
+								$('.first')[0].click();
+							},1200);
+							setTimeout(function(){
+								$('.first~.book-query')[0].click();
+							},2400);
+							setTimeout(function(){
+								$('.first')[0].click();
+							},3600);
+							setTimeout(function(){
+								$('.first')[0].click();
+							},4800);
+						}
+					},100);
 				},
 				postRideCallback: function(){
 					$('#tour-button').fadeIn();
-					$('#tour-button').on('click',function(){ takeTour(); })
+					$('#tour-button').on('click',function(){ takeTour(); });
 				}
 			});
 
-
-			$.cookie('boooksupplyco_tour','taken', {
-				expires: 90
-			});
-		}
-
-		if (!$.cookie('boooksupplyco_tour')){
-			$('#tour-button').hide().off()
-			takeTour();
-		}else{
-			$('#tour-button').on('click',function(){ takeTour(); })
-		}
-
-		// Set handlers for link/express switch
-		$('#simple').change(function(){
-			priceDivsHeartShapedBox.makeSimple();
-		});
-		$('#express').change(function(){
-			priceDivsHeartShapedBox.makeExpress();
-		});	
-
-		// [----------------------------------------===== #Private Methods =====----------------------------------------]
-		setTimeout(function(){
-			$('.loading').fadeOut(function(){
-				$(this).replaceWith('<span class="label">Not Found</span>').hide().fadeIn()
-			})
-		},20000)
+			// Set cookie
+			$.cookie('boooksupplyco_tour','taken', { expires: 90 });
+		};
 		
 		// Constructor for priceDiv objects
 		// params = {vendor,vendorId,price,condition, }
@@ -179,31 +165,30 @@ $(document).ready(function(){
 			// Set the handlers for the express buttons
 			var setCheckoutLinkHandler = function(){
 				$div.click(function(){
-					amazonCheckoutBehavior();
-					bnCheckoutBehavior();
+					var amazonBooks = priceDivsHeartShapedBox.amazonCheckoutData();
+					var bnBooks = priceDivsHeartShapedBox.bnCheckoutData();
+					if( amazonBooks && bnBooks ){
+						$('.checkout-text-prefix').show()
+						$('.checkout-text-amazon').show()
+						$('.checkout-text-connector').show()
+						$('.checkout-text-bn').show()
+					}else if( amazonBooks ){
+						$('.checkout-text-prefix').show()
+						$('.checkout-text-amazon').show()
+						$('.checkout-text-connector').hide()
+						$('.checkout-text-bn').hide()
+					}else if( bnBooks ){
+						$('.checkout-text-prefix').show()
+						$('.checkout-text-amazon').hide()
+						$('.checkout-text-connector').hide()
+						$('.checkout-text-bn').show()
+					}else if ( !amazonBooks && !bnBooks ){
+						$('.checkout-text-prefix').hide()
+						$('.checkout-text-amazon').hide()
+						$('.checkout-text-connector').hide()
+						$('.checkout-text-bn').hide()
+					}
 				});
-			};
-
-			// Wrap the amazon button in the UJS link on click
-			var amazonCheckoutBehavior = function(){
-				var amazonTarget = priceDivsHeartShapedBox.amazonCheckoutData();
-					$('a > #checkout-amazon').unwrap();
-				if (amazonTarget){
-					$('#checkout-amazon').wrap(
-						'<a href="' + amazonTarget + '" target="_blank" data-method="post" rel="nofollow"/>'
-					);
-				}
-			};
-
-			// Wrap the bn button in the built link on click
-			var bnCheckoutBehavior = function(){
-				var bnTarget = priceDivsHeartShapedBox.bnCheckoutData();
-					$('a > #checkout-bn').unwrap();
-				if (bnTarget) {
-					$('#checkout-bn').wrap(
-						'<a href="' + bnTarget + '" target="_blank" rel="nofollow"/>'
-					);
-				}
 			};
 
 			// Describes the characteristics of a non sold out express div
@@ -229,7 +214,6 @@ $(document).ready(function(){
 						makeLabel(price)
 					);
 				}
-
 
 			var vendorMethods = {
 			 	amazon: {
@@ -257,75 +241,72 @@ $(document).ready(function(){
 				}
 			};
 
+			// PRICEDIV PUBLIC METHODS
+			var thisDiv = $.extend(
+				{},
+				vendorMethods[vendor],
+				{
+					condition: 	condition,
+					ean: 				ean,
+					div: 				$div,
 
+					toSimpleDiv: function(){
+						$div.off();
+						$div.addClass("simple");
+						$div.removeClass("selectable");
+						if (price === "Sold out" || price === "Not found"){
+							simpleSoldOut();
+						} else {
+							this.simplePrice();
+						}
+					},
 
-				var thisDiv = $.extend(
-					{},
-					vendorMethods[vendor],
-					{
-						condition: 	condition,
-						ean: 				ean,
-						div: 				$div,
-
-						toSimpleDiv: function(){
-							$div.off();
-							$div.addClass("simple");
-							$div.removeClass("selectable");
-							if (price === "Sold out" || price === "Not found"){
-								simpleSoldOut();
+					toExpressDiv: function(){
+						if (price === "Sold out" || price === "Not found"){
+							expressSoldOut();
+						} else {
+							expressPrice();
+						}
+					},
+					// Describes the characteristics of a non sold out simple div
+					simplePrice: function(){
+						changeContent(
+							'<a href=' + this.link() + ' target="_blank">' +
+								 showPrice(price)
+							+ '</a>'
+						);
+					},
+					// Switch to give you
+					link: function(){
+						if (ean){
+							if (condition === "new") {
+								return this.newLink();
 							} else {
-								this.simplePrice();
-							}
-						},
-
-						toExpressDiv: function(){
-							if (price === "Sold out" || price === "Not found"){
-								expressSoldOut();
-							} else {
-								expressPrice();
-							}
-						},
-						// Describes the characteristics of a non sold out simple div
-						simplePrice: function(){
-							changeContent(
-								'<a href=' + this.link() + ' target="_blank">' +
-									 showPrice(price)
-								+ '</a>'
-							);
-						},
-						// Switch to give you
-						link: function(){
-							if (ean){
-								if (condition === "new") {
-									return this.newLink();
-								} else {
-									return this.usedLink();
-								}
+								return this.usedLink();
 							}
 						}
 					}
-				);
+				}
+			);
 				
 				priceDivsHeartShapedBox.divs.push(thisDiv);
 				thisDiv.toExpressDiv();
 				return thisDiv
 			};
 
-			priceDivsHeartShapedBox = {
+			var priceDivsHeartShapedBox = {
 				divs: [],
 				makeSimple: function(filter){
 					$.each(this.divs,function(){
 						this.toSimpleDiv();
 					});
-					$("#checkout-amazon").slideUp();
-					$("#checkout-bn").slideUp();
+					$("#checkout-button").slideUp();
 				},
 				makeExpress: function(filter){
 					$.each(this.divs,function(){
 						this.toExpressDiv();
 					});
-					$("#checkout-amazon").slideDown();
-					$("#checkout-bn").slideDown();
+					$("#checkout-button").slideDown();
 				},
 				selectByClass: function(){
 					var that = this
@@ -345,25 +326,25 @@ $(document).ready(function(){
 					});
 				},
 				amazonCheckoutData: function(){
-					var conditionString = "cart%5Bbooks%5D%5B%5D%5Bcondition%5D=";
-					var eanString = "cart%5Bbooks%5D%5B%5D%5Bean%5D=";
-					var books = this.selectByClass('book-amazon','selected');
+					var amazonBooks = this.selectByClass('book-amazon','selected');
+					if( amazonBooks.length != 0 ){
+						var conditionString = "cart[books][][condition]=";
+						var eanString = "cart[books][][ean]=";
+						var associateTag = "&cart[tag]=" + schoolAmazonTag();
+						var bookData = amazonBooks.map(function(book){
+							return conditionString + book.condition + "&" + eanString + book.ean;
+						});
 
-					var bookData = books.map(function(book){
-						return conditionString + book.condition + "&" + eanString + book.ean;
-					});
-
-					var associateTag = "&cart%5Btag%5D=" + schoolAmazonTag();
-
-					return window.location.pathname + "/carts?" + bookData.join("&") + associateTag
+						return window.location.pathname + "/carts?" + bookData.join("&") + associateTag
+					}
 				},
 				bnCheckoutData: function(){
 					var bnBooks = this.selectByClass("book-bn","selected")
-					if ( bnBooks.length != 0 ) {
+					if( bnBooks.length != 0 ) {
 						var paramsString = bnBooks.reduce(function(a,e,i){
-								a.push( "ean" + (i+1) + "=" + e.ean + "&productcode" + (i+1) + "=" + e.productCode() + "&qty" + (i+1) + "=1" )
+								a.push( "ean" + (i+1) + "=" + e.ean + "&productcode" + (i+1) + "=" + e.productCode() + "&qty" + (i+1) + "=1" );
 								return a
-						},[]).join("&")
+						},[]).join("&");
 
 						return "http://cart4.barnesandnoble.com/op/request.aspx?" + paramsString + "&stage=fullCart&uiaction=multAddMoreToCart"
 					}
@@ -385,5 +366,4 @@ $(document).ready(function(){
 			}
 		}
 	}());
-
 });

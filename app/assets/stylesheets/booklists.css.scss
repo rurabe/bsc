@@ -218,25 +218,18 @@ td.book-query {
 	color: #FFFFFF;
 }
 
-#checkout-amazon {
-	min-width: 117px
+#checkout-button {
+	width: 100%;
+	min-width: 250px;
 }
 
-#checkout-amazon-td {
+#checkout-td {
 	text-align: center;
 }
 
 #checkout-amazon-icon {
 	font-size: 24px;
 	line-height: 12px;
-}
-
-#checkout-bn {
-	min-width: 117px
-}
-
-#checkout-bn-td {
-	text-align: center;
 }
 
 #checkout-bn-icon {

@@ -106,20 +106,18 @@
 			<td></td>
 			<td></td>
 			<td colspan="2"></td>
-			<td id="checkout-amazon-td" colspan="2" class="centered">
-				<button type="submit" class="btn btn-info" id="checkout-amazon">
-					<span id="checkout-amazon-icon-span">
-						<i class="icon-amazon" id="checkout-amazon-icon"></i>
-					</span>
-					<span id="checkout-amazon-text">Checkout</span>
+			<td id="checkout-td" colspan="4" class="centered">
+				<button type="submit" class="btn btn-warning" id="checkout-button">
+					<span id="checkout-text-span">
+						<span class="checkout-text">Buy my books now </span>
+						<span class="checkout-text-prefix" style="display:none">at</span>
+						<span class="checkout-text-amazon" style="display:none"><i class="icon-amazon" id="checkout-amazon-icon"></i></span>
+						<span class="checkout-text-connector" style="display:none">and</span>
+						<span class="checkout-text-bn" style="display:none"><%= image_tag 'bn-icon-16-white.png', :id => "checkout-bn-icon" %></span>
+						<span class="checkout-text">!</span>
+					</span>				
 				</button>
-			<td id="checkout-amazon-td" colspan="2" class="centered">
-				<button type="submit" class="btn btn-info" id="checkout-bn">
-					<span id="checkout-bn-icon-span">
-						<%= image_tag 'bn-icon-16-white.png', :id => "checkout-bn-icon" %>
-					</span>
-					<span id="checkout-bn-text">Checkout</span>
-				</button>
+
 			</td>
 			</td>
 		</tr>
