@@ -3,18 +3,14 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 div.schools-index-box{
-	margin-top: 20px;
-  max-height: 500px;
-  overflow: scroll;
 }
 
 div.school-row {
-	margin: 20px auto 20px auto;
+	margin: 0px auto 10px auto;
 }
 
 .schools-index-box a{
 	text-decoration: none;
-  text-align: right;
 }
 
 h3.school-listing{
@@ -24,44 +20,11 @@ h3.school-listing{
   margin: 0 auto 0 auto;
 }
 
-.front-carousel{
-  height:500px;
-}
-
 .main-front-row{
   margin: 25px auto;
-  height:500px;
   padding: 10px;
 }
 
-#slide-ssl{
-  height: 500px;
-  background-image: url(/assets/ssl.jpg);
-  background-position: center center;
-  background-size: cover; 
-}
-
-#slide-time{
-  height: 500px;
-  background-image: url(/assets/time.jpg);
-  background-position: center center;
-  background-size: cover; 
-}
-
-#slide-money{
-  height: 500px;
-  background-image: url(/assets/money.jpg);
-  background-position: center center;
-  background-size: cover; 
-}
-
-.caption-header{
-  font-family: "FuturaBold";
-  color: white;
-  margin-top: 0px;
-}
-
-.carousel-caption{
-  text-align: left;
-
+.about-point{
+  margin: 30px auto 20px auto;
 }
