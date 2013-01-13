@@ -65,6 +65,11 @@ module BookSupply
     # Load modules from concerns
     config.autoload_paths += %W(#{Rails.root}/app/concerns)
 
+    # Eager load for threads
+    config.autoload_paths.each do |path|
+      config.eager_load_paths << path
+    end
+
     # For deployment on heroku
     config.assets.initialize_on_precompile = false
   end

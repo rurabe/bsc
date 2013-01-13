@@ -1,3 +1,5 @@
+require ''
+
 module BarnesAndNoble
   class UsedBooks
     def initialize(eans)
@@ -5,9 +7,11 @@ module BarnesAndNoble
     end
 
     def ui_data
+      threads = []
       @eans.map do |ean|
-        query_used_book(ean)
+        threads << Thread.new { query_used_book(ean) }
       end
+      threads.map { |t| t.join; t.value }
     end
 
 
