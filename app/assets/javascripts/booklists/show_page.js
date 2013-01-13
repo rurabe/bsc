@@ -3,7 +3,7 @@ $(document).ready(function(){
 	// BOOKSUPPLYCO is the master object, accessible from the gloabal scope.
 	// Only public methods should be exposed in this object, but all JS
 	// activity should be contained within this object
-	(BOOKSUPPLYCO = function(){
+	BOOKSUPPLYCO = function(){
 // [----------------------------------------===== #Private Methods =====----------------------------------------]
 		var initialize = function(){
 			// Ajax requests for the book prices, returns JSON which is imported by 
@@ -45,13 +45,14 @@ $(document).ready(function(){
 				}
 			});
 
-			// Checks for the tour taken cookie, and starts the tour or sets the button
-			if (!$.cookie('boooksupplyco_tour')){
-				$('#tour-button').hide().off();
-				takeTour();
-			}else{
-				$('#tour-button').on('click',function(){ takeTour(); });
-			};
+	    $('th.amazon').popover(
+	      { html: true,
+	        title: "<span class='close' id='offerClose'>&times;</span><h4>Hot Deal!</h4>",
+	        content: "<p>Amazon is offering <b>students</b> a <a href='http://www.amazon.com/gp/student/signup/info?ie=UTF8&refcust=HR7XOWUQOG6SMYEDL5FJBQACTU&ref_type=generic' target='_blank'> free trial of Amazon Prime.</a> Sign up <a href='http://www.amazon.com/gp/student/signup/info?ie=UTF8&refcust=HR7XOWUQOG6SMYEDL5FJBQACTU&ref_type=generic' target='_blank'>here</a> before you select your books and get free 2-day shipping on your books from Amazon!</p>",
+	        placement: 'top',
+	        trigger: 'manual'
+	      }
+	    );
 
 			// Set handlers for link/express switch
 			$('#simple').change(function(){
@@ -76,6 +77,13 @@ $(document).ready(function(){
 			var slug = $('h2.school-name').attr('data-slug');
 			return 'bsc-' + slug + '-20'
 		};
+
+		var showAmazonOffer = function(){
+			$('th.amazon').popover('show');
+			$('#offerClose').click(function(){
+				$('th.amazon').popover('hide');
+			});
+		}
 
 		// Defines the tour object and starts the tour.
 		var takeTour = function(){
@@ -105,12 +113,24 @@ $(document).ready(function(){
 				postRideCallback: function(){
 					$('#tour-button').fadeIn();
 					$('#tour-button').on('click',function(){ takeTour(); });
+					showAmazonOffer();
 				}
 			});
 
 			// Set cookie
-			$.cookie('boooksupplyco_tour','taken', { expires: 90 });
+			$.cookie('booksupplyco_tour','taken', { expires: 90 });
 		};
+
+		var checkTour = function(){
+			// Checks for the tour taken cookie, and starts the tour or sets the button
+			if (!$.cookie('booksupplyco_tour')){
+				$('#tour-button').hide().off();
+				takeTour();
+			}else{
+				$('#tour-button').on('click',function(){ takeTour(); });
+				showAmazonOffer();
+			};
+		}();
 		
 		// Constructor for priceDiv objects
 		// params = {vendor,vendorId,price,condition, }
@@ -365,5 +385,5 @@ $(document).ready(function(){
 				}
 			}
 		}
-	}());
+	}();
 });
