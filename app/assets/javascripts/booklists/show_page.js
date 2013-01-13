@@ -54,6 +54,14 @@ $(document).ready(function(){
 	      }
 	    );
 
+	    $('th.amazon').tooltip({
+	    	title: "Hot Deal!",
+	    	trigger: 'manual'
+	    })
+
+
+
+
 			// Set handlers for link/express switch
 			$('#simple').change(function(){
 				priceDivsHeartShapedBox.makeSimple();
@@ -79,11 +87,18 @@ $(document).ready(function(){
 		};
 
 		var showAmazonOffer = function(){
-			$('th.amazon').popover('show');
+			$('th.amazon').popover('show').tooltip('hide');
 			$('#offerClose').click(function(){
-				$('th.amazon').popover('hide');
+				hideAmazonOffer();
 			});
-		}
+		};
+
+		var hideAmazonOffer = function(){
+			$('th.amazon').popover('hide').tooltip('show');
+			$('div.tooltip.fade').click(function(){
+	    	showAmazonOffer();
+	  	});
+		};
 
 		// Defines the tour object and starts the tour.
 		var takeTour = function(){
@@ -131,6 +146,10 @@ $(document).ready(function(){
 				showAmazonOffer();
 			};
 		}();
+
+		$('div.tooltip.fade').click(function(){
+	    $('th.amazon').popover('show').tooltip('hide');
+	  });
 		
 		// Constructor for priceDiv objects
 		// params = {vendor,vendorId,price,condition, }
