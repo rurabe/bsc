@@ -12,7 +12,12 @@
 					<%= render :partial => 'loginform' %>
 				</div>
 
-				<%= render :partial => 'shared/about_info' %>
+				<div class="about-info-container">
+				  <div class="about-info" style="display: none">
+						<%= render :partial => 'shared/about_info' %>
+					</div>
+					<button class="btn btn-warning" id="about-handle"> What is Book Supply Co.??? </button>
+				</div>
 
 				<div class="socials">
 					<%= render :partial => 'shared/socials' %>
