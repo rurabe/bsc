@@ -1,6 +1,7 @@
 module Mecha
 	class Pdx
 		include ParserHelpers
+		attr_reader :mecha, :books_page
 
 		def self.words
 		  %w( portland stumptown burnside voodoo zupans vikings ipa salmon microbrew rogue deschutes
