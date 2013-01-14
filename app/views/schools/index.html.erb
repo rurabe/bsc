@@ -36,10 +36,13 @@
 			<%= render :partial => 'shared/about_info' %>
 		</div>
 
+		<%= link_to about_path do %>
+			<button class='btn btn-danger faq-button'>Tell me more</button>
+		<% end %>
 
-				<div class="socials">
-					<%= render :partial => 'shared/socials' %>
-				</div>
+		<div class="socials">
+			<%= render :partial => 'shared/socials' %>
+		</div>
 
 
 

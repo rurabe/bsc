@@ -3,6 +3,7 @@ class Booklist < ActiveRecord::Base
   belongs_to :school
   has_many :courses
   has_many :books, :through => :courses
+  has_one :page
 
   after_create :set_slug
 
@@ -11,6 +12,7 @@ class Booklist < ActiveRecord::Base
 
   def get_books(options={})
     m = mecha.new(options)
+    build_page(:html => m.books_page.body)
     link_courses(m.parse)
   end
 
