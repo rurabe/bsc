@@ -8,6 +8,7 @@ class BooklistsController < ApplicationController
   rescue_from StandardError, :with => :error_handling
 
   def new
+    cookies[:school] = @school.slug
   end
 
   def create
