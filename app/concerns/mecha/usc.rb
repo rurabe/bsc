@@ -13,7 +13,7 @@ module Mecha
 
     def initialize(options={})
       @mecha = Mechanize.new { |mecha| mecha.follow_meta_refresh = true }
-      @books_page = navigate(options)
+      # @books_page = navigate(options)
     end
 
     def parse(page=@books_page)
@@ -24,7 +24,7 @@ module Mecha
       end
     end
 
-    private
+    # private
     
       def navigate(options={})
         login(options)
@@ -89,7 +89,7 @@ module Mecha
       end
 
       def parse_course_section(node)
-        parse_node(node,'./table/tr/td[@class="section"]')
+        parse_node(node,'.//table/tr/td[../td[@class="type"]/text()="Lecture" and @class="section"]') || './/table/tr/td[@class="section"]'
       end
 
       def get_books(node)
