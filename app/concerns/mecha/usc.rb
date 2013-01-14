@@ -13,7 +13,7 @@ module Mecha
 
     def initialize(options={})
       @mecha = Mechanize.new { |mecha| mecha.follow_meta_refresh = true }
-      # @books_page = navigate(options)
+      @books_page = navigate(options)
     end
 
     def parse(page=@books_page)
@@ -24,7 +24,7 @@ module Mecha
       end
     end
 
-    # private
+    private
     
       def navigate(options={})
         login(options)
