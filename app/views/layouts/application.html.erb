@@ -40,7 +40,8 @@
 		<div id="jses">
 			<%= javascript_include_tag "application" %>
 			<%= yield :page_js %>
-		</div>
+		  <%= render :partial => 'shared/google_analytics' %>
+    </div>
 
 
 </body>

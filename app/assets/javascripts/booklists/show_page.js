@@ -69,10 +69,7 @@ $(document).ready(function(){
 	    			Your teacher hasn't chosen what books are required,\
 	    		</li>\
 	    		<li>\
-	    			Your school requries a custom, school-specific edition of the book,\
-	    		</li>\
-	    		<li>\
-	    			This is a lab or discussion section; the books are listed under the lecture\
+	    			This is a lab or discussion section; the books are listed under the lecture, or\
 	    		</li>\
 	    		<li>\
 	    			No books are required! Yay!\
@@ -85,7 +82,6 @@ $(document).ready(function(){
 	    	content: whyPopoverContent,
 	    	title: "<h4>No Books?</h4>",
 	    	trigger: 'hover'
-
 	    })
 
 
