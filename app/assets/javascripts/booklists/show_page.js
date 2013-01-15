@@ -59,7 +59,34 @@ $(document).ready(function(){
 	    	trigger: 'manual'
 	    })
 
+	    var whyPopoverContent = "\
+	    	<p>When we can't find a book, it's usually for one of the following reasons:</p>\
+	    	<ul>\
+	    		<li>\
+	    			Your school does not have that class' books in the system,\
+	    		</li>\
+	    		<li>\
+	    			Your teacher hasn't chosen what books are required,\
+	    		</li>\
+	    		<li>\
+	    			Your school requries a custom, school-specific edition of the book,\
+	    		</li>\
+	    		<li>\
+	    			This is a lab or discussion section; the books are listed under the lecture\
+	    		</li>\
+	    		<li>\
+	    			No books are required! Yay!\
+	    		</li>\
+	    	</ul>\
+	    	<p>If you think we're wrong and it's an error on our part, let us know on Facebook.</p>"
 
+	    $('.no-books-why').popover({
+	    	html: true,
+	    	content: whyPopoverContent,
+	    	title: "<h4>No Books?</h4>",
+	    	trigger: 'hover'
+
+	    })
 
 
 			// Set handlers for link/express switch

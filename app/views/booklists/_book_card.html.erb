@@ -51,7 +51,6 @@
 					<%= course.department %> <%= course.number %>
 				</td>
 			</tr>
-
 			<% course.books.each_with_index do |book,i| %>
 				<tr class="book-row" id="book-row-<%= book.ean %>">
 
@@ -101,6 +100,15 @@
 
 				</tr>
 			<% end %>
+
+			<% if course.books.empty? %>
+				<tr class="book-row" >
+					<td colspan="8" class="no-books">
+						<center>Book Supply Co. couldn't find any books for this course. <a class="no-books-why">Here's why.</a></center>
+					<td>
+				</tr>
+			<% end %>
+
 		<% end %>
 		<tr class="checkout-row">
 			<td></td>

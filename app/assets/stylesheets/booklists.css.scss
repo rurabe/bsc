@@ -272,3 +272,13 @@ table#bnLinks tr td.bn-checkout-book{
 #tour-button {
 	margin-top: 20px;
 }
+
+.no-books{
+	color: silver;
+	font-style: italic;
+}
+
+.no-books-why{
+	text-decoration: underline;
+	cursor: pointer;
+}
