@@ -1,14 +1,14 @@
 class Course < ActiveRecord::Base
-  attr_accessible :department, 
-  								:instructor, 
-  								:number, 
-  								:section,
-  								:books_attributes,
-                  :school_unique_id
-
   belongs_to :booklist
-  has_many :books
+  has_many :sections
+  has_many :books, :through => :sections
 
-  accepts_nested_attributes_for :books
+  attr_accessible :department,
+  								:number,
+                  :school_unique_id,
+                  :sections_attributes
+
+
+  accepts_nested_attributes_for :sections
 
 end

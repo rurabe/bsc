@@ -14,7 +14,7 @@ module Mecha
     def numberize_price(string)
       if string =~ /\$/
         number = string.gsub("$","")
-        BigDecimal.new(number)
+        BigDecimal.new(number) if number.to_f > 0
       else
         nil
       end

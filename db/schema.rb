@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130114213407) do
+ActiveRecord::Schema.define(:version => 20130115204610) do
 
   create_table "booklists", :force => true do |t|
     t.datetime "created_at", :null => false
@@ -29,7 +29,6 @@ ActiveRecord::Schema.define(:version => 20130114213407) do
     t.string   "edition"
     t.string   "requirement"
     t.string   "asin"
-    t.integer  "course_id"
     t.datetime "created_at",                                                              :null => false
     t.datetime "updated_at",                                                              :null => false
     t.decimal  "bookstore_new_price",                       :precision => 6, :scale => 2
@@ -37,18 +36,22 @@ ActiveRecord::Schema.define(:version => 20130114213407) do
     t.decimal  "bookstore_used_price",                      :precision => 6, :scale => 2
     t.decimal  "bookstore_used_rental_price",               :precision => 6, :scale => 2
     t.string   "ean",                         :limit => 13
+    t.integer  "section_id"
+    t.string   "notes"
   end
+
+  add_index "books", ["section_id"], :name => "index_books_on_section_id"
 
   create_table "courses", :force => true do |t|
     t.string   "department"
     t.string   "number"
-    t.string   "section"
-    t.string   "instructor"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
     t.integer  "booklist_id"
     t.string   "school_unique_id"
   end
+
+  add_index "courses", ["booklist_id"], :name => "index_courses_on_booklist_id"
 
   create_table "pages", :force => true do |t|
     t.integer  "booklist_id"
@@ -69,5 +72,17 @@ ActiveRecord::Schema.define(:version => 20130114213407) do
     t.string   "user_id_label"
     t.string   "bookstore_name"
   end
+
+  add_index "schools", ["slug"], :name => "index_schools_on_slug", :unique => true
+
+  create_table "sections", :force => true do |t|
+    t.string   "school_unique_id"
+    t.integer  "course_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.string   "instructor"
+  end
+
+  add_index "sections", ["course_id"], :name => "index_sections_on_course_id"
 
 end

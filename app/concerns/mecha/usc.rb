@@ -17,11 +17,7 @@ module Mecha
     end
 
     def parse(page=@books_page)
-      courses = get_course_nodes(page)
-      courses.map do |course|
-        course_hash = build_course(course)
-        course_hash
-      end
+      courses_and_books_data(page)
     end
 
     private
@@ -64,36 +60,63 @@ module Mecha
       end
 
       # Master parse helper
-      def get_course_nodes(page)
+
+      def courses_and_books_data(page)
+        all_courses = courses_data(page)
+        get_section_nodes(page).each do |section|
+          course = all_courses.find { |course| generate_headline(course) == parse_course_headline(section) }
+          course[:sections_attributes] << build_section(section)
+        end
+        all_courses
+      end
+
+      def get_section_nodes(page)
         page.search('//ul[@class="info course_list"]/span/li')
+      end
+
+      def courses_data(page)
+        get_section_nodes(page).map do |course|
+          build_course(course)
+        end.uniq
+      end
+
+      def generate_headline(course)
+        "#{course[:department]} #{course[:number]}"
       end
 
       # Parsers
       def build_course(node)
-        { :department       => parse_course_department(node), 
-          :number           => parse_course_number(node), 
-          :section          => parse_course_section(node), 
-        # :instructor       => parse_course_instructor(node),
-          :school_unique_id => parse_course_section(node),
-          :books_attributes => get_books(node) }
+        { :department          => parse_course_department(node), 
+          :number              => parse_course_number(node), 
+          :sections_attributes => [] }
+      end
+
+      def parse_course_headline(node)
+        parse_result(parse_node(node,'./h4/strong'),/^(\w+ \w+)$/)
       end
 
       def parse_course_department(node)
-        string = parse_node(node,'./h4/strong')
-        parse_result(string, /^(\w+) \w+$/)
+        parse_result(parse_course_headline(node), /^(\w+) \w+$/)
       end
 
       def parse_course_number(node)
-        string = parse_node(node,'./h4/strong')
-        parse_result(string, /^\w+ (\w+)$/)
+        parse_result(parse_course_headline(node), /^\w+ (\w+)$/)
       end
 
-      def parse_course_section(node)
+      def build_section(node)
+        school_unique_id = parse_section_unique_id(node)
+        { # :instructor       => parse_section_instructor(node),
+            :school_unique_id => school_unique_id,
+            :books_attributes => get_books(school_unique_id)
+        }
+
+      end
+
+      def parse_section_unique_id(node)
         parse_node(node,'.//table/tr/td[../td[@class="type"]/text()="Lecture" and @class="section"]') || parse_node(node,'.//table/tr/td[@class="section"]')
       end
 
-      def get_books(node)
-        section = parse_course_section(node)
+      def get_books(section)
         book_nodes = query_for_booklist(section)
         book_nodes.map { |node| build_book(node) }
       end
@@ -114,6 +137,7 @@ module Mecha
           :ean                         => parse_book_ean(node),
         # :edition                     => parse_book_edition(node),
           :requirement                 => parse_book_requirement(node),
+          :notes                       => parse_book_notes(node), 
           :bookstore_new_price         => parse_new_book_price(node),
           :bookstore_used_price        => parse_used_book_price(node)}
       end
@@ -132,6 +156,10 @@ module Mecha
 
       def parse_book_requirement(node)
         parse_node(node,'./text()[preceding-sibling::em][1]').to_s.gsub(/[()]/,"")
+      end
+
+      def parse_book_notes(node)
+        parse_node(node,'./text()[preceding-sibling::br[preceding-sibling::text()[preceding-sibling::strong[text()="Used:"]]]][1]')
       end
 
       def parse_new_book_price(node)

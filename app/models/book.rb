@@ -6,12 +6,13 @@ class Book < ActiveRecord::Base
                   :ean, 
                   :requirement, 
                   :title,
+                  :notes,
                   :bookstore_new_price,
                   :bookstore_new_rental_price,
                   :bookstore_used_price,
                   :bookstore_used_rental_price
 
-  belongs_to :course
+  belongs_to :section
 
   default_scope order('requirement DESC')
 
