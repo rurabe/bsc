@@ -66,10 +66,14 @@ module Mecha
       def courses_and_books_data(page)
         all_courses = courses_data(page)
         get_section_nodes(page).each do |section|
-          course = all_courses.find { |course| generate_headline(course) == parse_course_headline(section) }
+          course = all_courses.find { |course| same_course?(course,section) }
           course[:sections_attributes] << build_section(section)
         end
         all_courses
+      end
+
+      def same_course?(course,section)
+        course[:department] == parse_course_department(section) && course[:number] == parse_course_number(section)
       end
 
       def get_section_nodes(page)
@@ -119,7 +123,6 @@ module Mecha
       end
 
       def get_books(section)
-        # THREAD THIS
         book_nodes = query_for_booklist(section)
         book_nodes.map { |node| build_book(node) }
       end
