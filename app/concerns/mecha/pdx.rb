@@ -3,6 +3,8 @@ module Mecha
 		include ParserHelpers
 		attr_reader :mecha, :books_page
 
+		CURRENT_TERM = '201301'
+
 		def self.words
 		  %w( portland stumptown burnside voodoo zupans vikings ipa salmon microbrew rogue deschutes
 		      multnomah hood tabor rose omsi powells hoyt alberta mississippi ne nw sw se blazers
@@ -13,23 +15,11 @@ module Mecha
 
 		def initialize(options = {})
 			@mecha = Mechanize.new { |mecha| mecha.follow_meta_refresh = true }
-			@booklist_page = navigate(options)
+			@books_page = navigate(options)
 		end
 
-		def parse
-			courses = []
-			active_course = nil
-			collect_elements.each do |e|
-				if e.name == "span"
-					#course
-					active_course = build_course(e)
-					courses << active_course
-				elsif e.name == "tr"
-					#book
-					active_course[:books_attributes] << build_book(e)
-				end
-			end
-			courses
+		def parse(page=@books_page)
+			courses_and_books_data(page)
 		end
 
 		private
@@ -54,7 +44,7 @@ module Mecha
 			end
 
 			def get_course_schedule
-				@mecha.post('https://banweb.pdx.edu/pls/oprd/bwskfshd.P_CrseSchdDetl', 'term_in' => '201301')
+				@mecha.post('https://banweb.pdx.edu/pls/oprd/bwskfshd.P_CrseSchdDetl', 'term_in' => CURRENT_TERM )
 			end
 
 			def get_books_page
@@ -68,19 +58,40 @@ module Mecha
 				@mecha.current_page.search("//*[text()[contains(.,'Invalid User ID or Password')]]").present?
 			end
 
+			def get_course_nodes(page)
+				page.search('//div[@id="course-bookdisplay"]//h3//span')
+			end
+
+			def courses_and_books_data(page)
+				all_courses = courses_data(page)
+				get_course_nodes(page).each do |section|
+					course = all_courses.find { |course| same_course?(course,section) }
+					course[:sections_attributes] << build_section(section)
+				end
+				all_courses
+			end
+
+			def same_course?(course,section)
+				course[:department] == parse_course_department(section.text) && course[:number] == parse_course_number(section.text)
+			end
+
+			def courses_data(page)
+				get_course_nodes(page).map do |course|
+					build_course(course)
+				end.uniq
+			end
+
 			# Parse helpers
-			def collect_elements
-				@booklist_page.search("//table[starts-with(@id,'section')]/tbody/tr[contains(concat(' ',@class,' '),'book course')] | //span[@id='course-bookdisplay-coursename']")
+			def collect_elements(page)
+				page.search("//table[starts-with(@id,'section')]/tbody/tr[contains(concat(' ',@class,' '),'book course')] | //span[@id='course-bookdisplay-coursename']")
 			end
 
 			# Course helper methods
 			def build_course(node)
-				course_info = node.content
-	      { :department 			=> parse_course_department(course_info), 
-					:number 					=> parse_course_number(course_info), 
-			  	:section 					=> parse_course_section(course_info), 
-					:instructor 			=> parse_course_instructor(course_info),
-					:books_attributes => [] }
+				course_info = node.text
+	      { :department 			 	 => parse_course_department(course_info), 
+					:number 						 => parse_course_number(course_info), 
+					:sections_attributes => [] }
 			end
 
 			def parse_course_department(course_info)
@@ -91,12 +102,27 @@ module Mecha
 				parse_result(course_info,/ - (\d+)/)
 			end
 
-			def parse_course_section(course_info)
-				parse_result(course_info,/section (\d+)/)
+			def build_section(node)
+				section_info = node.text
+				{	:school_unique_id => parse_section_school_unique_id(section_info),
+					:instructor 			=> parse_section_instructor(section_info),
+					:books_attributes => book_data(node)	}
 			end
 
-			def parse_course_instructor(course_info)
-				parse_result(course_info,/\((.+)\)/)
+			def parse_section_school_unique_id(section_info)
+				parse_result(section_info,/section (\d+)/)
+			end
+
+			def parse_section_instructor(section_info)
+				parse_result(section_info,/\((.+)\)/)
+			end
+
+			def book_data(section)
+				get_book_nodes(section).map { |book_node| build_book(book_node) }
+			end
+
+			def get_book_nodes(section)
+				section.search("//*[preceding-sibling::h3[.//span/text()='#{section.text}']][1]//tr[contains(concat(' ',@class,' '),'book course')]")
 			end
 
 			# Book helper methods
@@ -106,6 +132,7 @@ module Mecha
 				 :ean 												=> parse_book_ean(node),
 				 :edition 										=> parse_book_edition(node),
 				 :requirement 								=> parse_book_requirement(node),
+			 # :notes												=> parse_book_notes(node),
 				 :bookstore_new_price 				=> parse_book_new_price(node),
 				 :bookstore_new_rental_price 	=> parse_book_new_rental_price(node),
 				 :bookstore_used_price 				=> parse_book_used_price(node),
@@ -113,7 +140,7 @@ module Mecha
 			end
 
 			def parse_book_title(book_node)
-				parse_node(book_node,"*[@class='book-title']")
+				parse_node(book_node,".//*[@class='book-title']")
 			end
 
 			def parse_book_author(book_node)

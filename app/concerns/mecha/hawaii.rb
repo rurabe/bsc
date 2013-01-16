@@ -3,6 +3,8 @@ module Mecha
     include ParserHelpers
     attr_reader :mecha, :books_page
 
+    CURRENT_TERM = "SPRING%2013"
+
     def self.words
       %w(manoa makiki palolo moilili kaimuki stlouis kahala ainahaina hawaiikai makapuu waimanalo
          kailua lanikai maunawili kaneohe laie waimea sunset haleiwa wailua wahiawa mililani waipio
@@ -19,12 +21,7 @@ module Mecha
 
     def parse(page=@books_page)
       raise Mecha::ClassesNotInSystemError if books_not_found?
-      courses = get_course_nodes(page)
-      courses.map do |course|
-        course_hash = build_course(course)
-        course_hash[:books_attributes].replace(parse_course_books(course))
-        course_hash
-      end
+      course_and_book_data(page)
     end
 
     private
@@ -134,7 +131,7 @@ module Mecha
 
       # Bookstore Url Generator
       def bookstore_url
-        'http://www.bookstore.hawaii.edu/manoa/SelectCourses.aspx?src=2&type=2&stoid=105&trm=SPRING%2013&cid=' + get_crns.to_s
+        "http://www.bookstore.hawaii.edu/manoa/SelectCourses.aspx?src=2&type=2&stoid=105&trm=#{CURRENT_TERM}&cid=" + get_crns.to_s
       end
 
         def get_crns
@@ -143,7 +140,59 @@ module Mecha
         end
      
       # Master parse helpers
-      def parse_course_books(course_node)
+     
+
+      # Parsers
+      def course_and_book_data(page)
+        all_courses = course_data(page)
+        get_course_nodes(page).map do |section|
+          course = all_courses.find { |course| same_course?(course,section) }
+          course[:sections_attributes] << build_section(section)
+        end
+        all_courses
+      end
+
+      def same_course?(course,section)
+        course[:department] == parse_course_department(section.text) && course[:number] == parse_course_number(section.text)
+      end
+
+      def course_data(page)
+        get_course_nodes(page).map { |c| build_course(c) }.uniq
+      end
+
+      def get_course_nodes(page)
+        nodes = page.search("//div[@class='course_info']")
+        raise Mecha::NoBooksError if no_books?(nodes)
+        nodes
+      end
+
+      def build_course(node)
+        course_info = parse_course_info(node)
+        { :department          => parse_course_department(course_info), 
+          :number              => parse_course_number(course_info), 
+          :sections_attributes => [] }
+      end
+
+      def parse_course_info(node)
+        node.search('./div[@class="term_bar"]/h2').text
+      end
+
+      def parse_course_department(course_info)
+        parse_result(course_info,/Name:\s(\S+)\s/)
+      end
+
+      def parse_course_number(course_info)
+        parse_result(course_info,/Name:\s\S+\s+(\d+)\w*\sSection:/)
+      end
+
+      def build_section(node)
+        course_info = parse_course_info(node)
+        { :school_unique_id => parse_section_school_unique_id(course_info),
+          :instructor       => parse_section_instructor(course_info),
+          :books_attributes => parse_section_books(node) }
+      end
+
+      def parse_section_books(course_node)
         quantity_of_books = course_node.search("./div[@class='material_info']").count
         quantity_of_books.times.map do |i|
           book_info_node = course_node.search("./div[@class='material_info'][#{i+1}]")
@@ -152,44 +201,11 @@ module Mecha
         end
       end
 
-      # Parsers
-      def get_course_nodes(page)
-        nodes = page.search("//div[@class='course_info']")
-        raise Mecha::NoBooksError if no_books?(nodes)
-        nodes
-      end
-
-      def get_isbns(page)
-        page.search('//td/span[../../td[@class="left_side"]/text()[.="ISBN"]]')
-      end
-
-      def build_course(node)
-        course_info = node.search('./div[@class="term_bar"]/h2').text
-        { :department       => parse_course_department(course_info), 
-          :number           => parse_course_number(course_info), 
-          :section          => parse_course_section(course_info), 
-          :instructor       => parse_course_instructor(course_info),
-          :school_unique_id => parse_school_unique_id(course_info),
-          :books_attributes => [] }
-      end
-
-      def parse_course_department(course_info)
-        parse_result(course_info,/Name:\s(\S+)\s/)
-      end
-
-      def parse_course_number(course_info)
-        parse_result(course_info,/Name:\s\S+\s+(\S+)\sSection:/)
-      end
-
-      def parse_course_section(course_info)
-        parse_result(course_info,/Section:\s+\d+\s+(\w+)/)
-      end
-
-      def parse_course_instructor(course_info)
+      def parse_section_instructor(course_info)
         parse_result(course_info,/Instructor:\s+(\w+)\s+/)
       end
 
-      def parse_school_unique_id(course_info)
+      def parse_section_school_unique_id(course_info)
         parse_result(course_info,/Course ID:\s+(\w+)\s+Location:/)
       end
 
@@ -199,6 +215,7 @@ module Mecha
           :ean                         => parse_book_attribute(material_info_node,:ISBN),
           :edition                     => parse_book_attribute(material_info_node,:Edition),
           :requirement                 => parse_book_requirement(material_info_node),
+         #:notes                       => parse_book_notes(node)
           :bookstore_new_price         => parse_book_price(pricing_node,:new),
           :bookstore_used_price        => parse_book_price(pricing_node,:used)}
       end

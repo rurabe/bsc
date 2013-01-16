@@ -1,7 +1,10 @@
+
 module Mecha
   class Usc
     include ParserHelpers
     attr_reader :mecha, :books_page
+
+    CURRENT_TERM = "20131"
 
     def self.words
       %w( trojan tommy coliseum leavey doheny evk parkside cafe84 viterbi marshall thornton
@@ -60,7 +63,6 @@ module Mecha
       end
 
       # Master parse helper
-
       def courses_and_books_data(page)
         all_courses = courses_data(page)
         get_section_nodes(page).each do |section|
@@ -117,13 +119,14 @@ module Mecha
       end
 
       def get_books(section)
+        # THREAD THIS
         book_nodes = query_for_booklist(section)
         book_nodes.map { |node| build_book(node) }
       end
 
       def query_for_booklist(section)
         sec = clean_section(section)
-        booklist = @mecha.get("http://web-app.usc.edu/soc/20131/section.html?i=#{sec}&t=20131")
+        booklist = @mecha.get("http://web-app.usc.edu/soc/section.html?i=#{sec}&t=#{CURRENT_TERM}")
         book_nodes = booklist.search('//li[@class="books"]/ul/li')      
       end
 
