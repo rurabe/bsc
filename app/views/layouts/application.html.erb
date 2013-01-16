@@ -12,6 +12,8 @@
   <meta property="og:image" content="http://www.booksupply.co/assets/logo-square-200.png"/> 
   <meta property="fb:admins" content="3403944" />
   <meta name="alexaVerifyID" content="w0EKEuCXa0HXZwMCMCfgxo11ouw" />
+  <%= render :partial => 'shared/google_analytics' %>
+  <%= javascript_include_tag "application" %>
 </head>
 <body>
 	<div id="fb-root"></div>
@@ -38,9 +40,7 @@
 		
 
 		<div id="jses">
-			<%= javascript_include_tag "application" %>
 			<%= yield :page_js %>
-		  <%= render :partial => 'shared/google_analytics' %>
     </div>
 
 
