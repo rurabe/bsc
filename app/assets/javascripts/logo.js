@@ -1,2 +1,3 @@
-
-$('.logo').arctext({ radius: 2000 })
+$(document).ready(function(){
+  $('.logo').arctext({ radius: 2000 });
+});
