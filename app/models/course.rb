@@ -1,6 +1,6 @@
 class Course < ActiveRecord::Base
   belongs_to :booklist
-  has_many :sections
+  has_many :sections, :dependent => :destroy
   has_many :books, :through => :sections
 
   attr_accessible :department,

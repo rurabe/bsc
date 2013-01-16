@@ -1,7 +1,7 @@
 class Booklist < ActiveRecord::Base
 
   belongs_to :school
-  has_many :courses
+  has_many :courses, :dependent => :destroy
   has_many :books, :through => :courses
   has_one :page
 
