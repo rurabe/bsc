@@ -67,11 +67,13 @@ module Mecha
       end
 
       def courses_and_books_data(page)
+        threads = []
         all_courses = course_data(page)
         get_course_nodes(page).map do |section|
           course = all_courses.find { |c| same_course?(c,section) }
-          course[:sections_attributes] << build_section(section)
+          threads << Thread.new { course[:sections_attributes] << build_section(section) }
         end
+        threads.map { |t| t.join }
         all_courses
       end
 
@@ -115,7 +117,8 @@ module Mecha
 
       def get_book_nodes(node)
         params = build_book_params(node)
-        page = @mecha.post('http://www.bkstr.com/webapp/wcs/stores/servlet/booklookServlet',params)
+        junk_mecha = Mechanize.new { |mecha| mecha.follow_meta_refresh = true }
+        page = junk_mecha.post('http://www.bkstr.com/webapp/wcs/stores/servlet/booklookServlet',params)
         page.search(".//ul[preceding-sibling::comment()[contains(concat(' ',.,' '),'start the bookResultsInfo')]]")
       end
         
