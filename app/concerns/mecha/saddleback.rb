@@ -144,7 +144,7 @@ module Mecha
 
       def parse_book_title(node)
         string = parse_node(node,".//li/text()[contains(.,'TITLE')]")
-        parse_result(string,/TITLE:([\w ]+)/)
+        parse_result(string,/TITLE:(.+)/)
       end
 
       def parse_book_author(node)
