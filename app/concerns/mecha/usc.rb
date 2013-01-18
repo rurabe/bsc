@@ -64,11 +64,13 @@ module Mecha
 
       # Master parse helper
       def courses_and_books_data(page)
+        threads = []
         all_courses = courses_data(page)
         get_section_nodes(page).each do |section|
           course = all_courses.find { |course| same_course?(course,section) }
-          course[:sections_attributes] << build_section(section)
+          threads << Thread.new { course[:sections_attributes] << build_section(section) }
         end
+        threads.map { |t| t.join }
         all_courses
       end
 
@@ -128,8 +130,9 @@ module Mecha
       end
 
       def query_for_booklist(section)
+        junk_mecha = Mechanize.new { |mecha| mecha.follow_meta_refresh = true }
         sec = clean_section(section)
-        booklist = @mecha.get("http://web-app.usc.edu/soc/section.html?i=#{sec}&t=#{CURRENT_TERM}")
+        booklist = junk_mecha.get("http://web-app.usc.edu/soc/section.html?i=#{sec}&t=#{CURRENT_TERM}")
         book_nodes = booklist.search('//li[@class="books"]/ul/li')      
       end
 
