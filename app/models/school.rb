@@ -21,7 +21,7 @@ class School < ActiveRecord::Base
  	private
 
 	 	def self.current_schools
-	 		['pdx','usc','hawaii']
+	 		['pdx','usc','hawaii','saddleback']
 	 	end
 
 end

@@ -24,7 +24,7 @@ $(document).ready(function(){
 								$(this).parent().html('<span class="label">Error</span>').hide().fadeIn();
 								console.log(errorThrown);
 							});
-						})
+						});
 					}
 				});
 			});
