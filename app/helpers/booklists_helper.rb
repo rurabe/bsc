@@ -16,6 +16,8 @@ module BooklistsHelper
 			"label-warning"
 		when "Optional"
 			"label-success"
+		when "Choose"
+			"label-warning"
 		end
 	end
 

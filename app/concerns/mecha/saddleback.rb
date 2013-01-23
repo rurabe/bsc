@@ -163,8 +163,9 @@ module Mecha
       end
 
       def parse_book_requirement(node)
-        string = parse_node(node,".//preceding::h2[preceding-sibling::comment()[contains(.,'Iterate through the material')]][1]")
-        string.titlecase if string
+        string = parse_node(node,".//preceding::*[(self::h2 or self::h3) and following::comment()[contains(.,'retrieve material')]][1]")
+        requirement = parse_result(string,/(required|choose)/im) if string
+        requirement.titlecase if requirement
       end
 
       def parse_new_book_price(node)
