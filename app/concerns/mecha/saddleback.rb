@@ -1,7 +1,6 @@
 module Mecha
-  class Saddleback
-    include ParserHelpers
-    attr_reader :mecha, :books_page
+  class Saddleback < BasicMecha
+
 
     CURRENT_TERM = '20131'
     CURRENT_TERM_TEXT = 'Spring 2013'
@@ -10,16 +9,10 @@ module Mecha
       %w( oc gauchos newport )
     end
 
-    def initialize(options={})
-      @mecha = Mechanize.new { |mecha| mecha.follow_meta_refresh = true }
-      @books_page = navigate(options)
-    end
 
-    def parse(page=@books_page)
-      courses_and_books_data(page)
-    end
 
-    # private
+
+    private
 
       def navigate(options={})
         login(options)
@@ -66,7 +59,7 @@ module Mecha
         end.uniq
       end
 
-      def courses_and_books_data(page)
+      def course_and_book_data(page)
         threads = []
         all_courses = course_data(page)
         get_course_nodes(page).map do |section|
@@ -97,12 +90,6 @@ module Mecha
         parse_result(string,/\w+ (\w+)/)
       end
 
-      def build_section(node)
-        { :school_unique_id => parse_section_unique_school_id(node),
-          :instructor       => parse_section_instructor(node),
-          :books_attributes => get_books(node) }
-      end
-
       def parse_section_unique_school_id(node)
         parse_node(node,".//span[contains(concat(' ',@id,' '),'SectionID')]")
       end
@@ -111,7 +98,7 @@ module Mecha
         parse_node(node,".//span[contains(concat(' ',@id,' '),'Instructor')]")
       end
 
-      def get_books(node)
+      def book_data(node)
         get_book_nodes(node).map { |node| build_book(node) }
       end
 
@@ -129,17 +116,6 @@ module Mecha
           'dept-1'         => parse_course_department(node),
           'course-1'       => parse_course_number(node).rjust(3,"0"),
           'section-1'      => parse_section_unique_school_id(node) }
-      end
-
-      def build_book(node)
-       {  :title                       => parse_book_title(node),
-          :author                      => parse_book_author(node),
-          :ean                         => parse_book_ean(node),
-          :edition                     => parse_book_edition(node),
-          :requirement                 => parse_book_requirement(node),
-        # :notes                       => parse_book_notes(node), 
-          :bookstore_new_price         => parse_new_book_price(node),
-          :bookstore_used_price        => parse_used_book_price(node)}
       end
 
       def parse_book_title(node)
@@ -176,6 +152,13 @@ module Mecha
       def parse_used_book_price(node)
         string = parse_node(node,".//li[contains(concat(' ',text(),' '),'USED:')][1]")
         parse_result(string,/USED:\$([\d\.]+)/)
+      end
+
+      def parse_book_new_rental_price(book_node)
+      end
+
+
+      def parse_book_used_rental_price(book_node)
       end
   end
 end

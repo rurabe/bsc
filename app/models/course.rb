@@ -11,4 +11,6 @@ class Course < ActiveRecord::Base
 
   accepts_nested_attributes_for :sections
 
+  default_scope order('department ASC, number DESC')
+
 end

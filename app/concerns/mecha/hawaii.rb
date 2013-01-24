@@ -1,7 +1,5 @@
 module Mecha
-  class Hawaii
-    include ParserHelpers
-    attr_reader :mecha, :books_page
+  class Hawaii < BasicMecha
 
     CURRENT_TERM = "SPRING%2013"
 
@@ -14,14 +12,9 @@ module Mecha
          kualoa pearlharbor)
     end
 
-    def initialize(options={})
-      @mecha = Mechanize.new { |mecha| mecha.follow_meta_refresh = true }
-      @books_page = navigate(options)
-    end
-
-    def parse(page=@books_page)
+    def parse(page=@courses_page)
       raise Mecha::ClassesNotInSystemError if books_not_found?
-      course_and_book_data(page)
+      super
     end
 
     private
@@ -125,7 +118,7 @@ module Mecha
       end
 
       def parse_decrypted_data(data)
-        match_data = data.match /\d+ (\w+)\t(\w+)<*/
+        match_data = data.match(/\d+ (\w+)\t(\w+)<*/)
         { :sid => match_data[1], :pin => match_data[2] }
       end
 
@@ -189,11 +182,11 @@ module Mecha
         course_info = parse_course_info(node)
         { :school_unique_id => parse_section_school_unique_id(course_info),
           :instructor       => parse_section_instructor(course_info),
-          :books_attributes => parse_section_books(node) }
+          :books_attributes => book_data(node) }
       end
 
-      def parse_section_books(course_node)
-        quantity_of_books = course_node.search("./div[@class='material_info']").count
+      def book_data(node)
+        quantity_of_books = node.search("./div[@class='material_info']").count
         quantity_of_books.times.map do |i|
           book_info_node = course_node.search("./div[@class='material_info'][#{i+1}]")
           pricing_node   = course_node.search("./div[@class='pricing_wrapper'][#{i+1}]")
@@ -235,6 +228,17 @@ module Mecha
       def parse_book_price(node,condition)
         price = parse_node(node,"./div/div[@class='pricing_area']/div/div/div/p[@class='price']/span[../../p[@class='price_label']/text() = '#{condition.to_s.capitalize}']")
         numberize_price(price)
+      end
+
+      def parse_book_notes(node)
+      end
+
+
+      def parse_book_new_rental_price(book_node)
+      end
+
+
+      def parse_book_used_rental_price(book_node)
       end
 
   end

@@ -1,8 +1,6 @@
 
 module Mecha
-  class Usc
-    include ParserHelpers
-    attr_reader :mecha, :books_page
+  class Usc < BasicMecha
 
     CURRENT_TERM = "20131"
 
@@ -12,15 +10,6 @@ module Mecha
           commons traddies nineoh therow uv century conquest lyons roski gould keck thornton
           taper leventhal psx psa psb psd figueroa expo vermont jefferson chanos deltaco
           la tirebiter watts birnkrant fluor carlsjr )
-    end
-
-    def initialize(options={})
-      @mecha = Mechanize.new { |mecha| mecha.follow_meta_refresh = true }
-      @books_page = navigate(options)
-    end
-
-    def parse(page=@books_page)
-      courses_and_books_data(page)
     end
 
     private
@@ -63,7 +52,7 @@ module Mecha
       end
 
       # Master parse helper
-      def courses_and_books_data(page)
+      def course_and_book_data(page)
         threads = []
         all_courses = courses_data(page)
         get_section_nodes(page).each do |section|
@@ -111,21 +100,17 @@ module Mecha
         parse_result(parse_course_headline(node), /^\w+ (\w+)$/)
       end
 
-      def build_section(node)
-        school_unique_id = parse_section_unique_id(node)
-        { # :instructor       => parse_section_instructor(node),
-            :school_unique_id => school_unique_id,
-            :books_attributes => get_books(school_unique_id)
-        }
-
-      end
-
       def parse_section_unique_id(node)
         parse_node(node,'.//table/tr/td[../td[@class="type"]/text()="Lecture" and @class="section"]') || parse_node(node,'.//table/tr/td[@class="section"]')
       end
 
-      def get_books(section)
-        book_nodes = query_for_booklist(section)
+      def parse_section_instructor(node)
+        
+      end
+
+      def book_data(node)
+        section_id = parse_section_unique_id(node)
+        book_nodes = query_for_booklist(section_id)
         book_nodes.map { |node| build_book(node) }
       end
 
@@ -179,6 +164,14 @@ module Mecha
       def parse_used_book_price(node)
         price = parse_node(node,'./text()[preceding-sibling::strong[text()="Used:"]][1]')
         numberize_price(price)
+      end
+
+      
+      def parse_book_new_rental_price(book_node)
+      end
+
+
+      def parse_book_used_rental_price(book_node)
       end
 
   end
