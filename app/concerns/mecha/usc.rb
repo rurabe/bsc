@@ -58,7 +58,7 @@ module Mecha
         @mecha.current_page.link_with(:href => "https://camel2.usc.edu/OASISprtlchnlTest/PortalBridge.aspx").click
       end
 
-      # Error handlers
+      # Error handlers #
       def login_failed?
         @mecha.current_page.search('//p[text()="Authentication Failed"]').present?
       end
