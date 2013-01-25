@@ -89,7 +89,7 @@ module Mecha
       end
 
       def query_for_booklist(section)
-        junk_mecha = Mechanize.new { |mecha| mecha.follow_meta_refresh = true }
+        junk_mecha = Mechanize.new { |mecha| mecha.keep_alive = false }
         booklist = junk_mecha.get("http://web-app.usc.edu/soc/section.html?i=#{section}&t=#{CURRENT_TERM}")
         book_nodes = booklist.search('//li[@class="books"]/ul/li')      
       end
