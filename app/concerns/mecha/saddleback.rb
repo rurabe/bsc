@@ -84,7 +84,7 @@ module Mecha
 
       # Book_data helpers #
       def get_book_nodes(node)
-        junk_mecha = Mechanize.new { |mecha| mecha.follow_meta_refresh = true }
+        junk_mecha = Mechanize.new { |mecha| mecha.keep_alive = false }
         page = junk_mecha.post('http://www.bkstr.com/webapp/wcs/stores/servlet/booklookServlet',build_book_params(node))
         page.search(".//ul[preceding-sibling::comment()[contains(concat(' ',.,' '),'start the bookResultsInfo')]]")
       end
