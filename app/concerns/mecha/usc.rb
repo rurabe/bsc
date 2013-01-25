@@ -13,13 +13,25 @@ module Mecha
     end
 
     private
-    
+      # Hardpoints #
       def navigate(options={})
         login(options)
-        get_course_page
+        navigate_to_course_page
       end
 
-      # Navigation helpers
+      def course_data(page)
+        build_all_courses(page)
+      end
+
+      def section_data(course_node)
+        get_section_nodes(course_node).map { |section_node| build_section(section_node) }
+      end
+
+      def book_data(section_node)
+        get_book_nodes(section_node).map { |book_node| build_book(book_node) }
+      end
+
+      # Navigate helpers #
       def login(options={})
         initial_login(options)
         continue_login
@@ -42,7 +54,7 @@ module Mecha
         @mecha.get('https://my.usc.edu/portal/render.userLayoutRootNode.uP') 
       end
 
-      def get_course_page
+      def navigate_to_course_page
         @mecha.current_page.link_with(:href => "https://camel2.usc.edu/OASISprtlchnlTest/PortalBridge.aspx").click
       end
 
@@ -51,73 +63,34 @@ module Mecha
         @mecha.current_page.search('//p[text()="Authentication Failed"]').present?
       end
 
-      # Master parse helper
-      def course_and_book_data(page)
+      # Course_data helpers #
+      def build_all_courses(page)
         threads = []
-        all_courses = courses_data(page)
-        get_section_nodes(page).each do |section|
-          course = all_courses.find { |course| same_course?(course,section) }
-          threads << Thread.new { course[:sections_attributes] << build_section(section) }
+        get_course_nodes(page).map do |course|
+          threads << Thread.new { build_course(course) }
         end
-        threads.map { |t| t.join }
-        all_courses
+        threads.map { |t| t.join.value }
       end
 
-      def same_course?(course,section)
-        course[:department] == parse_course_department(section) && course[:number] == parse_course_number(section)
+      def get_course_nodes(page)
+        all_nodes = page.search('//ul[@class="info course_list"]/span/li').to_a
+        all_nodes.uniq { |course_node| parse_course_school_unique_id(course_node) }
       end
 
-      def get_section_nodes(page)
-        page.search('//ul[@class="info course_list"]/span/li')
+      # Section_data helpers #
+      def get_section_nodes(course_node)
+        course_node.search(".//tr[td]")
       end
 
-      def courses_data(page)
-        get_section_nodes(page).map do |course|
-          build_course(course)
-        end.uniq
-      end
-
-      def generate_headline(course)
-        "#{course[:department]} #{course[:number]}"
-      end
-
-      # Parsers
-      def build_course(node)
-        { :department          => parse_course_department(node), 
-          :number              => parse_course_number(node), 
-          :sections_attributes => [] }
-      end
-
-      def parse_course_headline(node)
-        parse_result(parse_node(node,'./h4/strong'),/^(\w+ \w+)$/)
-      end
-
-      def parse_course_department(node)
-        parse_result(parse_course_headline(node), /^(\w+) \w+$/)
-      end
-
-      def parse_course_number(node)
-        parse_result(parse_course_headline(node), /^\w+ (\w+)$/)
-      end
-
-      def parse_section_unique_id(node)
-        parse_node(node,'.//table/tr/td[../td[@class="type"]/text()="Lecture" and @class="section"]') || parse_node(node,'.//table/tr/td[@class="section"]')
-      end
-
-      def parse_section_instructor(node)
-        
-      end
-
-      def book_data(node)
-        section_id = parse_section_unique_id(node)
-        book_nodes = query_for_booklist(section_id)
-        book_nodes.map { |node| build_book(node) }
+      # Book_data helpers #
+      def get_book_nodes(section_node)
+        section_id = clean_section(parse_section_school_unique_id(section_node))
+        query_for_booklist(section_id)
       end
 
       def query_for_booklist(section)
         junk_mecha = Mechanize.new { |mecha| mecha.follow_meta_refresh = true }
-        sec = clean_section(section)
-        booklist = junk_mecha.get("http://web-app.usc.edu/soc/section.html?i=#{sec}&t=#{CURRENT_TERM}")
+        booklist = junk_mecha.get("http://web-app.usc.edu/soc/section.html?i=#{section}&t=#{CURRENT_TERM}")
         book_nodes = booklist.search('//li[@class="books"]/ul/li')      
       end
 
@@ -125,54 +98,67 @@ module Mecha
         raw_section.gsub(/\D/,'')
       end
 
-      def build_book(node)
-        { :title                       => parse_book_title(node),
-          :author                      => parse_book_author(node),
-          :ean                         => parse_book_ean(node),
-        # :edition                     => parse_book_edition(node),
-          :requirement                 => parse_book_requirement(node),
-          :notes                       => parse_book_notes(node), 
-          :bookstore_new_price         => parse_new_book_price(node),
-          :bookstore_used_price        => parse_used_book_price(node)}
+      # Course parsers #
+      def parse_course_school_unique_id(course_node)
+        "#{parse_course_department(course_node)}-#{parse_course_number(course_node)}"
       end
 
-      def parse_book_title(node)
-        parse_node(node,'./em')
+      def parse_course_department(course_node)
+        string = parse_node(course_node,".//h4/strong")
+        parse_result(string, /^(\w+) \w+$/) if string
       end
 
-      def parse_book_author(node)
-        parse_node(node,'./text()[following-sibling::em][1]')
+      def parse_course_number(course_node)
+        string = parse_node(course_node,".//h4/strong")
+        parse_result(string, /^\w+ (\w+)$/) if string
       end
 
-      def parse_book_ean(node)
-        parse_node(node,'./text()[preceding-sibling::strong[text()="ISBN:"]][1]')
+      # Section parsers #
+      def parse_section_school_unique_id(section_node)
+        parse_node(section_node,".//td[@class='section']")
       end
 
-      def parse_book_requirement(node)
-        parse_node(node,'./text()[preceding-sibling::em][1]').to_s.gsub(/[()]/,"")
+      def parse_section_instructor(section_no)
       end
 
-      def parse_book_notes(node)
-        parse_node(node,'./text()[preceding-sibling::br[preceding-sibling::text()[preceding-sibling::strong[text()="Used:"]]]][1]')
+      # Book parsers #
+      def parse_book_title(book_node)
+        parse_node(book_node,'./em')
       end
 
-      def parse_new_book_price(node)
-        price = parse_node(node,'./text()[preceding-sibling::strong[text()="New:"]][1]')
+      def parse_book_author(book_node)
+        parse_node(book_node,'./text()[following-sibling::em][1]')
+      end
+
+      def parse_book_ean(book_node)
+        parse_node(book_node,'./text()[preceding-sibling::strong[text()="ISBN:"]][1]')
+      end
+
+      def parse_book_edition(book_node)
+      end
+
+      def parse_book_requirement(book_node)
+        parse_node(book_node,'./text()[preceding-sibling::em][1]').to_s.gsub(/[()]/,"")
+      end
+
+      def parse_book_notes(book_node)
+        parse_node(book_node,'./text()[preceding-sibling::br[preceding-sibling::text()[preceding-sibling::strong[text()="Used:"]]]][1]')
+      end
+
+      def parse_book_new_price(book_node)
+        price = parse_node(book_node,'./text()[preceding-sibling::strong[text()="New:"]][1]')
         numberize_price(price)
       end
 
-      def parse_used_book_price(node)
-        price = parse_node(node,'./text()[preceding-sibling::strong[text()="Used:"]][1]')
+      def parse_book_used_price(book_node)
+        price = parse_node(book_node,'./text()[preceding-sibling::strong[text()="Used:"]][1]')
         numberize_price(price)
       end
 
-      
       def parse_book_new_rental_price(book_node)
       end
 
-
       def parse_book_used_rental_price(book_node)
       end
-
   end
 end

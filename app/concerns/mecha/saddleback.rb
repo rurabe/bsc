@@ -27,8 +27,8 @@ module Mecha
         get_section_nodes(course_node).map { |section_node| build_section(section_node) }
       end
 
-      def book_data(node)
-        get_book_nodes(node).map { |node| build_book(node) }
+      def book_data(section_node)
+        get_book_nodes(section_node).map { |book_node| build_book(book_node) }
       end
 
       # Navigate helpers #
@@ -75,14 +75,14 @@ module Mecha
         all_nodes.uniq { |course_node| parse_course_school_unique_id(course_node) }
       end
 
-      # Section_data helpers
+      # Section_data helpers #
       def get_section_nodes(course_node)
         department = parse_course_department(course_node)
         number     = parse_course_number(course_node)
         course_node.search("//table[@class='grid']/tr[contains(concat(' ',@id,' '),'PendingClasses') and contains(.,'#{department} #{number}')]")
       end
 
-      # Book_data helpers
+      # Book_data helpers #
       def get_book_nodes(node)
         page = query_for_book(node)
         page.search(".//ul[preceding-sibling::comment()[contains(concat(' ',.,' '),'start the bookResultsInfo')]]")
@@ -126,7 +126,7 @@ module Mecha
         parse_node(section_node,".//span[contains(concat(' ',@id,' '),'Instructor')]")
       end
 
-      # Book parsers
+      # Book parsers #
       def parse_book_title(book_node)
         string = parse_node(book_node,".//li/text()[contains(.,'TITLE')]")
         parse_result(string,/TITLE:(.+)/)
