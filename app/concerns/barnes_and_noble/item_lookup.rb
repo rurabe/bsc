@@ -1,7 +1,6 @@
 module BarnesAndNoble
 	class ItemLookup
 		include ApiMethods
-		include Mecha::ParserHelpers
 
 		attr_reader :response, :parsed_response
 
@@ -77,5 +76,10 @@ module BarnesAndNoble
 			def available?(product)
 				parse_node(product,'.//Availability') != "Not Available"
 			end
+
+			def parse_node(node,xpath)
+        result = node.search(xpath).first
+        result.text.strip if result
+      end
 	end
 end
