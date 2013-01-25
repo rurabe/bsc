@@ -26,30 +26,30 @@ module Mecha
 
     private
 
-      def build_course(node)
-        { :school_unique_id           => parse_course_school_unique_id(node),
-          :department                 => parse_course_department(node), 
-          :number                     => parse_course_number(node), 
-          :sections_attributes        => section_data(node) }
+      def build_course(course_node)
+        { :school_unique_id           => parse_course_school_unique_id(course_node),
+          :department                 => parse_course_department(course_node), 
+          :number                     => parse_course_number(course_node), 
+          :sections_attributes        => section_data(course_node) }
       end
 
-      def build_section(node)
-        { :school_unique_id           => parse_section_school_unique_id(node),
-          :instructor                 => parse_section_instructor(node),
-          :books_attributes           => book_data(node)  }
+      def build_section(section_node)
+        { :school_unique_id           => parse_section_school_unique_id(section_node),
+          :instructor                 => parse_section_instructor(section_node),
+          :books_attributes           => book_data(section_node)  }
       end
 
-      def build_book(node)
-        {:title                       => parse_book_title(node),
-         :author                      => parse_book_author(node),
-         :ean                         => parse_book_ean(node),
-         :edition                     => parse_book_edition(node),
-         :requirement                 => parse_book_requirement(node),
-         :notes                       => parse_book_notes(node),
-         :bookstore_new_price         => parse_book_new_price(node),
-         :bookstore_new_rental_price  => parse_book_new_rental_price(node),
-         :bookstore_used_price        => parse_book_used_price(node),
-         :bookstore_used_rental_price => parse_book_used_rental_price(node)}
+      def build_book(book_node)
+        {:title                       => parse_book_title(book_node),
+         :author                      => parse_book_author(book_node),
+         :ean                         => parse_book_ean(book_node),
+         :edition                     => parse_book_edition(book_node),
+         :requirement                 => parse_book_requirement(book_node),
+         :notes                       => parse_book_notes(book_node),
+         :bookstore_new_price         => parse_book_new_price(book_node),
+         :bookstore_new_rental_price  => parse_book_new_rental_price(book_node),
+         :bookstore_used_price        => parse_book_used_price(book_node),
+         :bookstore_used_rental_price => parse_book_used_rental_price(book_node)}
       end
 
       # Parser helper methods

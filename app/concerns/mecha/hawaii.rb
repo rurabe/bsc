@@ -17,7 +17,7 @@ module Mecha
       super
     end
 
-    # private
+    private
       # Hardpoints #
       def navigate(options={})      
         login(options)
