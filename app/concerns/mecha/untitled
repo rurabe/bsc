@@ -1,0 +1,6 @@
+{ 'bookstore_id-1' => 296,
+          'term_id-1'      => '20131',
+          'div-1'          => nil,
+          'dept-1'         => "MATH",
+          'course-1'       => "002",
+          'section-1'      => "13155" }

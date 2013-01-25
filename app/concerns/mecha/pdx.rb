@@ -20,7 +20,7 @@ module Mecha
 			end
 
 			def course_data(page)
-				build_all_courses(page).uniq { |course| course[:school_unique_id] }
+				build_all_courses(page)
 			end
 
 			def section_data(course_node)
@@ -65,14 +65,15 @@ module Mecha
 			end
 
 			def get_course_nodes(page)
-				page.search("//div[@id='course-bookdisplay']//h3//span")
+				all_nodes = page.search("//div[@id='course-bookdisplay']//h3//span").to_a
+				all_nodes.uniq { |course_node| parse_course_school_unique_id(course_node) }
 			end
 
 			# Section_data helpers #	
 			def get_section_nodes(course_node)
 				department = parse_course_department(course_node)
 				number 		 = parse_course_number(course_node)
-				course_node.search("//div[@id='course-bookdisplay']//h3//span[text()[contains(.,'#{department}') and contains(.,'#{number}')]]")
+				course_node.search("//div[@id='course-bookdisplay']//h3//span[text()[contains(.,'#{department} - #{number}')]]")
 			end
 
 			# Book_data helpers #
