@@ -1,5 +1,7 @@
 BookSupply::Application.routes.draw do
 
+  match '/booklists'   => 'booklists#index'
+
   match "/about"        => 'staticpages#about'
   match '/channel.html' => Facebook::Channel
 

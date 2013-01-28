@@ -1,0 +1,14 @@
+<h2> All Booklists </h2>
+<ul>
+  <% @booklists.each do |booklist| %>
+    <li> 
+      <%= link_to booklist.slug, booklist_path(booklist) %>
+       - 
+      <%= time_ago_in_words(booklist.created_at) %> ago
+      <% if booklist.school %>
+        <span class="label" style="background-color: #<%= booklist.school.primary_color %>;">
+          <%= booklist.school.slug %>
+        </span>
+      <% end %>
+  <% end %>
+</ul>
