@@ -1,10 +1,11 @@
 class BooklistsController < ApplicationController
 
-  before_filter :https_redirect,                                        :only 		=> [:new, :create]
-  before_filter :http_redirect,                                         :only 		=> [:show]
-  before_filter :define_school,                                         :only 		=> [:new, :create]
-  before_filter :define_booklist,	                                      :only			=> [:show, :update]
-  http_basic_authenticate_with :name => "admin", :password => "secret", :only     => [:index]
+  before_filter :https_redirect,  :only 		=> [:new, :create]
+  before_filter :http_redirect,   :only 		=> [:show]
+  before_filter :define_school,   :only 		=> [:new, :create]
+  before_filter :define_booklist,	:only			=> [:show, :update]
+  
+  http_basic_authenticate_with :name => "admin", :password => "saintmarys", :only => [:index]
 
   rescue_from StandardError, :with => :error_handling
 
