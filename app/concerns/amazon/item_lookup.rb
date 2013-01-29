@@ -1,6 +1,6 @@
 module Amazon
 	class ItemLookup < ApiClass
-		attr_reader :responses, :parsed_response
+		attr_reader :responses
 
 		# params should be in one of two formats:
 		#   1. [{:ean => "#{EAN}", :condition => "new"},{:ean => "#{EAN}", :condition => "used"}]
@@ -26,7 +26,7 @@ module Amazon
 	 		parse_ui_data.to_json
 	 	end
 
-	 	# private
+	 	private
 
 	 		# For controlling the flow
 			def control
@@ -83,17 +83,6 @@ module Amazon
 				end
 			end
 
-			def response_base
-				request_items.flat_map do |item|
-					full_item = item.merge({ :price => nil, :vendor => "amazon", :asin => nil })
-					if item[:condition] =~ /all/i
-						['new','used'].map { |c| full_item.merge( :condition => c ) }
-					else
-						full_item
-					end
-				end
-			end
-
 			def build_product_hashes_from_array
 				@books.flat_map do |ean|
 					[{:condition 	=> "all",
@@ -101,12 +90,31 @@ module Amazon
 				end
 			end
 
-	 		def get_items
-	 			@responses.flat_map { |r| r.search("//Item") }
+			def parse_cart_data
+				all_offers = parse_items
+				lowest_offers = request_items.map { |item| fetch_lowest_offer(item,all_offers) }
+				lowest_offers.map { |offer| offer[:offer_listing_id] }
+			end
+
+			def fetch_lowest_offer(item,offers)
+				matching_offers = offers.select { |offer| offer_matches?(item,offer) }
+				matching_offers.sort { |offer| offer[:price] }.first if matching_offers
+			end
+
+			def offer_matches?(item,offer)
+				!item.map { |k,v| offer[k] == v }.include?(false)
+			end
+
+			def parse_ui_data
+				parse_items
+			end
+
+			def parse_items
+	 			get_items.flat_map { |item| parse_item(item) }
 	 		end
 
-	 		def parse_items
-	 			get_items.map { |item| parse_item(item) }
+	 		def get_items
+	 			@responses.flat_map { |r| r.search("//Item") }
 	 		end
 
 	 		def parse_item(item) 
@@ -155,56 +163,6 @@ module Amazon
 			def format_price(data)
 				(data.to_d / 100) if data
 			end
-
-			# Parsers and parsing helper methods
-			def parse_cart_data
-		 		request_items.flat_map do |book|
-		 			offer = best_offer(book)
-		 			cart_data_parser(offer)
-		 		end
-	 		end
-
-	 		def parse_ui_data
-		 		response_base.flat_map do |book|
-		 			offer = best_offer(book)
-		 			data = ui_data_parser(offer)
-		 			book.merge(data) 
-		 		end
-	 		end
-
-
-	 		def cart_data_parser(offer)
-	 			offer.get('.//Offer//OfferListingId')
-	 		end
-
-	 		def ui_data_parser(offer)
-	 			if offer
-		 			{
-		 				:ean => parse_ean(offer),
-		 				:condition => parse_condition(offer),
-		 				:price => parse_price(offer),
-		 				:asin => parse_asin(offer)
-		 			}
-		 		else
-		 			{}
-		 		end
-	 		end
-
-
-
-			def best_offer(options={})
-	 			sorted_orders = find_offers(options).sort { |offer| offer.get('.//Offer//Price//Amount').to_f }
-	 			sorted_orders.first if sorted_orders
-	 		end
-
-	 		def find_offers(options={})
-	 			@responses.flat_map do |response|
-	 				response.items.select do |item| 
-	 					parse_ean(item)			  == options[:ean] &&
-	 				 	parse_condition(item) == options[:condition].to_s.downcase
-	 				 end
-	 			end
-	 		end
 
 	 		def parse_node(node,xpath)
         result = node.search(xpath) if node
