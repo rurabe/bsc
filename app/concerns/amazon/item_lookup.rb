@@ -1,5 +1,5 @@
 module Amazon
-	class ItemLookup
+	class ItemLookup < ApiClass
 		attr_reader :responses, :parsed_response
 
 		# params should be in one of two formats:
@@ -26,7 +26,7 @@ module Amazon
 	 		parse_ui_data.to_json
 	 	end
 
-	 	private
+	 	# private
 
 	 		# For controlling the flow
 			def control
@@ -35,17 +35,13 @@ module Amazon
 
 			# For sending the request to Amazon
 			def lookup(request_params)
-				send_request(request_params)
-			end
-
-			def send_request(request_params)
-				Amazon::Ecs.send_request(base_params.merge(request_params))
+				send_request(base_params.merge(request_params))
 			end
 
 			def base_params
 				{ :operation			=> 'ItemLookup',
 					:service 				=> 'AWSECommerceService',
-					:response_group => 'Offers,ItemAttributes,Request',
+					:response_group => 'ItemAttributes,OfferListings',
 					:id_type 				=> 'EAN',
 					:search_index		=> 'Books'}
 			end
@@ -73,7 +69,7 @@ module Amazon
 			end
 
 			def ids_sliced_by_ten
-				["new","used"].flat_map do |condition|
+				["new","used","all"].flat_map do |condition|
 					books = request_items.select { |book| book[:condition] == condition }
 					books.each_slice(10).map { |slice| slice }				
 				end
@@ -88,18 +84,76 @@ module Amazon
 			end
 
 			def response_base
-				request_items.each do |item|
-					item.merge!({ :price => nil, :vendor => "amazon", :asin => nil })
+				request_items.flat_map do |item|
+					full_item = item.merge({ :price => nil, :vendor => "amazon", :asin => nil })
+					if item[:condition] =~ /all/i
+						['new','used'].map { |c| full_item.merge( :condition => c ) }
+					else
+						full_item
+					end
 				end
 			end
 
 			def build_product_hashes_from_array
 				@books.flat_map do |ean|
-					[{:condition 	=> "new",
-						:ean 			 	=> ean},
-					 {:condition 	=> "used",
-						:ean 				=> ean}]
+					[{:condition 	=> "all",
+						:ean 			 	=> ean  }]
 				end
+			end
+
+	 		def get_items
+	 			@responses.flat_map { |r| r.search("//Item") }
+	 		end
+
+	 		def parse_items
+	 			get_items.map { |item| parse_item(item) }
+	 		end
+
+	 		def parse_item(item) 
+	 			[:new,:used].map { |condition| build_offer(item,condition) }
+	 		end
+
+	 		def build_offer(item,condition)
+	 			base_info = { :ean 			=> parse_item_ean(item),
+	 										:condition => condition.to_s }
+	 			offer = item.search(".//Offer[.//Condition[text()='#{condition.to_s.camelcase}']]")
+	 			offer.present? ? base_info.merge!(parse_offer(offer)) : base_info
+	 		end
+
+	 		def parse_offer(offer)
+	 			{ :price 						=> parse_price(offer),
+	 				:asin 						=> parse_asin(offer),
+	 				:offer_listing_id => parse_offer_listing_id(offer),
+	 				:availability			=> parse_availability(offer) }
+	 		end
+
+	 		def parse_asin(offer)
+	 			parse_node(offer,"../../ASIN")
+	 		end
+
+	 		def parse_item_ean(offer)
+	 			parse_node(offer,".//EAN")
+	 		end
+
+	 		def parse_condition(offer)
+	 			parse_node("Condition")
+	 		end
+
+	 		def parse_price(offer)
+	 			price = parse_node(offer,"Price/Amount")
+	 			format_price(price)
+	 		end
+
+	 		def parse_offer_listing_id(offer)
+	 			parse_node(offer,'OfferListing/OfferListingId')
+	 		end
+
+	 		def parse_availability(offer)
+	 			parse_node(offer,'OfferListing/Availability')
+	 		end
+
+			def format_price(data)
+				(data.to_d / 100) if data
 			end
 
 			# Parsers and parsing helper methods
@@ -118,6 +172,7 @@ module Amazon
 		 		end
 	 		end
 
+
 	 		def cart_data_parser(offer)
 	 			offer.get('.//Offer//OfferListingId')
 	 		end
@@ -135,26 +190,7 @@ module Amazon
 		 		end
 	 		end
 
-	 		def parse_asin(item)
-	 			item.get('.//ASIN')
-	 		end
 
-	 		def parse_ean(item)
-	 			item.get('.//EAN')
-	 		end
-
-	 		def parse_condition(item)
-	 			condition = item.get('.//Offers//Condition')
-	 			condition.downcase if condition
-	 		end
-
-	 		def parse_price(item)
-	 			format_price(item.get('.//Offers//Price//Amount'))
-	 		end
-
-			def format_price(data)
-				(data.to_d / 100) if data
-			end
 
 			def best_offer(options={})
 	 			sorted_orders = find_offers(options).sort { |offer| offer.get('.//Offer//Price//Amount').to_f }
@@ -169,5 +205,15 @@ module Amazon
 	 				 end
 	 			end
 	 		end
+
+	 		def parse_node(node,xpath)
+        result = node.search(xpath) if node
+        result.text.strip if result
+      end
+
+      def parse_result(string,regex)
+        match = string.match(regex) if string
+        match[1].strip if match
+      end
 	end
 end

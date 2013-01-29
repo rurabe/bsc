@@ -1,5 +1,5 @@
 module Amazon
-	class CartQuery
+	class CartQuery < ApiClass
 		attr_reader :link
 
 		def initialize(params)
@@ -17,13 +17,8 @@ module Amazon
 		private
 
 			def control
-				@response = send_request
-				parse_cart_response(@response)
-			end
-
-			def send_request
-				# Amazon::Ecs.send_request(:operation => 'CartCreate',:'Item.1.OfferListingId' => 'cdr23rg...', :'Item.1.Quantity' => 1,:service => "AWSECommerceService")
-				Amazon::Ecs.send_request(build_request)
+				@response = send_request(build_request)
+				@link = parse_cart_response(@response)
 			end
 
 			def build_request
@@ -45,7 +40,7 @@ module Amazon
 			end
 
 			def parse_cart_response(response)
-				@link = parse_node(response.doc,'./CartCreateResponse/Cart/PurchaseURL')
+				parse_node(response.doc,'./CartCreateResponse/Cart/PurchaseURL')
 			end
 
 			def parse_node(node,xpath)
