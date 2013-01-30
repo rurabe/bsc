@@ -8,7 +8,6 @@ gem 'pg'
 
 gem 'puma'
 gem 'mechanize'
-gem 'amazon-ecs'
 gem 'friendly_id'
 gem 'newrelic_rpm'
 
