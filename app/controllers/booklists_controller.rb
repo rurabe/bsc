@@ -34,7 +34,7 @@ class BooklistsController < ApplicationController
 
   def update
     query = @booklist.lookup(params[:vendor])
-    render :json => query.ui_data
+    render :json => query.parse.to_json
   end
 
   def index

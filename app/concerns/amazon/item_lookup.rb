@@ -18,29 +18,24 @@ module Amazon
 	    control
 	 	end
 
-	 	def cart_data
-	 		parse_cart_data
-	 	end
+	 	def parse
+			request_items.map { |book| parse_offers(book) }
+		end
 
-	 	def ui_data
-	 		parse_ui_data.to_json
-	 	end
+	 	# private
 
-	 	private
-
-	 		# For controlling the flow
+	 		# For controlling the flow #
 			def control
 				@responses = build_params.map { |request_params| lookup(request_params) }
 			end
 
-			# For sending the request to Amazon
+			# For sending the request to Amazon #
 			def lookup(request_params)
 				send_request(base_params.merge(request_params))
 			end
 
 			def base_params
 				{ :operation			=> 'ItemLookup',
-					:service 				=> 'AWSECommerceService',
 					:response_group => 'ItemAttributes,OfferListings',
 					:id_type 				=> 'EAN',
 					:search_index		=> 'Books'}
@@ -90,88 +85,74 @@ module Amazon
 				end
 			end
 
-			def parse_cart_data
-				all_offers = parse_items
-				lowest_offers = request_items.map { |item| fetch_lowest_offer(item,all_offers) }
-				lowest_offers.map { |offer| offer[:offer_listing_id] }
+			# Parse helpers #
+			def parse_offers(book)
+				response = response_base(book)
+				response[:offers_attributes].each do |offer_base|
+					offer_base.merge!(parse_best_offer(book,offer_base))
+				end
+				response
 			end
 
-			def fetch_lowest_offer(item,offers)
-				matching_offers = offers.select { |offer| offer_matches?(item,offer) }
-				matching_offers.sort { |offer| offer[:price] }.first if matching_offers
+			def parse_best_offer(book,offer_base)
+				build_offer(best_offer(book,offer_base))
 			end
 
-			def offer_matches?(item,offer)
-				!item.map { |k,v| offer[k] == v }.include?(false)
+			def best_offer(book,offer_base)
+				get_offers(book,offer_base).min { |a,b| parse_price(a) <=> parse_price(b) }
 			end
 
-			def parse_ui_data
-				parse_items
+			def get_offers(book,offer_base)
+				ean 			= book[:ean]
+				condition = offer_base[:condition].titlecase
+	 			@responses.flat_map do |r|
+	 			  r.search("//Item[.//EAN='#{ean}']//Offer[.//Condition='#{condition}']")
+	 			end
+	 		end
+
+			def response_base(book)
+				{ :ean 								=> book[:ean],
+					:offers_attributes  => offer_response_base(book) }
 			end
 
-			def parse_items
-	 			get_items.flat_map { |item| parse_item(item) }
-	 		end
+			def offer_response_base(book)
+				conditions = book[:condition] =~ /all/i ? ["new","used"] : [book[:condition]]
+				conditions.map { |condition| build_offer_response_base(book.merge(:condition => condition)) }
+			end
 
-	 		def get_items
-	 			@responses.flat_map { |r| r.search("//Item") }
-	 		end
+			def build_offer_response_base(book)
+				{ :vendor						=> 'Amazon',
+					:condition 				=> book[:condition] }
+			end
 
-	 		def parse_item(item) 
-	 			[:new,:used].map { |condition| build_offer(item,condition) }
-	 		end
-
-	 		def build_offer(item,condition)
-	 			base_info = { :ean 			=> parse_item_ean(item),
-	 										:condition => condition.to_s }
-	 			offer = item.search(".//Offer[.//Condition[text()='#{condition.to_s.camelcase}']]")
-	 			offer.present? ? base_info.merge!(parse_offer(offer)) : base_info
-	 		end
-
-	 		def parse_offer(offer)
-	 			{ :price 						=> parse_price(offer),
-	 				:asin 						=> parse_asin(offer),
-	 				:offer_listing_id => parse_offer_listing_id(offer),
+	 		def build_offer(offer)
+	 			{ :vendor_book_id   => parse_vendor_book_id(offer),
+	 			  :price 						=> parse_price(offer),
+	 				:vendor_offer_id  => parse_vendor_offer_id(offer),
 	 				:availability			=> parse_availability(offer) }
 	 		end
 
-	 		def parse_asin(offer)
+	 		def parse_vendor_book_id(offer)
 	 			parse_node(offer,"../../ASIN")
 	 		end
 
-	 		def parse_item_ean(offer)
-	 			parse_node(offer,".//EAN")
-	 		end
-
 	 		def parse_condition(offer)
-	 			parse_node("Condition")
+	 			parse_node(offer,".//Condition")
 	 		end
 
 	 		def parse_price(offer)
-	 			price = parse_node(offer,"Price/Amount")
+	 			price = parse_node(offer,".//Price//Amount")
 	 			format_price(price)
 	 		end
 
-	 		def parse_offer_listing_id(offer)
-	 			parse_node(offer,'OfferListing/OfferListingId')
+	 		def parse_vendor_offer_id(offer)
+	 			parse_node(offer,".//OfferListing//OfferListingId")
 	 		end
 
 	 		def parse_availability(offer)
-	 			parse_node(offer,'OfferListing/Availability')
+	 			parse_node(offer,".//OfferListing//Availability")
 	 		end
 
-			def format_price(data)
-				(data.to_d / 100) if data
-			end
 
-	 		def parse_node(node,xpath)
-        result = node.search(xpath) if node
-        result.text.strip if result
-      end
-
-      def parse_result(string,regex)
-        match = string.match(regex) if string
-        match[1].strip if match
-      end
 	end
 end

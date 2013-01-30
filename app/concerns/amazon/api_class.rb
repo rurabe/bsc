@@ -28,7 +28,7 @@ module Amazon
       end
 
       def encode_params(options={})
-        Hash[*sort_params(options).map { |e| url_encode(e) }]
+        Hash[*sort_params(options).map { |e| url_encode(e.to_s) }]
       end
 
       def sort_params(options={})
@@ -44,13 +44,24 @@ module Amazon
       end
 
       def url_encode(string)
-        CGI.escape(string).gsub("%7E", "~").gsub("+", "%20")
+        CGI.escape(string).gsub("%7E", "~").gsub("+", "%20") if string
       end
     
       def generate_signature(params)
         key = ENV['AMAZON_SECRET_KEY']
         url = "GET\nwebservices.amazon.com\n/onca/xml\n#{params}"
         URI.escape(Base64.encode64( HMAC::SHA256.digest(key, url) ).strip, /[+=]/)
+      end
+
+      # Parser helpers
+
+      def format_price(data)
+        (data.to_d / 100) if data
+      end
+
+      def parse_node(node,xpath)
+        result = node.search(xpath) if node
+        result.text.strip if result
       end
 
   end
