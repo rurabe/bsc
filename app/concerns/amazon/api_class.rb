@@ -48,9 +48,10 @@ module Amazon
       end
     
       def generate_signature(params)
-        key = ENV['AMAZON_SECRET_KEY']
-        url = "GET\nwebservices.amazon.com\n/onca/xml\n#{params}"
-        URI.escape(Base64.encode64( HMAC::SHA256.digest(key, url) ).strip, /[+=]/)
+        key    = ENV['AMAZON_SECRET_KEY']
+        url    = "GET\nwebservices.amazon.com\n/onca/xml\n#{params}"
+        digest = OpenSSL::Digest::SHA256.new
+        URI.escape(Base64.encode64( OpenSSL::HMAC.digest(digest, key, url) ).strip, /[+=]/)
       end
 
       # Parser helpers

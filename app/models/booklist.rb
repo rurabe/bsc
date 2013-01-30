@@ -24,10 +24,6 @@ class Booklist < ActiveRecord::Base
     end
   end
 
-  def used_bn
-    eans.map { |e| BarnesAndNoble::UsedBooks.new(e).ui_data }
-  end
-
   private
   
     def eans
