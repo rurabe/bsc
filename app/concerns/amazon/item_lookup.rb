@@ -130,7 +130,8 @@ module Amazon
 	 			  :price 						=> parse_price(offer),
 	 				:vendor_offer_id  => parse_vendor_offer_id(offer),
 	 				:availability			=> parse_availability(offer),
-	 				:shipping_time 		=> parse_shipping_time(offer) }
+	 				:shipping_time 		=> parse_shipping_time(offer),
+	 				:comments					=> parse_comments(offer) }
 	 		end
 
 	 		def parse_vendor_book_id(offer)
@@ -156,6 +157,9 @@ module Amazon
 
 	 		def parse_shipping_time(offer)
 	 			parse_node(offer,".//OfferListing//Availability")
+	 		end
+
+	 		def parse_comments(offer)
 	 		end
 
 

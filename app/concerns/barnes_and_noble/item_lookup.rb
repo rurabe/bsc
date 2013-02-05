@@ -10,8 +10,8 @@ module BarnesAndNoble
       control
     end
 
-    def ui_data
-      parse_ui_data.to_json
+    def parse
+      request_items.map { |book| parse_offers(book) }
     end
 
     private
@@ -49,10 +49,6 @@ module BarnesAndNoble
           :vendor     => "Barnes and Noble" }
       end
 
-      def parse
-        request_items.map { |book| parse_offers(book) }
-      end
-
       def parse_offers(book)
         response = response_base(book)
         response[:offers_attributes].each do |offer_base|
@@ -79,7 +75,8 @@ module BarnesAndNoble
           :price            => parse_price(offer),
           :vendor_offer_id  => parse_vendor_offer_id(offer),
           :availability     => parse_availability(offer),
-          :shipping_time    => parse_shipping_time(offer) }
+          :shipping_time    => parse_shipping_time(offer),
+          :comments         => parse_comments(offer) }
       end
 
       def parse_vendor_book_id(product)
@@ -100,6 +97,9 @@ module BarnesAndNoble
 
       def parse_shipping_time(offer)
         parse_node(offer,".//DeliveryMessage")
+      end
+
+      def parse_comments(offer)
       end
   end
 end

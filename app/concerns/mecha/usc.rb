@@ -65,11 +65,8 @@ module Mecha
 
       # Course_data helpers #
       def build_all_courses(page)
-        threads = []
-        get_course_nodes(page).map do |course|
-          threads << Thread.new { build_course(course) }
-        end
-        threads.map { |t| t.join.value }
+        threads = get_course_nodes(page).map { |course| lambda{ build_course(course) } }
+        Automatron::Needle.thread(threads)
       end
 
       def get_course_nodes(page)

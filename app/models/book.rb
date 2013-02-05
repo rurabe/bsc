@@ -13,11 +13,12 @@ class Book < ActiveRecord::Base
                   :bookstore_used_rental_price
 
   belongs_to :section
+  has_many   :offers
 
   default_scope order('requirement DESC')
 
   before_create :clean_isbns
-
+  
   private
 
     def clean_isbns

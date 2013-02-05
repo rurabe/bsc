@@ -7,8 +7,8 @@ class Booklist < ActiveRecord::Base
 
   after_create :set_slug
 
- 	extend FriendlyId
- 	friendly_id :slug, :use => :slugged
+  extend FriendlyId
+  friendly_id :slug, :use => :slugged
 
   def get_books(options={})
     m = mecha.new(options)
@@ -24,7 +24,34 @@ class Booklist < ActiveRecord::Base
     end
   end
 
+  def offer_data
+    merge_offers
+  end
+
   private
+
+    def merge_offers
+      all_offer_data = get_offer_data
+      eans.map do |ean|
+        { :ean               => ean,
+          :offers_attributes => consolidate_offers(all_offer_data,ean) }
+      end
+    end
+
+    def consolidate_offers(all_offer_data,ean)
+      select_offers(all_offer_data,ean).flat_map { |offer| offer[:offers_attributes] }
+    end
+
+    def select_offers(all_offer_data,ean)
+      all_offer_data.select { |offer| offer[:ean] == ean }
+    end
+
+    def get_offer_data
+      e = eans
+      threads = [ lambda{ Amazon::ItemLookup.new(e).parse },
+                  lambda{ BarnesAndNoble::ItemLookup.new(e).parse } ]
+      Automatron::Needle.thread(threads)
+    end
   
     def eans
       books.pluck(:ean)
