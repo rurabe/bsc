@@ -6,12 +6,11 @@ module BarnesAndNoble
     def initialize(eans)
       @eans = eans
       @response = nil
-      @parsed_response = {}
       control
     end
 
     def parse
-      request_items.map { |book| parse_offers(book) }
+      Automatron::Needle.thread( response_base.map { |book| lambda{parse_offers(book)} } )
     end
 
     private
@@ -39,48 +38,61 @@ module BarnesAndNoble
         end
       end
 
-      def response_base(book)
-        { :ean               => book[:ean],
-          :offers_attributes => [build_offer_response_base] }
+      # Response_base #
+      def response_base
+        @eans.flat_map do |ean|
+          { :ean               => ean,
+            :offers_attributes => build_offer_response_base }
+        end
       end
 
       def build_offer_response_base
-        { :condition  => "new",
-          :vendor     => "Barnes and Noble" }
+        ["new","used"].map do |condition|
+          { :condition  => condition,
+            :vendor     => "Barnes and Noble" }
+        end
       end
 
-      def parse_offers(book)
-        response = response_base(book)
+      # Takes a response base object and parses the offers #
+      def parse_offers(response)
         response[:offers_attributes].each do |offer_base|
-          offer_base.merge!(parse_best_offer(book,offer_base))
+          offer_base.merge!(parse_best_offer(response[:ean],offer_base))
         end
         response
       end
 
-     def parse_best_offer(book,offer_base)
-        build_offer(best_offer(book,offer_base))
+      def parse_best_offer(ean,offer_base)
+        condition = offer_base[:condition].downcase
+        send("best_#{condition}_offer".to_sym,ean)
+      end 
+
+      def best_new_offer(ean)
+        offer = get_new_offers(ean).min { |a,b| parse_price(a) <=> parse_price(b) }
+        build_new_offer(offer)
       end
 
-      def best_offer(book,offer_base)
-        get_offers(book,offer_base).min { |a,b| parse_price(a) <=> parse_price(b) }
-      end
-
-      def get_offers(book,offer_base)
-        ean = book[:ean]
+      def get_new_offers(ean)
         @response.search(".//Product[.//Ean[text()=#{ean}]]")
       end
 
-      def build_offer(offer)
-        { :vendor_book_id   => parse_vendor_book_id(offer),
-          :price            => parse_price(offer),
-          :vendor_offer_id  => parse_vendor_offer_id(offer),
-          :availability     => parse_availability(offer),
-          :shipping_time    => parse_shipping_time(offer),
-          :comments         => parse_comments(offer) }
+      def best_used_offer(ean)
+        BarnesAndNoble::UsedLookup.new(ean).parse
+      end
+
+
+      # Parsers #
+      def build_new_offer(offer)
+        { :vendor_book_id     => parse_vendor_book_id(offer),
+          :price              => parse_price(offer),
+          :vendor_offer_id    => parse_vendor_offer_id(offer),
+          :detailed_condition => parse_offer_detailed_condition(offer),
+          :availability       => parse_availability(offer),
+          :shipping_time      => parse_shipping_time(offer),
+          :comments           => parse_comments(offer) }
       end
 
       def parse_vendor_book_id(product)
-        parse_node(product,'.//Ean')
+        parse_node(product,'./Ean')
       end
 
       def parse_price(product)
@@ -89,6 +101,11 @@ module BarnesAndNoble
       end
 
       def parse_vendor_offer_id(offer)
+        parse_vendor_book_id(offer)
+      end
+
+      def parse_offer_detailed_condition(offer)
+        "Brand new"
       end
 
       def parse_availability(offer)

@@ -33,8 +33,7 @@ class BooklistsController < ApplicationController
   end
 
   def update
-    query = @booklist.lookup(params[:vendor])
-    render :json => query.parse.to_json
+    render :json => @booklist.offer_data.to_json
   end
 
   def index
@@ -43,31 +42,31 @@ class BooklistsController < ApplicationController
 
   private
 
-  def define_booklist
-    @booklist = Booklist.find(params[:id])
-  end
+    def define_booklist
+      @booklist = Booklist.find(params[:id])
+    end
 
-  def define_school
-    @school = School.find(params[:school])
-  end
+    def define_school
+      @school = School.find(params[:school])
+    end
 
-  def show_example
-    @booklist = Booklist.find("example")
-    redirect_to booklist_url(@booklist,:protocol => "http", :school => @school.slug)
-  end
+    def show_example
+      @booklist = Booklist.find("example")
+      redirect_to booklist_url(@booklist,:protocol => "http", :school => @school.slug)
+    end
 
-  def rerender_and_show_error
-    flash[:error] = @booklist.errors.full_messages
-    render 'new'
-  end
+    def rerender_and_show_error
+      flash[:error] = @booklist.errors.full_messages
+      render 'new'
+    end
 
-  # Error handling
-  def error_handling(error)
-    flash[:error] = [error.message]
-    pp error
-    pp error.backtrace
-    render 'new'
-  end
+    # Error handling
+    def error_handling(error)
+      flash[:error] = [error.message]
+      pp error
+      pp error.backtrace
+      render 'new'
+    end
 
 
 

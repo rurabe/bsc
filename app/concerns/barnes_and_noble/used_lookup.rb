@@ -1,112 +1,116 @@
 module BarnesAndNoble
-	class UsedLookup
-		attr_reader :response, :response_options, :retries
-		def initialize(ean)
-			@default_params = {:sze => 5,
-												:view => 'isbnservice',
-												:template => 'textbooksinlay',
-												:usedpagetype => 'usedisbn',
-												:uiAction => 'isbnservice'}
-			@ean = ean
-			@retries = nil
-			@response = nil
-			@response_options = []
-			control
-		end
+  class UsedLookup < Automatron::ParserClass
+    attr_reader :response, :retries
+    def initialize(ean)
+      @ean = ean
+      @retries = nil
+      @response = nil
+      control
+    end
 
-		def ui_data
-			response = response_base
-			response.merge!(best_offer) if best_offer
-			response
-		end
+    def parse
+      build_offer(best_offer)
+    end
 
-		# private
-			def control # Super sketchy API
-				query = 2.times do |i|
-					r = send_request(@ean)
-					if !r.include?(nil)
-						@retries = i
-						return
-					end
-					@retries = i
-				end
-			end
+    private
+      def control # Super sketchy API
+        2.times do |i|
+          r = send_request(@ean)
+          if !r.include?(nil)
+            @retries = i
+            return
+          end
+          @retries = i
+        end
+      end
 
-			def send_request(ean)
-				encoded_response = Net::HTTP.get_response(api_build_uri(ean))
-				@response = Nokogiri::HTML.parse(CGI::unescape(encoded_response.body))
-				api_parse_response
-			end
+      # Sends reuqest to API and gets response
+      def send_request(ean)
+        encoded_response = Net::HTTP.get_response(build_uri(ean))
+        @response = Nokogiri::HTML.parse(CGI::unescape(encoded_response.body))
+      end
 
-				def api_build_uri(ean)
-					url = "http://search.barnesandnoble.com/used/results.aspx?" + api_build_params(ean)
-					URI(url)
-				end
+      def build_uri(ean)
+        url = "http://search.barnesandnoble.com/used/results.aspx?" + build_params(ean)
+        URI(url)
+      end
 
-					def api_build_params(ean)
-						request_params = @default_params.merge(:pean => ean)
-						request_params.map { |key,value| "#{key.to_s}=#{value.to_s}" }.join("&")
-					end
+      def build_params(ean)
+        request_params = default_params.merge(:pean => ean)
+        request_params.map { |key,value| "#{key.to_s}=#{value.to_s}" }.join("&")
+      end
 
-			def api_parse_response
-				used_offers = select_used_offers(@response)
-				used_offers.map do |offer|
-						@response_options << {  :rating => parse_rating(offer),
-																		:condition => 'used',
-																		:ean => parse_offer_ean(offer),
-																		:parent_ean => @ean,
-																		:price => parse_offer_price(offer),
-																		:vendor => 'bn' }
-						parse_offer_ean(offer)
-				end
-			end
+      def default_params
+        { :sze          => 5,
+          :view         => 'isbnservice',
+          :template     => 'textbooksinlay',
+          :usedpagetype => 'usedisbn',
+          :uiAction     => 'isbnservice'}
+      end
 
-			def response_base
-				{
-					:vendor => "bn",
-					:condition => "used",
-					:price => nil,
-					:parent_ean => @ean,
-					:ean => nil
-				}
-			end
+      # Select offers #
+      def best_offer
+        offers = all_reputable_offers
+        offers.min { |offer| parse_offer_price(offer) }
+      end
 
-			def best_offer
-				best_offer = @response_options.find { |offer| offer[:rating] > 3.5 }
-				best_offer.reject {|k| k == :rating } if best_offer
-			end
+      def all_reputable_offers
+        offers = select_used_offers
+        offers.reject { |offer| parse_offer_seller_rating(offer) < 3.5} if offers
+      end
 
-			def select_used_offers(response)
-				response.xpath('//div[@class="w-box wgt-product-listing-textbooks-item product-root-node"]')
-			end
+      def select_used_offers
+        @response.xpath('//div[@class="w-box wgt-product-listing-textbooks-item product-root-node"]')
+      end
 
-			def parse_offer_price(node)
-				numberize(parse_node(node,'./div/span[@class="price"]'))
-			end
+      # Parsers #
+      def build_offer(offer)
+        if offer
+          { :vendor_book_id     => parse_vendor_book_id(offer),
+            :price              => parse_offer_price(offer),
+            :vendor_offer_id    => parse_vendor_offer_id(offer),
+            :detailed_condition => parse_offer_detailed_condition(offer),
+            :availability       => parse_offer_availability(offer),
+            :shipping_time      => parse_offer_shipping_time(offer),
+            :comments           => parse_offer_comments(offer) }
+        else
+          {}
+        end
+      end
 
-			def parse_rating(node)
-				rating = numberize(parse_result(parse_node(node,'./div/div/p/span[@class="feedback"]'),/\((.+) out/))
-				rating ? rating : 0
-			end
+      def parse_vendor_book_id(offer)
+        parse_vendor_offer_id(offer)
+      end
 
-			def parse_offer_ean(node)
-				form = node.xpath('./div/div/p[@class="product-details"]/a')
-				parse_result(form.attr('href').text,/EAN=(\d+)/) if form.present?
-			end
+      def parse_offer_price(offer)
+        numberize(parse_node(offer,'./div/span[@class="price"]'))
+      end
 
-		  def parse_node(node,xpath)
-	      result = node.search(xpath).first
-	      result.text.strip if result
-	    end
+      def parse_vendor_offer_id(offer)
+        form = offer.search('./div/div/p[@class="product-details"]/a')
+        parse_result(form.attr('href').text,/EAN=(\d+)/) if form.present?
+      end
 
-			def parse_result(string,regex)
-				match = string.match(regex) if string
-				match[1] if match
-			end
+      def parse_offer_detailed_condition(offer)
+        parse_node(offer,'.//text()[preceding-sibling::*[@class="condition-label"]][1]')
+      end
 
-			def numberize(string)
-				string.to_s.gsub("$","").to_d if string
-			end
+      def parse_offer_availability(offer)
+      end
 
-	end
+      def parse_offer_shipping_time(offer)
+        parse_node(offer,'.//text()[parent::*[@class="product-availability"]][last()]')
+      end
+
+      def parse_offer_comments(offer)
+        parse_node(offer,'.//text()[preceding-sibling::*[@class="comment-label"]][1]')
+      end
+
+      def parse_offer_seller_rating(offer)
+        rating = parse_result(parse_node(offer,'./div/div/p/span[@class="feedback"]'),/\((.+) out/)
+        rating ? rating.to_d : 0
+      end
+
+
+  end
 end

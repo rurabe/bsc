@@ -14,7 +14,6 @@ module Amazon
 		def initialize(books) 
 			@books = books
 	    @responses = []
-	    @parsed_response = []
 	    control
 	 	end
 
@@ -126,12 +125,13 @@ module Amazon
 			end
 
 	 		def build_offer(offer)
-	 			{ :vendor_book_id   => parse_vendor_book_id(offer),
-	 			  :price 						=> parse_price(offer),
-	 				:vendor_offer_id  => parse_vendor_offer_id(offer),
-	 				:availability			=> parse_availability(offer),
-	 				:shipping_time 		=> parse_shipping_time(offer),
-	 				:comments					=> parse_comments(offer) }
+	 			{ :vendor_book_id     => parse_vendor_book_id(offer),
+	 			  :price 						  => parse_price(offer),
+	 				:vendor_offer_id    => parse_vendor_offer_id(offer),
+	 				:detailed_condition => parse_detailed_condition(offer),
+	 				:availability			  => parse_availability(offer),
+	 				:shipping_time 		  => parse_shipping_time(offer),
+	 				:comments					  => parse_comments(offer) }
 	 		end
 
 	 		def parse_vendor_book_id(offer)
@@ -149,6 +149,9 @@ module Amazon
 
 	 		def parse_vendor_offer_id(offer)
 	 			parse_node(offer,".//OfferListing//OfferListingId")
+	 		end
+
+	 		def parse_detailed_condition(offer)
 	 		end
 
 	 		def parse_availability(offer)

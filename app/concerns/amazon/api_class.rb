@@ -1,5 +1,5 @@
 module Amazon
-  class ApiClass
+  class ApiClass < Automatron::ParserClass
 
     def send_request(options={})
       url = prepare_url(options)
@@ -52,17 +52,6 @@ module Amazon
         url    = "GET\nwebservices.amazon.com\n/onca/xml\n#{params}"
         digest = OpenSSL::Digest::SHA256.new
         URI.escape(Base64.encode64( OpenSSL::HMAC.digest(digest, key, url) ).strip, /[+=]/)
-      end
-
-      # Parser helpers
-
-      def format_price(data)
-        (data.to_d / 100) if data
-      end
-
-      def parse_node(node,xpath)
-        result = node.search(xpath) if node
-        result.text.strip if result
       end
 
   end

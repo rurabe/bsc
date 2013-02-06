@@ -1,5 +1,5 @@
 module BarnesAndNoble
-  class ApiClass
+  class ApiClass < Automatron::ParserClass
 
     def send_request(params)
       response = Net::HTTP.get_response(api_build_uri(params))

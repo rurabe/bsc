@@ -16,14 +16,6 @@ class Booklist < ActiveRecord::Base
     link_courses(m.parse)
   end
 
-  def lookup(vendor)
-    case vendor
-      when "amazon"  then Amazon::ItemLookup.new(eans)
-      when "bn"      then BarnesAndNoble::ItemLookup.new(eans)
-      when "bn-used" then BarnesAndNoble::UsedBooks.new(eans)
-    end
-  end
-
   def offer_data
     merge_offers
   end
