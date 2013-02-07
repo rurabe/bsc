@@ -7,17 +7,11 @@
 
 
 body {
-	background-image:url('bg.png');
+	// background-image:url('bg.png');
 }
 
 #flash{
 	margin: 20px auto;
-}
-
-.subtag{
-	font-family: "Brush Script Std", "Brush Script MT", cursive;
-	font-size: 14pt;
-		margin: 10px auto;
 }
 
 
@@ -32,6 +26,8 @@ body {
 .social-row {
 	margin: 5px auto;
 }
+
+
 
 
 
@@ -130,7 +126,8 @@ button.search-icon {
 // #SHOW ---------------/
 
 .book-card {
-	background-color: rgba(255,255,255,1);
+	// background-color: rgba(255,255,255,1);
+	background-image: url(/assets/linedpaper.png);
 	border: 3px solid #DDD;
 	padding: 10px;
 	-webkit-border-radius: 4px 4px 4px 4px;
@@ -143,13 +140,11 @@ button.search-icon {
 
 }
 
-.book-table thead tr.header-row {
-	border-bottom: 2px solid #CC0052;
+table.book-table td,th{
+	padding: 7px;
+	// border-top: none;
 }
 
-.book-table td,th{
-	padding: 5px;
-}
 
 .course-header {
 	font-size: 12pt;
@@ -165,23 +160,22 @@ button.search-icon {
 
 th.header {
 	text-align: center !important;
+	font-size: 18pt;
 }
 
-th.subheader {
+
+td.offer {
 	text-align: center !important;
-
+	font-size: 18pt;
 }
 
-td.book-bookstore {
-	text-align: center !important;
+
+span.requirement {
+	font-size: 6pt;
 }
 
-td.book-query {
-	text-align: center !important;
-}
-
-.requirement {
-	font-size: 7pt;
+td.book-title{
+	font-size: 12pt;
 }
 
 .loading {
@@ -255,14 +249,6 @@ label.checkout-label {
 
 #express + span {
 	font-style: italic;
-}
-
-#bnModal table {
-	border-bottom: 1px solid #DDD;
-}
-
-table#bnLinks tr td.bn-checkout-book{
-	text-align: right;
 }
 
 #tour {

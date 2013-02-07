@@ -2,19 +2,10 @@
 <html xmlns:fb="http://ogp.me/ns/fb#">
 <head>
   <title>BookSupply</title>
-  <%= stylesheet_link_tag "application", :media => "all" %>
-  <% if @school %>
-  	<%= stylesheet_link_tag "schools/" + @school.slug, :media => "all" %>
-  <% end %>
-  <%= csrf_meta_tags %>
-  <meta property="og:title" content="Book Supply Co."/> 
-  <meta property="og:type" content="company"/> 
-  <meta property="og:image" content="http://www.booksupply.co/assets/logo-square-200.png"/> 
-  <meta property="fb:admins" content="3403944" />
-  <meta name="alexaVerifyID" content="w0EKEuCXa0HXZwMCMCfgxo11ouw" />
+  <%= render :partial => 'shared/css' %>
+  <%= render :partial => 'shared/meta_tags' %>
   <%= javascript_include_tag "application" %>
   <%= render :partial => 'shared/google_analytics' %>
-
 </head>
 <body>
 	<div id="fb-root"></div>
@@ -38,15 +29,9 @@
 		<%= yield %>
 
 	<div>
-		
-
-		<div id="jses">
-
-			<%= yield :page_js %>
-      <%= javascript_include_tag "logo.js" %>
-
-    </div>
-
-
+	<div id="jses">
+		<%= yield :page_js %>
+    <%= javascript_include_tag "logo.js" %>
+  </div>
 </body>
 </html>

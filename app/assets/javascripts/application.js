@@ -17,5 +17,6 @@
 //= require twitter.js
 //= require jquery.cookie.js
 //= require jquery.arctext.js
+//= require underscore-min.js
 
 
