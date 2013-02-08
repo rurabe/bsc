@@ -127,34 +127,36 @@ button.search-icon {
 
 .book-card {
 	// background-color: rgba(255,255,255,1);
-	background-image: url(/assets/linedpaper.png);
+	background-image: url(linedpaper.png);
 	border: 3px solid #DDD;
-	padding: 10px;
+	padding: 50px;
 	-webkit-border-radius: 4px 4px 4px 4px;
 	-moz-border-radius: 4px 4px 4px 4px;
 	border-radius: 4px 4px 4px 4px;
 }
 
-.book-table {
+table.book-table {
 	margin: 0px auto;
-
+	border-spacing: 5px 5px;
+	border-collapse: separate;
 }
 
 table.book-table td,th{
-	padding: 7px;
-	// border-top: none;
+	border-top: none;
+	height: 26px;
+	vertical-align: middle;
 }
 
 
 .course-header {
-	font-size: 12pt;
+	font-size: 18pt;
 	font-weight: bold;
 	text-align: left;
 }
 
-.book-title {
+td.book-title {
 	text-align: left;
-	text-indent: 10px;
+	font-size: 13pt;
 }
 
 
@@ -164,18 +166,41 @@ th.header {
 }
 
 
-td.offer {
-	text-align: center !important;
-	font-size: 18pt;
+table.book-table td.offer {
+	padding: 0px;
+	width: 150px;
+	height: 50px;
 }
 
+div.offer-div{
+	border: 1px solid silver;
+}
+
+div.offer-div-inner{
+	text-align: center !important;
+	margin: auto auto;
+	padding: 8px;
+	font-size: 18pt;
+	text-shadow: 0.1em 0.1em 0.1em white;
+	line-height: 20pt;
+}
+
+.offer-div .amazon{
+	background-image: url(amazon-bg.png);
+	background-repeat: no-repeat;
+	background-position: 100% 0%;
+}
+
+
+.offer-div .bn{
+	background-image: url(bn-bg.png);
+	background-repeat: no-repeat;
+	background-position: 100% 50%;
+}
 
 span.requirement {
-	font-size: 6pt;
-}
-
-td.book-title{
-	font-size: 12pt;
+	font-size: 7pt;
+	vertical-align:middle;
 }
 
 .loading {
@@ -183,8 +208,8 @@ td.book-title{
 	background-image: url(ajax-loader.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
-	width: 16px;
-	height: 16px;
+	width: 26px;
+	height: 26px;
 }
 
 .selectable{
@@ -268,3 +293,19 @@ label.checkout-label {
 	text-decoration: underline;
 	cursor: pointer;
 }
+
+.menu-container{
+	position: absolute;
+	padding: -1px
+}
+
+.menu-item{
+	width: 300px;
+	height: 40px;
+	padding: 2px;
+	position: relative;
+	display: block;
+	background-color: silver;
+	margin: 2px;
+}
+

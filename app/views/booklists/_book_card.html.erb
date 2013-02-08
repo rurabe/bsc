@@ -1,75 +1,82 @@
-<div class="row-fluid">
-	<table class="book-table table">
+<div class="row">
+  <table class="book-table table">
 
-		<thead>
-			<tr class="header-row">
-				<th colspan="2"></th>
-				<th class="header span2">New</th>
-				<th class="header span2">Used</th>
-			</tr>
+    <thead>
+      <tr class="header-row">
+        <th colspan="2"></th>
+        <th class="header">New</th>
+        <th class="header">Used</th>
+      </tr>
 
-		</thead>
-		
-		<% @booklist.courses.each do |course| %>
-			<tr>
-				<td class="course-header" colspan="4">
-					<%= course.department %> <%= course.number %>
-				</td>
-			</tr>
-			<% course.books.each_with_index do |book,i| %>
-				<tr class="book-row" id="book-<%= book.ean %>" data-ean="<%= book.ean %>">
+    </thead>
+    
+    <% @booklist.courses.each do |course| %>
+      <tr>
+        <td class="course-header" colspan="4">
+          <%= course.department %> <%= course.number %>
+        </td>
+      </tr>
+      <% course.books.each_with_index do |book,i| %>
+        <tr class="book-row" id="book-<%= book.ean %>" data-ean="<%= book.ean %>">
 
-					<td class="book-requirement" id="requirement-<%= book.ean %>">
-							<span class="label requirement <%= requirement_class(book.requirement) %>">
-								<%= book.requirement.upcase %>
-							</span>
-					</td>
+          <td class="book-requirement" id="requirement-<%= book.ean %>">
+              <span class="label requirement <%= requirement_class(book.requirement) %>">
+                <%= book.requirement.upcase %>
+              </span>
+          </td>
 
-					<td class="book-title" id="title-<%= book.ean %>">
-						<span>
-							<%= titleize(book.title) %> 
-						</span>
-					</td>
+          <td class="book-title" id="title-<%= book.ean %>">
+            <span>
+              <%= titleize(book.title) %> 
+            </span>
+          </td>
 
-					<td class="offer offer-new" id="offer-new-<%= book.ean %>">
-						<span class="offer-price">
-							<%= show_price(book.bookstore_new_price) %>
-						</span>
-					</td>
+          <td class="offer offer-new" id="offer-new-<%= book.ean %>">
+            <div class="offer-div">
+              <div class="offer-div-inner">
+                <div class="loading"></div>
+              </div>
+            </div>
+          </td>
 
-					<td class="offer offer-used" id="offer-used-<%= book.ean %>">
-						<span class="offer-price">
-							<%= show_price(book.bookstore_used_price) %>
-						</span>
-					</td>
-				</tr>
-			<% end %>
+          <td class="offer offer-used" id="offer-used-<%= book.ean %>">
+            <div class="offer-div">
+              <div class="offer-div-inner">
+                <div class="loading"></div>
+              </div>
+            </div>
+          </td>
 
-			<% if course.books.empty? %>
-				<tr class="book-row" >
-					<td colspan="4" class="no-books">
-						<center>Book Supply Co. couldn't find any books for this course. <a class="no-books-why">Here's why.</a></center>
-					</td>
-				</tr>
-			<% end %>
+        </tr>
+      <% end %>
 
-		<% end %>
-		<tr class="checkout-row">
-			<td></td>
-			<td></td>
-			<td id="checkout-td" colspan="2" class="centered">
-				<button type="submit" class="btn btn-warning" id="checkout-button">
-					<span id="checkout-text-span">
-						<span class="checkout-text">Buy my books now </span>
-						<span class="checkout-text-prefix" style="display:none">at</span>
-						<span class="checkout-text-amazon" style="display:none"><i class="icon-amazon" id="checkout-amazon-icon"></i></span>
-						<span class="checkout-text-connector" style="display:none">and</span>
-						<span class="checkout-text-bn" style="display:none"><%= image_tag 'bn-icon-16-white.png', :id => "checkout-bn-icon" %></span>
-						<span class="checkout-text">!</span>
-					</span>				
-				</button>
-			</td>
-		</tr>
+      <% if course.books.empty? %>
+        <tr class="book-row" >
+          <td colspan="4" class="no-books">
+            <center>Book Supply Co. couldn't find any books for this course. <a class="no-books-why">Here's why.</a></center>
+          </td>
+        </tr>
+      <% end %>
 
-	</table>
+    <% end %>
+    <tr class="checkout-row">
+      <td></td>
+      <td></td>
+      <td id="checkout-td" colspan="2" class="centered">
+        <button type="submit" class="btn btn-warning" id="checkout-button">
+          <span id="checkout-text-span">
+            <span class="checkout-text">Buy my books now </span>
+            <span class="checkout-text-prefix" style="display:none">at</span>
+            <span class="checkout-text-amazon" style="display:none"><i class="icon-amazon" id="checkout-amazon-icon"></i></span>
+            <span class="checkout-text-connector" style="display:none">and</span>
+            <span class="checkout-text-bn" style="display:none"><%= image_tag 'bn-icon-16-white.png', :id => "checkout-bn-icon" %></span>
+            <span class="checkout-text">!</span>
+          </span>       
+        </button>
+      </td>
+    </tr>
+
+  </table>
+</div>
+<div class="menus">
 </div>

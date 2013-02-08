@@ -12,6 +12,7 @@ $(document).ready(function(){
 
   booklist = {
     books: [],
+    menus: [],
     find: function(ean){
       return _.find(this.books,function(book){
         return book.ean === ean
@@ -28,6 +29,15 @@ $(document).ready(function(){
       _.each(this.books,function(book){
         book.displayOffers();
       });
+    },
+    newMenu: function(offerGroup){
+      this.closeMenus();
+      this.menus.push(createOffersMenu(offerGroup));
+    },
+    closeMenus: function(){
+      _.each(this.menus,function(menu){
+        menu.close();
+      })
     }
   }
 
@@ -77,6 +87,7 @@ $(document).ready(function(){
         return null;
       } else {
         return _.min(allOffers,function(offer){
+          console.log(allOffers.length)
           return parseInt(offer.price);
         });
       }
@@ -84,72 +95,173 @@ $(document).ready(function(){
 
     var validOffers = function(){
       return _.filter(offers,function(offer){
-        return parseInt(offer.price)
-      });
-    };
-
-    var foundOffers = function(){
-      return _.filter(offers,function(offer){
-        return offer.vendorBookId
+        return parseFloat(offer.price)
       });
     };
 
     var validateStatus = function(){
-      if( _.isEmpty(foundOffers()) ){
-        return "Not found"
-      } else if( _.isEmpty(validOffers()) ){
+      if( checkOfferStatus("Available") ){
+        return "Available"
+      } else if( checkOfferStatus("Sold out") ){
         return "Sold out"
       } else {
-        return "Available"
+        return "Not found"
       }
     };
 
-    var changeContent = function(content){
-      var wrapper = $(td).children('span.offer-price');
-      wrapper.fadeOut(function(){
-        wrapper.html(content).fadeIn();
+    var checkOfferStatus = function(status){
+      return !_.isEmpty(
+        _.filter(offers,function(offer){
+          return offer.status === status
+        })
+      );
+    };
+
+    var changeCellContent = function(content){
+      var wrapper = $(td).children('div')
+      var oldContent = wrapper.children('div');
+      oldContent.fadeOut(function(){
+        var newContent = wrapper.html(content).children()
+        newContent.hide().fadeIn();
       });
     };
 
-    return {
+    var setClickHandler = function(){
+      td.click(function(){
+        booklist.newMenu(returnObject)
+      });
+    }();
+
+
+    var returnObject = {
       td: td,
       category: category,
       status: status,
       offers: offers,
+      selectedOffer: {},
+      bestOffer: function(){
+        return bestOffer();
+      },
       addOffer: function(json){
         offers.push(createOffer(json));
       },
       displayOffer: function(){
         this.status = validateStatus();
-        var offer = bestOffer();
-        if(offer){
-          changeContent(offer.toHTML());
+        this.selectedOffer = bestOffer();
+        if(this.selectedOffer){
+          changeCellContent(this.selectedOffer.toPriceHTML());
         } else {
-          changeContent(this.status);
+          changeCellContent('<div class="offer-div-inner">' + this.status + '</div>');
         }
+      },
+      otherOffers: function(){
+        return _.difference(offers,this.selectedOffer)
       }
     }
+
+    return returnObject
   };
   
   // Offer constructor //
   var createOffer = function(json){
 
+    var determineStatus = function(){
+      if(!vendorBookId){
+        return "Not found"
+      } else if(!price){
+        return "Sold out"
+      } else {
+        return "Available" }
+    };
+
+    var availability =      json.availability;
+    var comments =          json.comments;
+    var condition =         json.condition;
+    var detailedCondition = json.detailed_condition;
+    var price =             json.price;
+    var shippingTime =      json.shipping_time;
+    var vendor =            json.vendor;
+    var vendorBookId =      json.vendor_book_id;
+    var vendorOfferId =     json.vendor_offer_id;
+    var status =            determineStatus();
+
+    var formattedPrice = function(){
+      return "$" + parseFloat(price,10).toFixed(2);
+    }
+
+    var vendorCode = function(){
+      codes = {
+        'Amazon': 'amazon',
+        'Barnes and Noble': 'bn',
+        'Bookstore': 'bookstore'
+      }
+      return codes[vendor]
+    }
+
     return {
-      availability:       json.availability,
-      comments:           json.comments,
-      condition:          json.condition,
-      detailedCondition:  json.detailed_condition,
-      price:              json.price,
-      shippingTime:       json.shipping_time,
-      vendor:             json.vendor,
-      vendorBookId:       json.vendor_book_id,
-      vendorOfferId:      json.vendor_offer_id,
-      toHTML: function(){
-        return "$" + parseFloat(this.price,10).toFixed(2);
+      status:             status,
+      availability:       availability,
+      comments:           comments,
+      condition:          condition,
+      detailedCondition:  detailedCondition,
+      price:              price,
+      shippingTime:       shippingTime,
+      vendor:             vendor,
+      vendorBookId:       vendorBookId,
+      vendorOfferId:      vendorOfferId,
+      toPriceHTML: function(){
+        if(status === "Available"){
+          return '<div class="offer-div-inner '+vendorCode()+'">'+ formattedPrice(); + "</div>"
+        } else {
+          return '<div class="offer-div-inner">'+ status; +'</div>'
+        }
+      },
+      toFullHTML: function(){
+        return '<div class="menu-item ' + vendorCode() + '">'+ " - " +formattedPrice()+ " - " + this.shippingTime +'</div>'
       }
      }
   };
 
+  createOffersMenu = function(offerGroup){
+    var $div = $(offerGroup.td).children('div')
+
+    var containerCSS = _.extend({position: 'absolute'},$div.offset())
+    var containerHTML = '<div class="menu-container"></div>'
+
+    var $container = $('div.menus').append(containerHTML) // Add a container
+                                   .children().last() // Return the container
+                                   .css(containerCSS) // Apply the CSS
+
+    var speed = { duration: 500, queue: false }
+
+    var open = function(){
+
+      $container.append(offerGroup.selectedOffer.toFullHTML())
+      var slideLeft = {left: '-=' + $container.outerWidth()}
+      $container.hide().fadeIn(speed).animate(slideLeft, _.extend(speed,{
+        complete: function(){ 
+          _.each(offerGroup.otherOffers(),function(offer){
+            $container.append(offer.toFullHTML())
+          });
+        }
+      }));
+    }();
+
+    return {
+      close: function(){
+        var slideRight = {left: '+=' + $div.outerWidth()}
+
+        $container.fadeOut(speed).animate(slideRight, _.extend(speed,{
+          complete: function(){
+            $container.remove();
+          }
+        }));
+      }
+    }
+    
+  };
+
+  // Let's make books right away
   $('.book-row').each(function(){
     booklist.books.push(createBook(this));
   });
