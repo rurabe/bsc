@@ -87,7 +87,6 @@ $(document).ready(function(){
         return null;
       } else {
         return _.min(allOffers,function(offer){
-          console.log(allOffers.length)
           return parseInt(offer.price);
         });
       }
@@ -217,7 +216,7 @@ $(document).ready(function(){
         }
       },
       toFullHTML: function(){
-        return '<div class="menu-item ' + vendorCode() + '">'+ " - " +formattedPrice()+ " - " + this.shippingTime +'</div>'
+        return '<div class="menu-item ' + vendorCode() + '">'+ vendor +" - " +formattedPrice()+ " - " + this.shippingTime +'</div>'
       }
      }
   };
