@@ -67,9 +67,6 @@ module Amazon
 				condition = slice.first[:condition].to_s.camelcase
 				params = {:"ItemLookup.#{i+1}.Condition"	=> condition,
 									:"ItemLookup.#{i+1}.ItemId" 		=> slice.map {|book| book[:ean]}.join(",")}
-				params.merge!(
-									:"ItemLookup.#{i+1}.MerchantId" => "Amazon") if condition.to_s =~ /new/i
-				params
 			end
 
 			def ids_sliced_by_ten
