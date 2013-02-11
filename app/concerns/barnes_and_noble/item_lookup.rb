@@ -1,3 +1,4 @@
+require 'barnes_and_noble/used_books'
 module BarnesAndNoble
   class ItemLookup < ApiClass
     # merge with used
