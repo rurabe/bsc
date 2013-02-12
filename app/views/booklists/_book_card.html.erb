@@ -48,6 +48,20 @@
           </td>
 
         </tr>
+
+        <tr class="handle-row">
+          <td colspan="2" class="empty-handle"></td>
+          <td class="offer-handle-td handle-new-td">
+            <div class="offer-handle handle-new" id="handle-new-<%= book.ean %>">
+              -- more offers --
+            </div>
+          </td>
+          <td class="offer-handle-td handle-used-td">
+            <div class="offer-handle handle-used" id="handle-used-<%= book.ean %>">
+              -- more offers --
+            </div>
+          </td>
+        </tr>
       <% end %>
 
       <% if course.books.empty? %>

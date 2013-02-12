@@ -31,14 +31,10 @@ $(document).ready(function(){
       });
     },
     newMenu: function(offerGroup){
-      this.closeMenus();
-      this.menus.push(createOffersMenu(offerGroup));
+      var menu = createOffersMenu(offerGroup)
+      this.menus.push(menu);
+      return menu
     },
-    closeMenus: function(){
-      _.each(this.menus,function(menu){
-        menu.close();
-      })
-    }
   }
 
   // Book contructor //
@@ -78,6 +74,7 @@ $(document).ready(function(){
   // Offer group constructor //
   var createOfferGroup = function(tr,category){
     var td = $(tr).children('.offer-' + category);
+    var $handle = $(tr).next('tr').find('.handle-' + category)
     var offers = [];
     var status = undefined;
 
@@ -117,23 +114,20 @@ $(document).ready(function(){
     };
 
     var changeCellContent = function(content){
-      var wrapper = $(td).children('div')
-      var oldContent = wrapper.children('div');
-      oldContent.fadeOut(function(){
-        var newContent = wrapper.html(content).children()
-        newContent.hide().fadeIn();
+      var wrapper = $(td).children('div.offer-div')
+      var contentContainer = wrapper.children('div.offer-div-inner');
+      wrapper.fadeOut(function(){
+        contentContainer.remove()
+        $(wrapper).prepend(content).fadeIn();
       });
     };
 
-    var setClickHandler = function(){
-      td.click(function(){
-        booklist.newMenu(returnObject)
-      });
-    }();
+
 
 
     var returnObject = {
       td: td,
+      handle: $handle,
       category: category,
       status: status,
       offers: offers,
@@ -158,6 +152,8 @@ $(document).ready(function(){
       }
     }
 
+    var menu = booklist.newMenu(returnObject);
+    
     return returnObject
   };
   
@@ -222,39 +218,41 @@ $(document).ready(function(){
   };
 
   createOffersMenu = function(offerGroup){
-    var $div = $(offerGroup.td).children('div')
+    var $handle = offerGroup.handle;
+    var $container = undefined
 
-    var containerCSS = _.extend({position: 'absolute'},$div.offset())
-    var containerHTML = '<div class="menu-container"></div>'
-
-    var $container = $('div.menus').append(containerHTML) // Add a container
-                                   .children().last() // Return the container
-                                   .css(containerCSS) // Apply the CSS
-
-    var speed = { duration: 500, queue: false }
+    // var setClickHandler = function(block){
+    //   $handle.click(function(){
+    //     $handle.off();
+    //     block.call();
+    //   });
+    // };
 
     var open = function(){
+      $handle.trigger("handleOpen",$handle)
+      var $tr = $handle.parents('tr')
+      $container = $('<tr class="more-offers-container"><td colspan="4"></td></tr>').insertBefore($tr).hide().slideDown();
+    };
 
-      $container.append(offerGroup.selectedOffer.toFullHTML())
-      var slideLeft = {left: '-=' + $container.outerWidth()}
-      $container.hide().fadeIn(speed).animate(slideLeft, _.extend(speed,{
-        complete: function(){ 
-          _.each(offerGroup.otherOffers(),function(offer){
-            $container.append(offer.toFullHTML())
-          });
-        }
-      }));
-    }();
+    var close = function(e,handle){
+      if( $container ){
+        $container.slideUp()
+      }
+    };
+
+    $handle.on("click",open);
+
+    $(document).on("handleOpen",close)
 
     return {
+      offerGroup: offerGroup,
+      open: function(){
+        open();
+        this.status = "open"
+      },
       close: function(){
-        var slideRight = {left: '+=' + $div.outerWidth()}
-
-        $container.fadeOut(speed).animate(slideRight, _.extend(speed,{
-          complete: function(){
-            $container.remove();
-          }
-        }));
+        close();
+        this.status = "closed"
       }
     }
     

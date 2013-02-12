@@ -168,17 +168,17 @@ th.header {
 
 table.book-table td.offer {
 	padding: 0px;
-	width: 150px;
-	height: 50px;
 }
 
 div.offer-div{
 	border: 1px solid silver;
+	width: 150px;
+	height: 40px;
+		margin: auto auto;
 }
 
 div.offer-div-inner{
 	text-align: center !important;
-	margin: auto auto;
 	padding: 8px;
 	font-size: 18pt;
 	text-shadow: 0.1em 0.1em 0.1em white;
@@ -191,11 +191,41 @@ div.offer-div-inner{
 	background-position: 100% 0%;
 }
 
-
 .offer-div .bn{
 	background-image: url(bn-bg.png);
 	background-repeat: no-repeat;
 	background-position: 100% 50%;
+}
+
+.offer-handle{
+	margin: 0px auto 0px auto;
+	margin-top: -10px;
+	width: 100px;
+	height: 15px;
+	border: 1px solid silver;
+	font-size: 8pt;
+	line-height: 10pt;
+	text-align: center;
+}
+
+
+.handle-row td.offer-handle-td{
+	padding: 0px;
+	height: 15px;
+	padding-bottom: 5px;
+
+}
+
+.handle-row td.empty-handle{
+	height:0px;
+}
+
+.more-offers-container{
+	width: 120%;
+	overflow: visible;
+	height:100px;
+	background-color: silver;
+	margin-bottom: 2px;
 }
 
 span.requirement {
