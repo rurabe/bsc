@@ -2,30 +2,32 @@ $(document).ready(function(){
 	// [----------------------------------------===== #NEW =====----------------------------------------]
 	
 	// [----------=====About Tab=====----------]
-
-		$('#about-handle').toggle(
+		var aboutOpen = false
+		$('#about-handle').click(
 			function(){
-				$('.logo-inner').animate({'margin-top': '-350px'});
-				$('.about-info').slideToggle();
-				$(this).fadeOut(200,function(){
-					$(this).text("OK, I got it!").fadeIn();
-				});
-				$('#about-handle').parent().append(
-						"<a href='/about'><button class='btn btn-danger faq-button'>Tell me more</button></a>"
-					).hide().fadeIn();
-				// Do it on load
-				resizeExplanationDivs();
-				// And do it each time the window resizes
-				$(window).resize(resizeExplanationDivs);
-			},
-			function(){
-				$('.logo-inner').animate({'margin-top': '-250px'});
-				$('.about-info').slideToggle();
-				$('.faq-button').fadeOut();
-				$(this).fadeOut(200,function(){
-					$(this).text("Wait, what's this about again?").fadeIn();
-					$('#aboutlink').remove();
-				});
+				if(aboutOpen){
+					$('.logo-inner').animate({'margin-top': '-250px'});
+					$('.about-info').slideToggle();
+					$('.faq-button').fadeOut();
+					$(this).fadeOut(200,function(){
+						$(this).text("Wait, what's this about again?").fadeIn();
+						$('#aboutlink').remove();
+					});
+				} else {
+					$('.logo-inner').animate({'margin-top': '-350px'});
+					$('.about-info').slideToggle();
+					$(this).fadeOut(200,function(){
+						$(this).text("OK, I got it!").fadeIn();
+					});
+					$('#about-handle').parent().append(
+							"<a href='/about'><button class='btn btn-danger faq-button'>Tell me more</button></a>"
+						).hide().fadeIn();
+					// Do it on load
+					resizeExplanationDivs();
+					// And do it each time the window resizes
+					$(window).resize(resizeExplanationDivs);
+				}
+				aboutOpen = !aboutOpen
 			}
 		);
 
