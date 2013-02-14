@@ -77,8 +77,8 @@ div.book-row-inner{
 	border: 1px solid silver;
 	font-size: 10pt;
 	line-height: $button-height;
+	color: black;
 }
-
 
 .loading {
 	margin: auto auto;
@@ -86,6 +86,12 @@ div.book-row-inner{
 	background-repeat: no-repeat;
 	background-position: center center;
 	height: $row-height;
+}
+
+.offer-row{
+	height:30px;
+	border: 1px solid silver;
+	margin: 2px 0px 2px;
 }
 
 
