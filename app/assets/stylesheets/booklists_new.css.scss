@@ -1,0 +1,84 @@
+.logo-outer {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+  left: 0px;
+  float:left;
+}
+
+.logo-inner {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  margin-top: -250px;
+  background-repeat: no-repeat;
+  background-position: center -110px;
+}
+
+.logo-front {
+  margin: 0px auto 20px auto;
+}
+
+
+.loginform{
+  margin: 10px auto;
+}
+
+.login {
+  margin: 0px auto;
+}
+
+.form-label-cell {
+  text-align: right;
+  padding-right: 10px;
+}
+
+.form-field-cell {
+}
+
+input#booklist_username {
+  background-color: #FAFFBD;
+}
+
+input#booklist_password {
+  background-color: #FAFFBD;
+}
+
+
+// For loading modal
+
+#loadingModal {
+  overflow: visible;
+}
+
+#loadingModal-body {
+  overflow-y: visible;
+}
+
+#intro-carousel {
+  width: 100%;
+  height: 300px;
+}
+
+button.search-icon {
+  width: 130px;
+  height: 110px;
+  font-size: 16pt;
+  font-weight: bold;
+}
+
+
+// For about
+
+.icon-image {
+  font-size: 48pt;
+}
+
+.other-school{
+  width: 100px;
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  margin: 0px 0px 0px -50px;
+}

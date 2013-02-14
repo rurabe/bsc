@@ -43,7 +43,7 @@ class BooklistsController < ApplicationController
   private
 
     def define_booklist
-      @booklist = Booklist.find(params[:id])
+      @booklist = Booklist.where(:slug => params[:id]).includes(:courses,:books).first
     end
 
     def define_school

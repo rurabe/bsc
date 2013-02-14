@@ -10,5 +10,17 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
-//= require ./jquery.joyride-2.0.2.js
-//= require ./show_page.js
+//= require ./show/top.js
+//= require ./show/booklist.js
+//= require ./show/book.js
+//= require ./show/offer_group.js
+//= require ./show/offer.js
+//= require ./show/offers_handle.js
+
+  var createBooks = function(){
+    $('.book-row-outer').each(function(){
+      BOOKSUPPLYCO.addBook(this);
+    })
+  }();
+
+});

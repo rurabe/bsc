@@ -1,96 +1,24 @@
-<div class="row">
-  <table class="book-table table">
+<div class="book-card-container">
 
-    <thead>
-      <tr class="header-row">
-        <th colspan="2"></th>
-        <th class="header">New</th>
-        <th class="header">Used</th>
-      </tr>
+  <%= render :partial => 'book_card_headers' %>
 
-    </thead>
-    
-    <% @booklist.courses.each do |course| %>
-      <tr>
-        <td class="course-header" colspan="4">
-          <%= course.department %> <%= course.number %>
-        </td>
-      </tr>
-      <% course.books.each_with_index do |book,i| %>
-        <tr class="book-row" id="book-<%= book.ean %>" data-ean="<%= book.ean %>">
+  <% @booklist.courses.each do |course| %>
 
-          <td class="book-requirement" id="requirement-<%= book.ean %>">
-              <span class="label requirement <%= requirement_class(book.requirement) %>">
-                <%= book.requirement.upcase %>
-              </span>
-          </td>
+    <%= render :partial => 'course_row', :locals => { :course => course } %>
 
-          <td class="book-title" id="title-<%= book.ean %>">
-            <span>
-              <%= titleize(book.title) %> 
-            </span>
-          </td>
+    <% if course.books.present? %>
 
-          <td class="offer offer-new" id="offer-new-<%= book.ean %>">
-            <div class="offer-div">
-              <div class="offer-div-inner">
-                <div class="loading"></div>
-              </div>
-            </div>
-          </td>
-
-          <td class="offer offer-used" id="offer-used-<%= book.ean %>">
-            <div class="offer-div">
-              <div class="offer-div-inner">
-                <div class="loading"></div>
-              </div>
-            </div>
-          </td>
-
-        </tr>
-
-        <tr class="handle-row">
-          <td colspan="2" class="empty-handle"></td>
-          <td class="offer-handle-td handle-new-td">
-            <div class="offer-handle handle-new" id="handle-new-<%= book.ean %>">
-              -- more offers --
-            </div>
-          </td>
-          <td class="offer-handle-td handle-used-td">
-            <div class="offer-handle handle-used" id="handle-used-<%= book.ean %>">
-              -- more offers --
-            </div>
-          </td>
-        </tr>
+      <% course.books.each do |book| %>
+        <%= render :partial => 'book_row', :locals => { :book => book } %>
       <% end %>
 
-      <% if course.books.empty? %>
-        <tr class="book-row" >
-          <td colspan="4" class="no-books">
-            <center>Book Supply Co. couldn't find any books for this course. <a class="no-books-why">Here's why.</a></center>
-          </td>
-        </tr>
-      <% end %>
+    <% else %>
+
+      <%= render :partial => 'no_books_row' %>
 
     <% end %>
-    <tr class="checkout-row">
-      <td></td>
-      <td></td>
-      <td id="checkout-td" colspan="2" class="centered">
-        <button type="submit" class="btn btn-warning" id="checkout-button">
-          <span id="checkout-text-span">
-            <span class="checkout-text">Buy my books now </span>
-            <span class="checkout-text-prefix" style="display:none">at</span>
-            <span class="checkout-text-amazon" style="display:none"><i class="icon-amazon" id="checkout-amazon-icon"></i></span>
-            <span class="checkout-text-connector" style="display:none">and</span>
-            <span class="checkout-text-bn" style="display:none"><%= image_tag 'bn-icon-16-white.png', :id => "checkout-bn-icon" %></span>
-            <span class="checkout-text">!</span>
-          </span>       
-        </button>
-      </td>
-    </tr>
 
-  </table>
+  <% end %>
+
 </div>
-<div class="menus">
-</div>
+
