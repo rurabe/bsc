@@ -44,8 +44,8 @@ var createOfferGroup = function(book,category){
   }
 
   var displayOffer = function(){
-    var best = this.bestOffer = bestOffer()
-    changeContent('<span>'+ best.priceHtml() +'</span>',function(){
+    var best = this.bestOffer = bestOffer() || {priceHtml: function(){return "Not Found"}}
+    changeContent('<span class="price-content">'+ best.priceHtml() +'</span>',function(){
       if(best.status === "Available"){ $contentContainer.addClass(best.vendorCode) }
     });
     

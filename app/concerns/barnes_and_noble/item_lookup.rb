@@ -14,7 +14,7 @@ module BarnesAndNoble
       Automatron::Needle.thread( response_base.map { |book| lambda{parse_offers(book)} } )
     end
 
-    private
+    # private
 
       def control
         @response = send_request(build_lookup_params)
@@ -106,7 +106,7 @@ module BarnesAndNoble
       end
 
       def parse_offer_detailed_condition(offer)
-        "Brand new" if available?(offer)
+        "New" if available?(offer)
       end
 
       def parse_availability(offer)
@@ -121,7 +121,9 @@ module BarnesAndNoble
       end
 
       def available?(offer)
-        !(parse_availability(offer) =~ /Not available/i)
+        if parse_availability(offer) && !(parse_availability(offer) =~ /Not available/i)
+          true
+        end
       end
   end
 end

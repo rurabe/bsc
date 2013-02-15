@@ -64,7 +64,7 @@ module Amazon
 
 			def ids_sliced_by_ten
 				["new","used","all"].flat_map do |condition|
-					books = request_items.select { |book| book[:condition] == condition }
+					books = request_items.uniq.select { |book| book[:condition] == condition }
 					books.each_slice(10).map { |slice| slice }				
 				end
 			end
@@ -164,6 +164,11 @@ module Amazon
 
 	 		def parse_comments(offer)
 	 		end
+
+	 		def available?(offer)
+	 			!!parse_price(offer)
+	 		end
+
 
 
 	end

@@ -6,10 +6,15 @@ body {
   margin: 20px auto;
 }
 
-.socials {
-  margin: 20px auto;
+.social-button {
+  display: inline-block;
+  vertical-align: top;
 }
 
 .social-row {
+  list-style-image: none;
+  list-style-position: outside;
+  list-style-type: none;
+  display: block;
   margin: 5px auto;
 }

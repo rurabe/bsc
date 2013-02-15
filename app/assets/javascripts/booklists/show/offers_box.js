@@ -26,7 +26,6 @@ var createOffersBox = function(offerGroup){
     close: close
   };
 
-
   var formDomElement = function(){
     var css = { 'margin-right': margin() }
     return $('<div class="offer-box"></div>').appendTo($bookRow).hide().css(css)
@@ -44,7 +43,7 @@ var createOffersBox = function(offerGroup){
 
   var appendOffers = function(){
     _.each(offerGroup.sortedOffers(),function(offer){
-      $el.append(_.template(offerRow,{offer: offer}));
+      $el.append(offer.offerHtml());
     });
   }
 

@@ -10,7 +10,7 @@ var createOffer = function(offerGroup,json){
   var vendorOfferId =     json.vendor_offer_id;
   var status
 
-  var determineStatus = function(){
+  var status = function(){
     if(!vendorBookId){
       return "Not Found"
     } else if(!price){
@@ -18,7 +18,7 @@ var createOffer = function(offerGroup,json){
     } else {
       return "Available"
     }
-  };
+  }();
 
   var formattedPrice = function(){
     if(price){
@@ -26,7 +26,11 @@ var createOffer = function(offerGroup,json){
     }
   }
 
-  var status = determineStatus();
+  var schoolAmazonTag = function(){
+    var slug = $('h2.school-name').attr('data-slug');
+    return 'bsc-' + slug + '-20'
+  };
+
   var formattedPrice = formattedPrice();
   var vendorCode = function(){
     codes = {
@@ -35,13 +39,30 @@ var createOffer = function(offerGroup,json){
     return codes[vendor]
   }
 
+  var vendorLink = function(){
+    var links = {
+      amazon: {
+        'new': "https://www.amazon.com/dp/" + vendorBookId + "?tag=" + schoolAmazonTag(),
+        'used': "http://www.amazon.com/gp/offer-listing/" + vendorBookId + "?tag=" + schoolAmazonTag()
+      },
+      bn: {
+        'new': "http://click.linksynergy.com/deeplink?mid=36889&id=BF/ADxwv1Mc&murl=http%3A%2F%2Fwww.barnesandnoble.com%2Fean%2F" + vendorBookId,
+        'used': "http://click.linksynergy.com/deeplink?mid=36889&id=BF/ADxwv1Mc&murl=http%3A%2F%2Fwww.barnesandnoble.com%2Flisting%2F" + vendorBookId
+      } 
+    };
+    return links[vendorCode()][condition];
+  }()
+
   var priceHtml = function(){
     return formattedPrice || status;
   };
 
-  var offerHtml = function(){
+  var setDetailedCondition = function(){
+    if(status === "Available" && !detailedCondition){
+      detailedCondition = condition.substr(0,1).toUpperCase() + condition.substr(1)
+    }
+  }();
 
-  };
 
   var returnObject = {
     offerGroup:         offerGroup,
@@ -58,9 +79,46 @@ var createOffer = function(offerGroup,json){
     offerGroup:         offerGroup,
     status:             status,
     priceHtml:          priceHtml,
-    offerHtml:          offerHtml,
-    vendorCode:         vendorCode()
+    vendorCode:         vendorCode(),
+    offerRowTemplate:   offerRowTemplate,
+    vendorLink:         vendorLink
   };
+
+  var offerRowTemplate = '\
+    <div class="offer-row <%= offer.vendorCode %>">\
+      <div class="offer-column-link">\
+        <% if(offer.vendorBookId){ %>\
+          <a href="<%= offer.vendorLink %>" target="_blank">\
+            <i class="icon-link"></i>\
+          </a>\
+        <% } %>\
+      </div>\
+      <div class="offer-column-left">\
+        <div class="offer-price">\
+          <span class"offer-price-content"><%= offer.priceHtml() %></span>\
+        </div>\
+        <span class="offer-vendor"><%= offer.vendor %></span>\
+      </div>\
+      <div class="offer-column-right">\
+        <div class="offer-column-row">\
+          <% if(offer.detailedCondition){ %>\
+            Condition: <span class="offer-detailed-condition"><%= offer.detailedCondition %></span>\
+          <% } %>\
+          <span class="offer-shipping-time"><%= offer.shippingTime %></span>\
+        </div>\
+        <div class="offer-column-row offer-comments-row">\
+          <span class="offer-comments"><%= offer.comments %></span>\
+        </div>\
+      </div>\
+    </div>\
+  ';
+
+  var offerHtml = function(){
+    return _.template(offerRowTemplate,{offer: returnObject})
+  };
+
+  _.extend(returnObject,{offerHtml: offerHtml});
+
 
   return returnObject;
 };

@@ -10,6 +10,7 @@
   -webkit-border-radius: 4px 4px 4px 4px;
   -moz-border-radius: 4px 4px 4px 4px;
   border-radius: 4px 4px 4px 4px;
+  margin: 20px auto 50px;
 }
 
 .book-card-container {
@@ -58,10 +59,18 @@ div.book-row-inner{
 .book-title{
   text-align: left;
   font-size: 14pt;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  overflow-wrap: ellipsis; 
+  white-space: nowrap;
 }
 
 .book-price{
   font-size: 18pt;
+}
+
+.price-content{
+
 }
 
 .shadow-button{
@@ -74,7 +83,14 @@ div.book-row-inner{
   border: 1px solid silver;
   height: $row-height;
   background-color: white;
+  text-shadow: 0.07em 0.07em 0.07em white;
   @extend .shadow-button
+}
+
+.wireline{
+  width: 2px;
+  margin: 0px auto;
+  background-color: black;
 }
 
 .book-button-handle{
@@ -105,12 +121,15 @@ div.book-row-inner{
   margin: 25px 0px 30px;
 }
 
+$offer-row-height: 40px;
+
 .offer-row{
   width: 400px;
-  height: 40px;
+  height: $offer-row-height;
   border: 1px solid silver;
   margin: 5px 0px 5px;
   background-color: white;
+  padding: 5px;
   @extend .shadow-button
 }
 
@@ -126,6 +145,66 @@ div.book-row-inner{
   background-position: 100% 50%;
 }
 
+.offer-column-link{
+  width: 10%;
+  height: 100%;
+  float: left;
+  font-size: 18pt;
+  line-height: $offer-row-height;
+}
+
+.offer-column-link a:hover{
+  text-decoration: none;
+}
+
+
+.offer-column-left{
+  width: 25%;
+  float: left;
+  text-align: left;
+}
+
+.offer-column-right{
+  width: 65%;
+  height: 100%;
+  float: right;
+  font-size: 8pt;
+  text-align: left;
+}
+
+.offer-price{
+  font-size: 18pt;
+  line-height: 18pt;
+}
+
+.offer-vendor{
+  margin: 5px;
+  font-size: 10pt;
+}
+
+.offer-column-row{
+  position: relative;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  overflow-wrap: ellipsis; 
+  white-space: nowrap;
+}
+
+.offer-detailed-condition{
+  height: 20px;
+  font-size: 11pt;
+}
+
+.offer-shipping-time{
+  height: 20px;
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+}
+
+.offer-comments-row{
+  margin-top: 3px;
+}
 
 // table.book-table {
 //  margin: 0px auto;

@@ -1,6 +1,7 @@
 var createOffersHandle = function(offerGroup){
   var $el = offerGroup.$el.find('.book-button-handle');
-  var wrapper = $el.find('.handle-content');
+  var $wrapper = $el.find('.handle-content');
+  var $wireline = $el.siblings('.wireline')
 
   var arrows = function(direction){
     return '<i class="icon-double-angle-' + direction + '"></i>'
@@ -40,8 +41,8 @@ var createOffersHandle = function(offerGroup){
 
   var open = function(time){
     time = time || 500
-    var distance = offerGroup.offersBox.open() + $el.outerHeight();
-    $el.animate({display: 'absolute', 'margin-top': distance},time);
+    var height = offerGroup.offersBox.open() + $el.outerHeight();
+    $wireline.animate({'height': height},time);
     labelChanger(arrows('up'),'hide');
     $el.off('click')
     $el.on({
@@ -52,9 +53,7 @@ var createOffersHandle = function(offerGroup){
   var close = function(time){
     time = time || 500
     offerGroup.offersBox.close()
-    $el.animate({
-      'margin-top': '-1px'
-    });
+    $wireline.animate({'height': '0px'},time);
     labelChanger(arrows('down'),"more options");
     $el.off('click')
     $el.on({
@@ -69,8 +68,8 @@ var createOffersHandle = function(offerGroup){
   };
 
   var changeContent = function(content){
-    wrapper.fadeOut(50,function(){
-      wrapper.empty().append('<span class="handle-content">' + content + '</span>').fadeIn(50);
+    $wrapper.fadeOut(50,function(){
+      $wrapper.empty().append('<span class="handle-content">' + content + '</span>').fadeIn(50);
     });
   };
 
