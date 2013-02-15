@@ -92,13 +92,13 @@ module BarnesAndNoble
           :comments           => parse_comments(offer) }
       end
 
-      def parse_vendor_book_id(product)
-        parse_node(product,'./Ean')
+      def parse_vendor_book_id(offer)
+        parse_node(offer,'./Ean')
       end
 
-      def parse_price(product)
-        price = parse_node(product,".//Prices//BnPrice")
-        format_price(price)
+      def parse_price(offer)
+        price = parse_node(offer,".//Prices//BnPrice")
+        format_price(price) if available?(offer)
       end
 
       def parse_vendor_offer_id(offer)
@@ -106,7 +106,7 @@ module BarnesAndNoble
       end
 
       def parse_offer_detailed_condition(offer)
-        "Brand new"
+        "Brand new" if available?(offer)
       end
 
       def parse_availability(offer)
@@ -118,6 +118,10 @@ module BarnesAndNoble
       end
 
       def parse_comments(offer)
+      end
+
+      def available?(offer)
+        !(parse_availability(offer) =~ /Not available/i)
       end
   end
 end

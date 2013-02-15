@@ -4,20 +4,20 @@
 
 
 .book-card {
-	background-image: url(linedpaper.png);
-	border: 3px solid #DDD;
-	padding: 50px 0px 50px 0px;
-	-webkit-border-radius: 4px 4px 4px 4px;
-	-moz-border-radius: 4px 4px 4px 4px;
-	border-radius: 4px 4px 4px 4px;
+  background-image: url(linedpaper.png);
+  border: 3px solid #DDD;
+  padding: 50px 0px 50px 0px;
+  -webkit-border-radius: 4px 4px 4px 4px;
+  -moz-border-radius: 4px 4px 4px 4px;
+  border-radius: 4px 4px 4px 4px;
 }
 
 .book-card-container {
-	padding:  3.19% // This is half of one grid space
+  padding:  3.19% // This is half of one grid space
 }
 
 .book-header{
-	font-size:18pt;
+  font-size:18pt;
 }
 
 $row-height: 35px !default;
@@ -25,277 +25,299 @@ $row-height: 35px !default;
 // Course rows
 
 .course-row{
-	height: $row-height
+  height: $row-height
 }
 
 .course-attr{
-	text-align: left;
-	font-size: 18pt;
+  text-align: left;
+  font-size: 18pt;
 }
 
 // Book rows
 div.book-row-outer{
-	position: relative;
+  position: relative;
 }
 
 div.book-row-inner{
-	margin: 5px auto 25px;
+  margin: 5px auto 25px;
 }
 
 .book-cell{
-	height: $row-height
+  height: $row-height
 }
 
 .book-attr{
-	line-height: $row-height;
+  line-height: $row-height;
 }
 
 .book-requirement{
-	text-align: left;
+  text-align: left;
 }
 
 
 .book-title{
-	text-align: left;
-	font-size: 14pt;
+  text-align: left;
+  font-size: 14pt;
 }
 
 .book-price{
-	font-size: 18pt;
+  font-size: 18pt;
+}
+
+.shadow-button{
+  -moz-box-shadow:    1px 1px 1px 1px #ccc;
+  -webkit-box-shadow: 1px 1px 1px 1px #ccc;
+  box-shadow:         1px 1px 1px 1px #ccc;
 }
 
 .book-button-outer{
-	border: 1px solid silver;
-	height: $row-height
+  border: 1px solid silver;
+  height: $row-height;
+  background-color: white;
+  @extend .shadow-button
 }
 
 .book-button-handle{
-	$button-height: 15px;
-	margin: -1px auto 0px;
-	width: 50%;
-	height: $button-height;
-	border: 1px solid silver;
-	font-size: 10pt;
-	line-height: $button-height;
-	color: black;
+  $button-height: 15px;
+  margin: -1px auto 0px;
+  width: 50%;
+  height: $button-height;
+  border: 1px solid silver;
+  font-size: 10pt;
+  line-height: $button-height;
+  color: black;
+  background-color: white;
+  @extend .shadow-button
+
 }
 
 .loading {
-	margin: auto auto;
-	background-image: url(ajax-loader.gif);
-	background-repeat: no-repeat;
-	background-position: center center;
-	height: $row-height;
+  margin: auto auto;
+  background-image: url(ajax-loader.gif);
+  background-repeat: no-repeat;
+  background-position: center center;
+  height: $row-height;
+}
+
+.offer-box{
+  float: right;
+  position: relative;
+  margin: 25px 0px 30px;
 }
 
 .offer-row{
-	height:30px;
-	border: 1px solid silver;
-	margin: 2px 0px 2px;
+  width: 400px;
+  height: 40px;
+  border: 1px solid silver;
+  margin: 5px 0px 5px;
+  background-color: white;
+  @extend .shadow-button
+}
+
+.offer-row.amazon, .book-button-inner.amazon{
+  background-image: url(amazon-bg.png);
+  background-repeat: no-repeat;
+  background-position: 100% 0%;
+}
+
+.offer-row.bn, .book-button-inner.bn{
+  background-image: url(bn-bg.png);
+  background-repeat: no-repeat;
+  background-position: 100% 50%;
 }
 
 
 // table.book-table {
-// 	margin: 0px auto;
-// 	border-spacing: 5px 5px;
-// 	border-collapse: separate;
+//  margin: 0px auto;
+//  border-spacing: 5px 5px;
+//  border-collapse: separate;
 // }
 
 // table.book-table td,th{
-// 	border-top: none;
-// 	height: 26px;
-// 	vertical-align: middle;
+//  border-top: none;
+//  height: 26px;
+//  vertical-align: middle;
 // }
 
 
 // .course-header {
-// 	font-size: 18pt;
-// 	font-weight: bold;
-// 	text-align: left;
+//  font-size: 18pt;
+//  font-weight: bold;
+//  text-align: left;
 // }
 
 // td.book-title {
-// 	text-align: left;
-// 	font-size: 13pt;
+//  text-align: left;
+//  font-size: 13pt;
 // }
 
 
 // th.header {
-// 	text-align: center !important;
-// 	font-size: 18pt;
+//  text-align: center !important;
+//  font-size: 18pt;
 // }
 
 
 // table.book-table td.offer {
-// 	padding: 0px;
+//  padding: 0px;
 // }
 
 // div.offer-div{
-// 	border: 1px solid silver;
-// 	width: 150px;
-// 	height: 40px;
-// 		margin: auto auto;
+//  border: 1px solid silver;
+//  width: 150px;
+//  height: 40px;
+//    margin: auto auto;
 // }
 
 // div.offer-div-inner{
-// 	text-align: center !important;
-// 	padding: 8px;
-// 	font-size: 18pt;
-// 	text-shadow: 0.1em 0.1em 0.1em white;
-// 	line-height: 20pt;
+//  text-align: center !important;
+//  padding: 8px;
+//  font-size: 18pt;
+//  text-shadow: 0.1em 0.1em 0.1em white;
+//  line-height: 20pt;
 // }
 
-// .offer-div .amazon{
-// 	background-image: url(amazon-bg.png);
-// 	background-repeat: no-repeat;
-// 	background-position: 100% 0%;
-// }
 
-// .offer-div .bn{
-// 	background-image: url(bn-bg.png);
-// 	background-repeat: no-repeat;
-// 	background-position: 100% 50%;
-// }
 
 // .offer-handle{
-// 	margin: 0px auto 0px auto;
-// 	margin-top: -10px;
-// 	width: 100px;
-// 	height: 15px;
-// 	border: 1px solid silver;
-// 	font-size: 8pt;
-// 	line-height: 10pt;
-// 	text-align: center;
+//  margin: 0px auto 0px auto;
+//  margin-top: -10px;
+//  width: 100px;
+//  height: 15px;
+//  border: 1px solid silver;
+//  font-size: 8pt;
+//  line-height: 10pt;
+//  text-align: center;
 // }
 
 
 // .handle-row td.offer-handle-td{
-// 	padding: 0px;
-// 	height: 15px;
-// 	padding-bottom: 5px;
+//  padding: 0px;
+//  height: 15px;
+//  padding-bottom: 5px;
 
 // }
 
 // .handle-row td.empty-handle{
-// 	height:0px;
+//  height:0px;
 // }
 
 // .more-offers-container{
-// 	width: 120%;
-// 	overflow: visible;
-// 	height:100px;
-// 	background-color: silver;
-// 	margin-bottom: 2px;
+//  width: 120%;
+//  overflow: visible;
+//  height:100px;
+//  background-color: silver;
+//  margin-bottom: 2px;
 // }
 
 // span.requirement {
-// 	font-size: 7pt;
-// 	vertical-align:middle;
+//  font-size: 7pt;
+//  vertical-align:middle;
 // }
 
 // .loading {
-// 	margin: auto;
-// 	background-image: url(ajax-loader.gif);
-// 	background-repeat: no-repeat;
-// 	background-position: center center;
-// 	width: 26px;
-// 	height: 26px;
+//  margin: auto;
+//  background-image: url(ajax-loader.gif);
+//  background-repeat: no-repeat;
+//  background-position: center center;
+//  width: 26px;
+//  height: 26px;
 // }
 
 // .selectable{
-// 	color: #08C;
-// 	cursor: pointer;
+//  color: #08C;
+//  cursor: pointer;
 // }
 
 // .selected{
-// 	background-color: #3A87AD;
+//  background-color: #3A87AD;
 // }
 
 // .selected span{
-// 	color: #FFFFFF;
+//  color: #FFFFFF;
 // }
 
 // .simple{
-// 	background-color: #FFFFFF;
+//  background-color: #FFFFFF;
 // }
 
 // .simple span{
-// 	color: #08C;
+//  color: #08C;
 // }
 
 // .simple span.label{
-// 	color: #FFFFFF;
+//  color: #FFFFFF;
 // }
 
 // #checkout-button {
-// 	width: 100%;
-// 	min-width: 250px;
+//  width: 100%;
+//  min-width: 250px;
 // }
 
 // #checkout-td {
-// 	text-align: center;
+//  text-align: center;
 // }
 
 // #checkout-amazon-icon {
-// 	font-size: 24px;
-// 	line-height: 12px;
+//  font-size: 24px;
+//  line-height: 12px;
 // }
 
 // #checkout-bn-icon {
-// 	position: relative;
-// 	top: -1px;
+//  position: relative;
+//  top: -1px;
 // }
 
 // input.checkout-radio {
-// 	vertical-align: middle;
+//  vertical-align: middle;
 // }
 
 // input#express {
-// 	margin: 0px;
+//  margin: 0px;
 // }
 
 // input#simple {
-// 	margin: 0px;
+//  margin: 0px;
 // }
 
 // label.checkout-label {
-// 	display: inline;
+//  display: inline;
 // }
 
 // #express + span {
-// 	font-style: italic;
+//  font-style: italic;
 // }
 
 // #tour {
-// 	display: none
+//  display: none
 // }
 
 // #tour-button {
-// 	margin-top: 20px;
+//  margin-top: 20px;
 // }
 
 // .no-books{
-// 	color: silver;
-// 	font-style: italic;
+//  color: silver;
+//  font-style: italic;
 // }
 
 // .no-books-why{
-// 	text-decoration: underline;
-// 	cursor: pointer;
+//  text-decoration: underline;
+//  cursor: pointer;
 // }
 
 // .menu-container{
-// 	position: absolute;
-// 	padding: -1px
+//  position: absolute;
+//  padding: -1px
 // }
 
 // .menu-item{
-// 	width: 300px;
-// 	height: 40px;
-// 	padding: 2px;
-// 	position: relative;
-// 	display: block;
-// 	background-color: silver;
-// 	margin: 2px;
+//  width: 300px;
+//  height: 40px;
+//  padding: 2px;
+//  position: relative;
+//  display: block;
+//  background-color: silver;
+//  margin: 2px;
 // }
 

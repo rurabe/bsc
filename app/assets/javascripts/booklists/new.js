@@ -10,38 +10,44 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
-//= require ./new_page.js
+
 
 $(document).ready(function(){
   // [----------------------------------------===== #NEW =====----------------------------------------]
   
   // [----------=====About Tab=====----------]
 
-    $('#about-handle').toggle(
-      function(){
-        $('.logo-inner').animate({'margin-top': '-350px'});
-        $('.about-info').slideToggle();
-        $(this).fadeOut(200,function(){
-          $(this).text("OK, I got it!").fadeIn();
-        });
-        $('#about-handle').parent().append(
-            "<a href='/about'><button class='btn btn-danger faq-button'>Tell me more</button></a>"
-          ).hide().fadeIn();
-        // Do it on load
-        resizeExplanationDivs();
-        // And do it each time the window resizes
-        $(window).resize(resizeExplanationDivs);
-      },
-      function(){
-        $('.logo-inner').animate({'margin-top': '-250px'});
-        $('.about-info').slideToggle();
-        $('.faq-button').fadeOut();
-        $(this).fadeOut(200,function(){
-          $(this).text("Wait, what's this about again?").fadeIn();
-          $('#aboutlink').remove();
-        });
+    $('#about-handle').on({
+      click: function(){
+        if(!this.isOpen){
+          $('.logo-inner').animate({'margin-top': '-350px'});
+          $('.about-info').slideToggle();
+          $(this).fadeOut(200,function(){
+            $(this).text("OK, I got it!").fadeIn();
+            $('#about-handle').parent().append(
+              "<a href='/about'><button class='btn btn-danger faq-button'>Tell me more</button></a>"
+            ).hide().fadeIn(500);
+          });
+
+          // Do it on load
+          resizeExplanationDivs();
+          // And do it each time the window resizes
+          $(window).resize(resizeExplanationDivs);
+          this.isOpen = true
+        } else {
+          $('.logo-inner').animate({'margin-top': '-250px'});
+          $('.about-info').slideToggle();
+          $('.faq-button').fadeOut(200,function(){$(this).remove()});
+          $(this).fadeOut(200,function(){
+            $(this).text("Wait, what's this about again?").fadeIn();
+            $('#aboutlink').remove();
+          });
+          this.isOpen = false
+        }
       }
-    );
+    });
+
+
 
   // [----------=====Loading Modal=====----------]
 

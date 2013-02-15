@@ -24,13 +24,31 @@ var createOfferGroup = function(book,category){
     return _.difference(offers,bestOffer());
   };
 
+  var sortedOffers = function(){
+    valid = validOffers();
+    invalid = _.difference(offers,valid)
+
+    var result = _.map([valid,invalid],function(collection){
+      return _.sortBy(collection,function(offer){
+        return offer.price || offer.status;
+      });
+    });
+
+    return _.flatten(result)
+  }
+
   // Public methods
   var addOffer = function(json){
     offers.push( createOffer(this,json) );
+    displayOffer();
   }
 
   var displayOffer = function(){
-    changeContent('<span>'+ bestOffer().priceHtml() +'</span>');
+    var best = this.bestOffer = bestOffer()
+    changeContent('<span>'+ best.priceHtml() +'</span>',function(){
+      if(best.status === "Available"){ $contentContainer.addClass(best.vendorCode) }
+    });
+    
   }
 
   var returnObject = {
@@ -40,12 +58,18 @@ var createOfferGroup = function(book,category){
     offers: offers,
     addOffer: addOffer,
     displayOffer: displayOffer,
-    otherOffers: otherOffers
+    otherOffers: otherOffers,
+    sortedOffers: sortedOffers
   };
 
-  var changeContent = function(content){
+  var changeContent = function(content,funcOut,funcIn){
+    funcOut = funcOut || $.noop
+    funcIn = funcIn || $.noop
     $contentContainer.fadeOut(function(){
-      $contentContainer.html(content).fadeIn();
+      funcOut.call();
+      $contentContainer.html(content).fadeIn(function(){
+        funcIn.call();
+      });
     });
   };
 
@@ -61,9 +85,10 @@ var createOfferGroup = function(book,category){
     });
   }
 
+  var offersBox = createOffersBox(returnObject);
+  _.extend(returnObject,{offersBox: offersBox})
   var offersHandle = createOffersHandle(returnObject);
-
   _.extend(returnObject,{offersHandle: offersHandle})
-
+  
   return returnObject;
 }

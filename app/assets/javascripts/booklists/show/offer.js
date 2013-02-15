@@ -8,7 +8,7 @@ var createOffer = function(offerGroup,json){
   var vendor =            json.vendor;
   var vendorBookId =      json.vendor_book_id;
   var vendorOfferId =     json.vendor_offer_id;
-  var statys
+  var status
 
   var determineStatus = function(){
     if(!vendorBookId){
@@ -28,6 +28,12 @@ var createOffer = function(offerGroup,json){
 
   var status = determineStatus();
   var formattedPrice = formattedPrice();
+  var vendorCode = function(){
+    codes = {
+      'Amazon': "amazon",
+      'Barnes and Noble': 'bn' }
+    return codes[vendor]
+  }
 
   var priceHtml = function(){
     return formattedPrice || status;
@@ -52,7 +58,8 @@ var createOffer = function(offerGroup,json){
     offerGroup:         offerGroup,
     status:             status,
     priceHtml:          priceHtml,
-    offerHtml:          offerHtml
+    offerHtml:          offerHtml,
+    vendorCode:         vendorCode()
   };
 
   return returnObject;
