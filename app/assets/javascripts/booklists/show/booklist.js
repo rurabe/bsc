@@ -22,10 +22,25 @@ BOOKSUPPLYCO = function(){
     });
   }
 
+  var selectedOffers = function(){
+    return _.reduce(books,function(memo,book){
+      if( book.selectedOffer() ){ memo.push( book.selectedOffer() ); }
+      return memo;
+    },[]);
+  };
+
+  var checkoutData = function(vendor){
+    return _.filter(selectedOffers(),function(offer){
+      return offer.vendor === vendor || offer.vendorCode === vendor;
+    });
+  };
+
   returnObject = {
     books: books,
     addBook: addBook,
-    importData: importData
+    importData: importData,
+    selectedOffers: selectedOffers,
+    checkoutData: checkoutData
   };
 
   var find = function(ean){

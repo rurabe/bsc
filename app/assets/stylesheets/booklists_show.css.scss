@@ -155,16 +155,20 @@ div.book-row-inner{
 
 }
 
+$offer-row-height: 40px;
+$offer-row-width: 400px;
+
 .offer-box{
   float: right;
   position: relative;
   margin: 25px 0px 30px;
+  width: $offer-row-width;
 }
 
-$offer-row-height: 40px;
+
 
 .offer-row{
-  width: 400px;
+  width: $offer-row-width;
   height: $offer-row-height;
   border: 1px solid silver;
   margin: 5px 0px 5px;

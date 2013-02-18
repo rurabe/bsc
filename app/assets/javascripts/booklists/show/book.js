@@ -20,6 +20,12 @@ var createBook = function(el){
     _.each(siblings,function(offerGroup){ offerGroup.deselect(); });
   }
 
+  var selectedOffer = function(){
+    return _.reduce(offerGroups,function(memo,offerGroup){
+      return offerGroup.selectedOffer() ? offerGroup.selectedOffer() : memo;
+    },undefined);
+  };
+
   // Public attributes
   var returnObject = {
     el: el,
@@ -27,7 +33,8 @@ var createBook = function(el){
     ean: ean,
     offerGroups: offerGroups,
     addOffers: addOffers,
-    reportSelected: reportSelected
+    reportSelected: reportSelected,
+    selectedOffer: selectedOffer
   }
 
   // Private methods
