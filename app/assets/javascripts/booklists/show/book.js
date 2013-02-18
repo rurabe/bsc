@@ -7,7 +7,6 @@ var createBook = function(el){
   var addOffers = function(offers){
     if( !_.isArray(offers) ){ offers = [offers] }
     var book = this
-
     _.each(offers,function(offer){
       var offerGroup = _.find(book.offerGroups,function(group){ 
         return group.category === offer.condition;
@@ -16,13 +15,10 @@ var createBook = function(el){
     });
   };
 
-  var displayOffers = function(){
-    _.each(offerGroups,function(offerGroup){
-      offerGroup.displayOffer()
-    });
-  };
-
-
+  var reportSelected = function(offerGroup){
+    var siblings = _.difference(offerGroups,offerGroup)
+    _.each(siblings,function(offerGroup){ offerGroup.deselect(); });
+  }
 
   // Public attributes
   var returnObject = {
@@ -31,7 +27,7 @@ var createBook = function(el){
     ean: ean,
     offerGroups: offerGroups,
     addOffers: addOffers,
-    displayOffers: displayOffers
+    reportSelected: reportSelected
   }
 
   // Private methods

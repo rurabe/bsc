@@ -39,6 +39,7 @@ var createOffersHandle = function(offerGroup){
     });
   };
 
+  var isOpen
   var open = function(time){
     time = time || 500
     var height = offerGroup.offersBox.open() + $el.outerHeight();
@@ -48,23 +49,28 @@ var createOffersHandle = function(offerGroup){
     $el.on({
       click: close
     });
-  }
+    isOpen = true;
+  };
 
   var close = function(time){
-    time = time || 500
-    offerGroup.offersBox.close()
-    $wireline.animate({'height': '0px'},time);
-    labelChanger(arrows('down'),"more options");
-    $el.off('click')
-    $el.on({
-      click: open
-    })
-  }
+    if(isOpen){
+      time = time || 500
+      offerGroup.offersBox.close()
+      $wireline.animate({'height': '0px'},time);
+      labelChanger(arrows('down'),"more options");
+      $el.off('click')
+      $el.on({
+        click: open
+      });
+    }
+    isOpen = false;
+  };
 
   returnObject = {
     $el: $el,
     offerGroup: offerGroup,
-    open: open
+    open: open,
+    close: close
   };
 
   var changeContent = function(content){

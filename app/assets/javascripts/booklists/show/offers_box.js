@@ -1,14 +1,11 @@
 var createOffersBox = function(offerGroup){
   var $el = undefined;
   var $bookRow = offerGroup.book.$el.find('.book-row-inner');
+  var offerRows = []
   
-
-  var offerRow = '<div class="offer-row <%= offer.vendorCode %>"><%= offer.priceHtml() %></div>';
-
-
   var open = function(){
     this.$el = $el = formDomElement();
-    appendOffers();
+    appendOffers(this);
     var height = $el.outerHeight() + parseInt( $el.css('margin-top') );
     $el.slideDown();
     return height;
@@ -23,7 +20,8 @@ var createOffersBox = function(offerGroup){
   returnObject = {
     $el: $el,
     open: open,
-    close: close
+    close: close,
+    offerRows: offerRows
   };
 
   var formDomElement = function(){
@@ -41,9 +39,9 @@ var createOffersBox = function(offerGroup){
     return rowWidth - (x + cellWidth/2) + margin + "px"
   }
 
-  var appendOffers = function(){
+  var appendOffers = function(offersBox){
     _.each(offerGroup.sortedOffers(),function(offer){
-      $el.append(offer.offerHtml());
+      offerRows.push(createOfferRow(offer,offersBox));
     });
   }
 

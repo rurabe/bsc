@@ -18,17 +18,9 @@ BOOKSUPPLYCO = function(){
       dataType: "json",
       success: function(data, textStatus, jqXHR){
         importData(data);
-        displayData();
       }
     });
   }
-
-  var displayData = function(){
-    _.each(books,function(book){
-      book.displayOffers();
-    });
-  }
-
 
   returnObject = {
     books: books,

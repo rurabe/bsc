@@ -17,6 +17,7 @@
 //= require ./show/offer.js
 //= require ./show/offers_handle.js
 //= require ./show/offers_box.js
+//= require ./show/offer_row.js
 
   var createBooks = function(){
     $('.book-row-outer').each(function(){

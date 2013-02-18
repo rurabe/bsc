@@ -2,6 +2,31 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+// Styles
+
+.shadow-button-style{
+  -moz-box-shadow:    1px 1px 1px 1px #ccc;
+  -webkit-box-shadow: 1px 1px 1px 1px #ccc;
+  box-shadow:         1px 1px 1px 1px #ccc;
+}
+
+.ui-transition-style{
+  -webkit-transition: all 0.1s ease;
+  -moz-transition: all 0.1s ease;
+  -o-transition: all 0.1s ease;
+  transition: all 0.1s ease;
+}
+
+.selected-style{
+  background-color: black;
+  color: white;
+}
+
+.selectable-style{
+  cursor: pointer;
+}
+
+// 
 
 .book-card {
   background-image: url(linedpaper.png);
@@ -47,44 +72,32 @@ div.book-row-inner{
   height: $row-height
 }
 
-.book-attr{
-  line-height: $row-height;
-}
-
-.book-requirement{
-  text-align: left;
-}
-
-
-.book-title{
-  text-align: left;
-  font-size: 14pt;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  overflow-wrap: ellipsis; 
-  white-space: nowrap;
-}
-
-.book-price{
-  font-size: 18pt;
-}
-
-.price-content{
-
-}
-
-.shadow-button{
-  -moz-box-shadow:    1px 1px 1px 1px #ccc;
-  -webkit-box-shadow: 1px 1px 1px 1px #ccc;
-  box-shadow:         1px 1px 1px 1px #ccc;
-}
-
 .book-button-outer{
   border: 1px solid silver;
   height: $row-height;
   background-color: white;
-  text-shadow: 0.07em 0.07em 0.07em white;
-  @extend .shadow-button
+  text-shadow: 0.07em 0.07em 0.07em silver;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  @extend .shadow-button-style
+}
+
+.selectable .book-button-inner{
+  @extend .selectable-style;
+}
+
+
+.selected .book-button-outer{
+  @extend .ui-transition-style;
+  @extend .selected-style;
+}
+
+.deselected .book-button-outer{
+  @extend .ui-transition-style;
 }
 
 .wireline{
@@ -103,7 +116,8 @@ div.book-row-inner{
   line-height: $button-height;
   color: black;
   background-color: white;
-  @extend .shadow-button
+  @extend .shadow-button-style;
+  @extend .selectable-style;
 
 }
 
@@ -113,6 +127,32 @@ div.book-row-inner{
   background-repeat: no-repeat;
   background-position: center center;
   height: $row-height;
+}
+
+.book-attr{
+  line-height: $row-height;
+}
+
+.book-requirement{
+  text-align: left;
+}
+
+
+.book-title{
+  text-align: left;
+  font-size: 14pt;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  overflow-wrap: ellipsis; 
+  white-space: nowrap;
+}
+
+.book-price{
+  font-size: 18pt;
+}
+
+.price-content{
+
 }
 
 .offer-box{
@@ -130,7 +170,24 @@ $offer-row-height: 40px;
   margin: 5px 0px 5px;
   background-color: white;
   padding: 5px;
-  @extend .shadow-button
+  float: right;
+  @extend .shadow-button-style;
+}
+
+.selectable .offer-row{
+  @extend .selectable-style;
+}
+
+.offer-row.active{
+  margin: 1px 4px 9px 0px;
+  -moz-box-shadow:    4px 4px 4px 2px #ccc;
+  -webkit-box-shadow: 4px 4px 4px 2px #ccc;
+  box-shadow:         4px 4px 4px 2px #ccc;
+  @extend .ui-transition-style;
+}
+
+.offer-row.inactive{
+  @extend .ui-transition-style;
 }
 
 .offer-row.amazon, .book-button-inner.amazon{
@@ -143,6 +200,10 @@ $offer-row-height: 40px;
   background-image: url(bn-bg.png);
   background-repeat: no-repeat;
   background-position: 100% 50%;
+}
+
+.offer-row.selected{
+  @extend .selected-style
 }
 
 .offer-column-link{
@@ -178,16 +239,16 @@ $offer-row-height: 40px;
 }
 
 .offer-vendor{
-  margin: 5px;
   font-size: 10pt;
 }
 
 .offer-column-row{
   position: relative;
-  overflow-x: scroll;
+  overflow-x: hidden;
   overflow-y: hidden;
   overflow-wrap: ellipsis; 
   white-space: nowrap;
+  height: 22px;
 }
 
 .offer-detailed-condition{
@@ -205,198 +266,3 @@ $offer-row-height: 40px;
 .offer-comments-row{
   margin-top: 3px;
 }
-
-// table.book-table {
-//  margin: 0px auto;
-//  border-spacing: 5px 5px;
-//  border-collapse: separate;
-// }
-
-// table.book-table td,th{
-//  border-top: none;
-//  height: 26px;
-//  vertical-align: middle;
-// }
-
-
-// .course-header {
-//  font-size: 18pt;
-//  font-weight: bold;
-//  text-align: left;
-// }
-
-// td.book-title {
-//  text-align: left;
-//  font-size: 13pt;
-// }
-
-
-// th.header {
-//  text-align: center !important;
-//  font-size: 18pt;
-// }
-
-
-// table.book-table td.offer {
-//  padding: 0px;
-// }
-
-// div.offer-div{
-//  border: 1px solid silver;
-//  width: 150px;
-//  height: 40px;
-//    margin: auto auto;
-// }
-
-// div.offer-div-inner{
-//  text-align: center !important;
-//  padding: 8px;
-//  font-size: 18pt;
-//  text-shadow: 0.1em 0.1em 0.1em white;
-//  line-height: 20pt;
-// }
-
-
-
-// .offer-handle{
-//  margin: 0px auto 0px auto;
-//  margin-top: -10px;
-//  width: 100px;
-//  height: 15px;
-//  border: 1px solid silver;
-//  font-size: 8pt;
-//  line-height: 10pt;
-//  text-align: center;
-// }
-
-
-// .handle-row td.offer-handle-td{
-//  padding: 0px;
-//  height: 15px;
-//  padding-bottom: 5px;
-
-// }
-
-// .handle-row td.empty-handle{
-//  height:0px;
-// }
-
-// .more-offers-container{
-//  width: 120%;
-//  overflow: visible;
-//  height:100px;
-//  background-color: silver;
-//  margin-bottom: 2px;
-// }
-
-// span.requirement {
-//  font-size: 7pt;
-//  vertical-align:middle;
-// }
-
-// .loading {
-//  margin: auto;
-//  background-image: url(ajax-loader.gif);
-//  background-repeat: no-repeat;
-//  background-position: center center;
-//  width: 26px;
-//  height: 26px;
-// }
-
-// .selectable{
-//  color: #08C;
-//  cursor: pointer;
-// }
-
-// .selected{
-//  background-color: #3A87AD;
-// }
-
-// .selected span{
-//  color: #FFFFFF;
-// }
-
-// .simple{
-//  background-color: #FFFFFF;
-// }
-
-// .simple span{
-//  color: #08C;
-// }
-
-// .simple span.label{
-//  color: #FFFFFF;
-// }
-
-// #checkout-button {
-//  width: 100%;
-//  min-width: 250px;
-// }
-
-// #checkout-td {
-//  text-align: center;
-// }
-
-// #checkout-amazon-icon {
-//  font-size: 24px;
-//  line-height: 12px;
-// }
-
-// #checkout-bn-icon {
-//  position: relative;
-//  top: -1px;
-// }
-
-// input.checkout-radio {
-//  vertical-align: middle;
-// }
-
-// input#express {
-//  margin: 0px;
-// }
-
-// input#simple {
-//  margin: 0px;
-// }
-
-// label.checkout-label {
-//  display: inline;
-// }
-
-// #express + span {
-//  font-style: italic;
-// }
-
-// #tour {
-//  display: none
-// }
-
-// #tour-button {
-//  margin-top: 20px;
-// }
-
-// .no-books{
-//  color: silver;
-//  font-style: italic;
-// }
-
-// .no-books-why{
-//  text-decoration: underline;
-//  cursor: pointer;
-// }
-
-// .menu-container{
-//  position: absolute;
-//  padding: -1px
-// }
-
-// .menu-item{
-//  width: 300px;
-//  height: 40px;
-//  padding: 2px;
-//  position: relative;
-//  display: block;
-//  background-color: silver;
-//  margin: 2px;
-// }
-
