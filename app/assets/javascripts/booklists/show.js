@@ -15,6 +15,12 @@ $(document).ready(function(){
       });
     }
 
+    var find = function(ean){
+      return _.find(books,function(book){
+        return book.ean === ean
+      });
+    };
+
     var updateData = function(){
       $.ajax({
         type: 'PUT',
@@ -23,28 +29,35 @@ $(document).ready(function(){
           importData(data);
         }
       });
-    }
+    };
 
     var checkoutData = function(){
       return _.map(checkoutVendors(),function(vendor){
-        return $.param({
-          booklist_id: booklistId(),
+        var response = {
           vendor: vendor,
-          book_data: vendorCheckoutData(vendor),
-        });
+          books: vendorCheckoutData(vendor) 
+        }
+        // For rails, check to make sure server interprets correctly if refactoring
+        return $.param(response).replace(/\%5B\d\%5D/g,"%5B%5D")
       });
-    }
+    };
 
     var vendorCheckoutData = function(vendor){
       return _.map( checkoutOffers(vendor), function(offer){
-        console.log(offer.vendor + " " + offer.price)
-        return offer.vendorOfferId;
+        return {
+          vendor: offer.vendor,
+          ean: offer.ean,
+          condition: offer.condition,
+          vendorOfferId: offer.vendorOfferId,
+          vendorBookId: offer.vendorBookId,
+          price: offer.price
+        };
       });
     }
 
     var checkoutVendors = function(){
       return _.unique(_.map(selectedOffers(),function(offer){
-        return offer.vendorCode
+        return offer.vendor
       }));
     }
 
@@ -65,6 +78,23 @@ $(document).ready(function(){
       return window.location.pathname.replace("/","")
     }
 
+    var setCheckoutButton = function(){
+      $('#checkout-button').on({
+        click: function(){
+          _.map(checkoutData(),function(vendorData){
+            $.ajax({
+              url: window.location.href + '/cart',
+              type: 'POST',
+              data: vendorData,
+              success: function(data, textStatus, jqXHR){
+                console.log("yay")
+              }
+            })
+          });
+        }
+      })
+    }
+
     returnObject = {
       books: books,
       addBook: addBook,
@@ -72,13 +102,8 @@ $(document).ready(function(){
       checkoutData: checkoutData
     };
 
-    var find = function(ean){
-      return _.find(books,function(book){
-        return book.ean === ean
-      });
-    };
-
     updateData();
+    setCheckoutButton();
     return returnObject
   }();
 
@@ -263,7 +288,6 @@ $(document).ready(function(){
       $contentContainer.on({
         click: function(e){
           toggleSelect();
-          console.log(e)
         }
       });
       isClickable = true;
@@ -395,6 +419,7 @@ $(document).ready(function(){
       comments:           comments,
       condition:          condition,
       detailedCondition:  detailedCondition,
+      ean:                offerGroup.book.ean,
       price:              price,
       formattedPrice:     formattedPrice,
       shippingTime:       shippingTime,

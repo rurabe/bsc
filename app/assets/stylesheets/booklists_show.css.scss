@@ -10,6 +10,13 @@
   box-shadow:         1px 1px 1px 1px #ccc;
 }
 
+.button-active-style{
+  margin: 1px 4px 9px 0px;
+  -moz-box-shadow:    4px 4px 4px 2px #ccc;
+  -webkit-box-shadow: 4px 4px 4px 2px #ccc;
+  box-shadow:         4px 4px 4px 2px #ccc;
+}
+
 .ui-transition-style{
   -webkit-transition: all 0.1s ease;
   -moz-transition: all 0.1s ease;
@@ -66,6 +73,10 @@ div.book-row-outer{
 
 div.book-row-inner{
   margin: 5px auto 25px;
+}
+
+.no-books-row{
+  height: $row-height;
 }
 
 .book-cell{
@@ -181,10 +192,7 @@ $offer-row-width: 400px;
 }
 
 .offer-row.active{
-  margin: 1px 4px 9px 0px;
-  -moz-box-shadow:    4px 4px 4px 2px #ccc;
-  -webkit-box-shadow: 4px 4px 4px 2px #ccc;
-  box-shadow:         4px 4px 4px 2px #ccc;
+  @extend .button-active-style;
   @extend .ui-transition-style;
 }
 
@@ -267,4 +275,16 @@ $offer-row-width: 400px;
 
 .offer-comments-row{
   margin-top: 3px;
+}
+
+$button-height: 40px;
+
+.checkout-row{
+  padding: 25px 0px;
+  height: $button-height;
+}
+
+#checkout-button{
+  font-size: 14pt;
+  height: $button-height;
 }
