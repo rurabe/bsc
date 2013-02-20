@@ -142,20 +142,54 @@ module Mecha
         parse_node(book_node,'./text()[preceding-sibling::br[preceding-sibling::text()[preceding-sibling::strong[text()="Used:"]]]][1]')
       end
 
-      def parse_book_new_price(book_node)
+      def parse_new_offer_vendor(book_node)
+        "USC Bookstore"
+      end
+      alias_method :parse_used_offer_vendor, :parse_new_offer_vendor
+
+      def parse_new_offer_price(book_node)
         price = parse_node(book_node,'./text()[preceding-sibling::strong[text()="New:"]][1]')
         numberize_price(price)
       end
 
-      def parse_book_used_price(book_node)
+      def parse_used_offer_price(book_node)
         price = parse_node(book_node,'./text()[preceding-sibling::strong[text()="Used:"]][1]')
         numberize_price(price)
       end
 
-      def parse_book_new_rental_price(book_node)
+      def parse_new_offer_vendor_book_id(book_node)
+        parse_book_ean(book_node)
+      end
+      alias_method :parse_used_offer_vendor_book_id, :parse_new_offer_vendor_book_id
+
+      def parse_new_offer_vendor_offer_id(book_node)
+      end
+      alias_method :parse_used_offer_vendor_offer_id, :parse_new_offer_vendor_offer_id
+
+      def parse_new_offer_detailed_condition(book_node)
+      end
+      alias_method :parse_used_offer_detailed_condition, :parse_new_offer_detailed_condition
+
+      def parse_new_offer_availability(book_node)
+      end
+      alias_method :parse_used_offer_availability, :parse_new_offer_availability
+
+      def parse_new_offer_shipping_time(book_node)
+      end
+      alias_method :parse_used_offer_shipping_time, :parse_new_offer_shipping_time
+
+      def parse_new_offer_comments(book_node)
+        remove_these = [/\<a href.+\<\/a\>/,/This title is.+rental.?/]
+        notes = parse_book_notes(book_node)
+        remove_these.inject(notes) { |s,r| s.gsub(r,'') if s } if notes
+      end
+      alias_method :parse_used_offer_comments, :parse_new_offer_comments
+
+      # Not in use yet
+      def parse_offer_new_rental_price(book_node)
       end
 
-      def parse_book_used_rental_price(book_node)
+      def parse_offer_used_rental_price(book_node)
       end
   end
 end

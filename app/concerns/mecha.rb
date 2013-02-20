@@ -46,10 +46,25 @@ module Mecha
          :edition                     => parse_book_edition(book_node),
          :requirement                 => parse_book_requirement(book_node),
          :notes                       => parse_book_notes(book_node),
-         :bookstore_new_price         => parse_book_new_price(book_node),
-         :bookstore_new_rental_price  => parse_book_new_rental_price(book_node),
-         :bookstore_used_price        => parse_book_used_price(book_node),
-         :bookstore_used_rental_price => parse_book_used_rental_price(book_node)}
+         :bookstore_offers            => build_offers(book_node)}
+      end
+
+      def build_offers(book_node)
+        ['new','used'].map { |c| build_offer(book_node,c) }
+      end
+
+      def build_offer(book_node,condition)
+        {
+         :condition                   => condition.to_s, 
+         :vendor                      => send("parse_#{condition}_offer_vendor".to_sym, book_node),
+         :price                       => send("parse_#{condition}_offer_price".to_sym, book_node),
+         :vendor_book_id              => send("parse_#{condition}_offer_vendor_book_id".to_sym, book_node),
+         :vendor_offer_id             => send("parse_#{condition}_offer_vendor_offer_id".to_sym, book_node),
+         :detailed_condition          => send("parse_#{condition}_offer_detailed_condition".to_sym, book_node),
+         :availability                => send("parse_#{condition}_offer_availability".to_sym, book_node),
+         :shipping_time               => send("parse_#{condition}_offer_shipping_time".to_sym, book_node),
+         :comments                    => send("parse_#{condition}_offer_comments".to_sym, book_node)
+        }
       end
 
       # Parser helper methods

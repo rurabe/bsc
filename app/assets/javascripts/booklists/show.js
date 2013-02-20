@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-//--------BOOKLIST--------BOOKLIST--------BOOKLIST--------BOOKLIST--------BOOKLIST-------//
+//--------BOOKLIST--------BOOKLIST--------BOOKLIST--------BOOKLIST-------//
   BOOKSUPPLYCO = function(){
     var books = []
 
@@ -33,12 +33,16 @@ $(document).ready(function(){
 
     var checkoutData = function(){
       return _.map(checkoutVendors(),function(vendor){
-        var response = {
+        var data = {
           vendor: vendor,
+          school: $('h2.school-name').attr('data-slug'),
           books: vendorCheckoutData(vendor) 
-        }
+        };
         // For rails, check to make sure server interprets correctly if refactoring
-        return $.param(response).replace(/\%5B\d\%5D/g,"%5B%5D")
+        return {
+          data: $.param(data).replace(/\%5B\d\%5D/g,"%5B%5D"),
+          vendor: vendor
+        };
       });
     };
 
@@ -48,8 +52,8 @@ $(document).ready(function(){
           vendor: offer.vendor,
           ean: offer.ean,
           condition: offer.condition,
-          vendorOfferId: offer.vendorOfferId,
-          vendorBookId: offer.vendorBookId,
+          vendor_offer_id: offer.vendorOfferId,
+          vendor_book_id: offer.vendorBookId,
           price: offer.price
         };
       });
@@ -85,14 +89,23 @@ $(document).ready(function(){
             $.ajax({
               url: window.location.href + '/cart',
               type: 'POST',
-              data: vendorData,
+              data: vendorData.data,
               success: function(data, textStatus, jqXHR){
-                console.log("yay")
+                openWindow(data.link,vendorData.vendor)
               }
-            })
+            });
           });
         }
-      })
+      });
+    };
+
+    var windows = []
+    var openWindow = function(link,vendor){
+      var x = 0;
+      var y = (windows.length)*150;
+      var newWindow = window.open(link, vendor + ' books','height=650,width=1000' );
+      newWindow.moveTo(x,y);
+      windows.push(newWindow);
     }
 
     returnObject = {
@@ -107,7 +120,7 @@ $(document).ready(function(){
     return returnObject
   }();
 
-// -------BOOK-------BOOK-------BOOK-------BOOK-------BOOK-------BOOK-------BOOK-------//
+// -------BOOK-------BOOK-------BOOK-------BOOK-------BOOK-------BOOK-------//
   var createBook = function(el){
     var $el = $(el);
     var ean = $el.attr('data-ean');
@@ -155,7 +168,7 @@ $(document).ready(function(){
     return returnObject;
   };
 
-//-------OFFERGROUP-------OFFERGROUP-------OFFERGROUP-------OFFERGROUP-------OFFERGROUP-------//
+//-------OFFERGROUP-------OFFERGROUP-------OFFERGROUP-------OFFERGROUP-------//
   var createOfferGroup = function(book,category){
     var $el = book.$el.find('.price-'+category)
     var $contentContainer = $el.find('.book-button-inner')
@@ -365,8 +378,8 @@ $(document).ready(function(){
     var vendorLink = function(){
       var links = {
         amazon: {
-          'new': "https://www.amazon.com/dp/" + vendorBookId + "?tag=" + schoolAmazonTag,
-          'used': "http://www.amazon.com/gp/offer-listing/" + vendorBookId + "?tag=" + schoolAmazonTag
+          'new': "http://www.amazon.com/gp/offer-listing/" + vendorBookId + "?condition=new&tag=" + schoolAmazonTag,
+          'used': "http://www.amazon.com/gp/offer-listing/" + vendorBookId + "?condition=used&tag=" + schoolAmazonTag
         },
         bn: {
           'new': "http://click.linksynergy.com/deeplink?mid=36889&id=BF/ADxwv1Mc&murl=http%3A%2F%2Fwww.barnesandnoble.com%2Fean%2F" + vendorBookId,

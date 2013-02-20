@@ -2,8 +2,8 @@ module Amazon
 	class CartQuery < ApiClass
 
 		def initialize(params)
-			@books = params[:books]
-			@associate_tag = params[:tag]
+			@books = params['books']
+			@associate_tag = "bsc-#{params['school']}-20"
 			@response = nil
 			control
 		end
@@ -12,7 +12,7 @@ module Amazon
 			parse_cart_response(@response)
 		end
 
-		# private
+		private
 
 			def control
 				@response = send_request(build_request)
@@ -51,7 +51,15 @@ module Amazon
 			end
 
 			def updated_query_data
-				Amazon::ItemLookup.new(@books).parse
+				Amazon::ItemLookup.new(sanitized_query_data).parse
+			end
+
+			def sanitized_query_data
+				@books.map { |book| book.reject { |k,v| extra_attrs.include?(k) } }
+			end
+
+			def extra_attrs
+				['vendor', 'vendor_offer_id', 'vendor_book_id', 'price']
 			end
 
 			def parse_cart_response(response)
