@@ -87,8 +87,12 @@ module Mecha
 
       def query_for_booklist(section)
         junk_mecha = Mechanize.new { |mecha| mecha.keep_alive = false }
-        booklist = junk_mecha.get("http://web-app.usc.edu/soc/section.html?i=#{section}&t=#{CURRENT_TERM}")
+        booklist = junk_mecha.get( booklist_link(section) )
         book_nodes = booklist.search('//li[@class="books"]/ul/li')      
+      end
+
+      def booklist_link(section)
+        "http://web-app.usc.edu/soc/section.html?i=#{section}&t=#{CURRENT_TERM}"
       end
 
       def clean_section(raw_section)
@@ -134,6 +138,10 @@ module Mecha
       def parse_book_edition(book_node)
       end
 
+      def parse_book_link(book_node)
+        booklist_link( parse_result( parse_node(book_node,'//h3'), /Section (\d+)/ ) )
+      end
+
       def parse_book_requirement(book_node)
         parse_node(book_node,'./text()[preceding-sibling::em][1]').to_s.gsub(/[()]/,"")
       end
@@ -171,6 +179,7 @@ module Mecha
       alias_method :parse_used_offer_detailed_condition, :parse_new_offer_detailed_condition
 
       def parse_new_offer_availability(book_node)
+        "Not available"
       end
       alias_method :parse_used_offer_availability, :parse_new_offer_availability
 
@@ -184,6 +193,11 @@ module Mecha
         remove_these.inject(notes) { |s,r| s.gsub(r,'') if s } if notes
       end
       alias_method :parse_used_offer_comments, :parse_new_offer_comments
+
+      def parse_new_offer_link(book_node)
+        parse_book_link(book_node)
+      end
+      alias_method :parse_used_offer_link, :parse_new_offer_link
 
       # Not in use yet
       def parse_offer_new_rental_price(book_node)

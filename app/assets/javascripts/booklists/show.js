@@ -352,6 +352,8 @@ $(document).ready(function(){
         return "Not found"
       } else if(!price){
         return "Sold out"
+      } else if( availability === "Not available" ){
+        return "Not available"
       } else {
         return "Available"
       }

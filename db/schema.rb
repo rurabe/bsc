@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130131064424) do
+ActiveRecord::Schema.define(:version => 20130220084715) do
 
   create_table "booklists", :force => true do |t|
     t.datetime "created_at", :null => false
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(:version => 20130131064424) do
     t.string   "ean",                         :limit => 13
     t.integer  "section_id"
     t.string   "notes"
+    t.string   "link"
   end
 
   add_index "books", ["ean"], :name => "index_books_on_ean"

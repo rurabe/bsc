@@ -44,9 +44,10 @@ module Mecha
          :author                      => parse_book_author(book_node),
          :ean                         => parse_book_ean(book_node),
          :edition                     => parse_book_edition(book_node),
+         :link                        => parse_book_link(book_node),
          :requirement                 => parse_book_requirement(book_node),
          :notes                       => parse_book_notes(book_node),
-         :bookstore_offers            => build_offers(book_node)}
+         :offers_attributes            => build_offers(book_node)}
       end
 
       def build_offers(book_node)
@@ -63,7 +64,8 @@ module Mecha
          :detailed_condition          => send("parse_#{condition}_offer_detailed_condition".to_sym, book_node),
          :availability                => send("parse_#{condition}_offer_availability".to_sym, book_node),
          :shipping_time               => send("parse_#{condition}_offer_shipping_time".to_sym, book_node),
-         :comments                    => send("parse_#{condition}_offer_comments".to_sym, book_node)
+         :comments                    => send("parse_#{condition}_offer_comments".to_sym, book_node),
+         :link                        => send("parse_#{condition}_offer_link".to_sym, book_node),
         }
       end
 
