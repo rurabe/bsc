@@ -12,6 +12,8 @@ BookSupply::Application.routes.draw do
     end
   end
 
+  match'/books/:id'  => 'books#show', :via => 'get'
+
   match '/:id'       => 'booklists#show',   :via => 'get',   :as => 'booklist'
   match '/:id'       => 'booklists#update', :via => 'put',   :as => 'update_booklist'
   match '/:id/cart'  => 'carts#create',     :via => 'post',  :as => 'carts'

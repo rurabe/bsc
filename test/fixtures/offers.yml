@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  condition: MyString
+  vendor: MyString
+  price: 9.99
+  vendor_book_id: MyString
+  vendor_offer_id: MyString
+  detailed_condition: MyString
+  availability: MyString
+  shipping_time: MyString
+  comments: MyString
+  link: MyString
+
+two:
+  condition: MyString
+  vendor: MyString
+  price: 9.99
+  vendor_book_id: MyString
+  vendor_offer_id: MyString
+  detailed_condition: MyString
+  availability: MyString
+  shipping_time: MyString
+  comments: MyString
+  link: MyString

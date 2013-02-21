@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130220084715) do
+ActiveRecord::Schema.define(:version => 20130220224540) do
 
   create_table "booklists", :force => true do |t|
     t.datetime "created_at", :null => false
@@ -54,6 +54,23 @@ ActiveRecord::Schema.define(:version => 20130220084715) do
   end
 
   add_index "courses", ["booklist_id"], :name => "index_courses_on_booklist_id"
+
+  create_table "offers", :force => true do |t|
+    t.string   "condition"
+    t.string   "vendor"
+    t.decimal  "price",              :precision => 6, :scale => 2
+    t.decimal  "decimal",            :precision => 6, :scale => 2
+    t.string   "vendor_book_id"
+    t.string   "vendor_offer_id"
+    t.string   "detailed_condition"
+    t.string   "availability"
+    t.string   "shipping_time"
+    t.string   "comments"
+    t.string   "link"
+    t.integer  "book_id"
+    t.datetime "created_at",                                       :null => false
+    t.datetime "updated_at",                                       :null => false
+  end
 
   create_table "pages", :force => true do |t|
     t.integer  "booklist_id"

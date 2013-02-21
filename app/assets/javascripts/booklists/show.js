@@ -1,12 +1,16 @@
 $(document).ready(function(){
 
+
+
 //--------BOOKLIST--------BOOKLIST--------BOOKLIST--------BOOKLIST-------//
   BOOKSUPPLYCO = function(){
-    var books = []
+    var books = [];
 
-    var addBook = function(el){
-      this.books.push( createBook(el) );
-    }
+    var addBooks = function(){
+      $('.book-row-outer').each(function(){
+        books.push( createBook(this) );
+      });
+    };
 
     var importData = function(data){
       _.each(data,function(bookData){
@@ -110,9 +114,10 @@ $(document).ready(function(){
 
     returnObject = {
       books: books,
-      addBook: addBook,
+      addBooks: addBooks,
       importData: importData,
-      checkoutData: checkoutData
+      checkoutData: checkoutData,
+      find: find
     };
 
     updateData();
@@ -341,6 +346,7 @@ $(document).ready(function(){
     var price =             json.price;
     var shippingTime =      json.shipping_time;
     var vendor =            json.vendor;
+    var link =              json.link;
     var vendorBookId =      json.vendor_book_id;
     var vendorOfferId =     json.vendor_offer_id;
     var status
@@ -388,7 +394,7 @@ $(document).ready(function(){
           'used': "http://click.linksynergy.com/deeplink?mid=36889&id=BF/ADxwv1Mc&murl=http%3A%2F%2Fwww.barnesandnoble.com%2Flisting%2F" + vendorBookId
         } 
       };
-      return links[vendorCode][condition];
+      return link || links[vendorCode][condition];
     }();
 
     var priceHtml = function(){
@@ -699,10 +705,16 @@ $(document).ready(function(){
   };
 
 //--------INIT--------INIT--------INIT--------INIT--------INIT--------INIT--------//
-  var createBooks = function(){
-    $('.book-row-outer').each(function(){
-      BOOKSUPPLYCO.addBook(this);
-    })
-  }();
+
+  BOOKSUPPLYCO.addBooks();
+  $.ajax({
+    dataType: 'json',
+    url: '/books/9781256655046',
+    success: function(data, textStatus, jqXHR){
+      BOOKSUPPLYCO.importData(data);
+    }
+  });
+
+
 
 });
