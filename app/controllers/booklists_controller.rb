@@ -30,10 +30,7 @@ class BooklistsController < ApplicationController
 
   def show
     @school = @booklist.school || School.find(params[:school])
-  end
-
-  def update
-    render :json => @booklist.offer_data.to_json
+    # @offers = @booklist.offers_data
   end
 
   def index
@@ -43,7 +40,7 @@ class BooklistsController < ApplicationController
   private
 
     def define_booklist
-      @booklist = Booklist.where(:slug => params[:id]).includes(:courses,:books).first
+      @booklist = Booklist.where(:slug => params[:id]).includes(:courses,:books,:offers).first
     end
 
     def define_school

@@ -3,6 +3,7 @@ class Booklist < ActiveRecord::Base
   belongs_to :school
   has_many :courses, :dependent => :destroy
   has_many :books, :through => :courses
+  has_many :offers, :through => :books
   has_one :page
 
   after_create :set_slug
@@ -16,33 +17,22 @@ class Booklist < ActiveRecord::Base
     link_courses(m.parse)
   end
 
-  def offer_data
-    merge_offers
+  def get_offers(vendor)
+    e = eans
+    case vendor
+    when 'amazon'     then Amazon::ItemLookup.new(e).parse
+    when 'bn'         then BarnesAndNoble::ItemLookup.new(e).parse
+    when 'bookstore'  then bookstore_offers_data
+    end
   end
 
   private
 
-    def merge_offers
-      all_offer_data = get_offer_data
-      eans.map do |ean|
-        { :ean               => ean,
-          :offers_attributes => consolidate_offers(all_offer_data,ean) }
+    def bookstore_offers_data
+      offers.map do |offer|
+        { :ean               => offer.book.ean,
+          :offers_attributes => [offer] }
       end
-    end
-
-    def consolidate_offers(all_offer_data,ean)
-      select_offers(all_offer_data,ean).flat_map { |offer| offer[:offers_attributes] }
-    end
-
-    def select_offers(all_offer_data,ean)
-      all_offer_data.select { |offer| offer[:ean] == ean }
-    end
-
-    def get_offer_data
-      e = eans
-      threads = [ lambda{ Amazon::ItemLookup.new(e).parse },
-                  lambda{ BarnesAndNoble::ItemLookup.new(e).parse } ]
-      Automatron::Needle.thread(threads)
     end
   
     def eans

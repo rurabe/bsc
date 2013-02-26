@@ -1,6 +1,6 @@
 class BooksController < ApplicationController
 	def show
-		@book = Book.find_by_ean(params[:id])
-		render :json => [{:ean => @book.ean, :offers_attributes => @book.offers.map {|offer| offer } }]
+		@booklist = Booklist.where( :slug => params[:id] ).includes(:books,:offers).first
+    render :json => @booklist.get_offers( params[:vendor] )
 	end
 end

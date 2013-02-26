@@ -1,4 +1,5 @@
 $(document).ready(function(){
+  var vendors = ['bookstore','amazon','bn'];
 
 
 
@@ -26,12 +27,19 @@ $(document).ready(function(){
     };
 
     var updateData = function(){
-      $.ajax({
-        type: 'PUT',
-        dataType: "json",
-        success: function(data, textStatus, jqXHR){
-          importData(data);
-        }
+      var received = []
+      _.each(vendors,function(vendor){
+        $.ajax({
+          url: window.location.pathname + '/books/' + vendor,
+          dataType: "json",
+          success: function(data, textStatus, jqXHR){
+            importData(data);
+          },
+          complete: function(){
+            received.push(vendor);
+            if(received.length === vendors.length){console.log("all done")}
+          }
+        });
       });
     };
 
@@ -374,7 +382,7 @@ $(document).ready(function(){
     var vendorCode = function(){
       codes = {
         'Amazon': "amazon",
-        'Barnes and Noble': 'bn' }
+        'Barnes and Noble': 'bn'}
       return codes[vendor]
     }();
 
@@ -707,14 +715,5 @@ $(document).ready(function(){
 //--------INIT--------INIT--------INIT--------INIT--------INIT--------INIT--------//
 
   BOOKSUPPLYCO.addBooks();
-  $.ajax({
-    dataType: 'json',
-    url: '/books/9781256655046',
-    success: function(data, textStatus, jqXHR){
-      BOOKSUPPLYCO.importData(data);
-    }
-  });
-
-
 
 });
