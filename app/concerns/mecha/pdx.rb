@@ -1,7 +1,7 @@
 module Mecha
 	class Pdx < BasicMecha
 
-		CURRENT_TERM = '201301'
+		CURRENT_TERM = '201302'
 
 		def self.words
 		  %w( portland stumptown burnside voodoo zupans vikings ipa salmon microbrew rogue deschutes
@@ -36,10 +36,10 @@ module Mecha
 				username = options.fetch(:username)
 				password = options.fetch(:password)
 				raise Mecha::AuthenticationError if username.blank? || password.blank?
-				login_page = @mecha.get('https://banweb.pdx.edu/pls/oprd/twbkwbis.P_WWWLogin')
-				login_form = login_page.form('loginform')
-				login_form.sid = username
-				login_form.PIN = password
+				login_page = @mecha.get('https://sso.pdx.edu/cas/login?service=https%3A%2F%2Fwls.banner.pdx.edu%3A443%2Fssomanager%2Fc%2FSSB')
+				login_form = login_page.form
+				login_form.username = username
+				login_form.password = password
 				login_form.submit
 			end
 
@@ -129,22 +129,22 @@ module Mecha
 			end
 
 			def parse_book_new_price(book_node)
-				price = parse_node(book_node,"./td[@class='book-pref']/table/tbody/tr[starts-with(@id,'tr-radio-sku-new')]/td[@class='price']/label")
+				price = parse_node(book_node,".//td[@class='price']/label[./../../td//text()[contains(.,'New') and not(contains(.,'Rental'))]]")
 				numberize_price(price)
 			end
 
 			def parse_book_new_rental_price(book_node)
-				price = parse_node(book_node,"./td[@class='book-pref']/table/tbody/tr[starts-with(@id,'tr-radio-radio-sku-new-rental')]/td[@class='price']/label")
+				price = parse_node(book_node,".//td[@class='price']/label[./../../td//text()[contains(.,'New') and contains(.,'Rental')]]")
 				numberize_price(price)
 			end
 
 			def parse_book_used_price(book_node)
-				price = parse_node(book_node,"./td[@class='book-pref']/table/tbody/tr[starts-with(@id,'tr-radio-sku-used')]/td[@class='price']/label")
+				price = parse_node(book_node,".//td[@class='price']/label[./../../td//text()[contains(.,'Used') and not(contains(.,'Rental'))]]")
 				numberize_price(price)
 			end
 
 			def parse_book_used_rental_price(book_node)
-				price = parse_node(book_node,"./td[@class='book-pref']/table/tbody/tr[starts-with(@id,'tr-radio-radio-sku-used-rental')]/td[@class='price']/label")
+				price = parse_node(book_node,".//td[@class='price']/label[./../../td//text()[contains(.,'Used') and contains(.,'Rental')]]")
 				numberize_price(price)
 			end
 	end
