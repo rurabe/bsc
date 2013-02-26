@@ -129,7 +129,7 @@ module Mecha
       end
 
       def parse_book_notes(book_node)
-      end
+      end 
 
       def parse_new_offer_vendor(book_node)
         "PSU Bookstore"
@@ -160,6 +160,7 @@ module Mecha
       alias_method :parse_used_offer_detailed_condition, :parse_new_offer_detailed_condition
 
       def parse_new_offer_availability(book_node)
+        "Not available"
       end
       alias_method :parse_used_offer_availability, :parse_new_offer_availability
 

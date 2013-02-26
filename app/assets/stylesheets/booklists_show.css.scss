@@ -33,8 +33,6 @@
   cursor: pointer;
 }
 
-// 
-
 .book-card {
   background-image: url(linedpaper.png);
   border: 3px solid #DDD;
@@ -94,7 +92,8 @@ div.book-row-inner{
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  @extend .shadow-button-style
+  @extend .shadow-button-style;
+  position: relative;
 }
 
 .selectable .book-button-inner{
@@ -135,8 +134,14 @@ div.book-row-inner{
 .loading {
   background-image: url(ajax-loader.gif);
   background-repeat: no-repeat;
-  background-position: center center;
+  background-position: center 95%;
   height: $row-height;
+  position: absolute;
+  left: 50%;
+  bottom: 1px;
+  width: 16px;
+  margin-left: -8px;
+  
 }
 
 .book-attr{

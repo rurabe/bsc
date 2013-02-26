@@ -37,7 +37,9 @@ $(document).ready(function(){
           },
           complete: function(){
             received.push(vendor);
-            if(received.length === vendors.length){console.log("all done")}
+            if(received.length === vendors.length){
+              $('.loading').fadeOut('slow',function(){ $(this).remove(); });
+            }
           }
         });
       });
@@ -252,7 +254,8 @@ $(document).ready(function(){
     };
 
     var addOffer = function(json){
-      offers.push( createOffer(this,json) );
+      var newOffer = createOffer(this,json);
+      offers.push( newOffer );
       updateDiv();
     };
 
@@ -280,12 +283,6 @@ $(document).ready(function(){
       $contentContainer.addClass('book-button-inner ' + offer.vendorCode);
     };
 
-    var isClickable = false
-    var makeSelectable = function(){
-      $el.addClass('selectable');
-      if(!isClickable){ setClickHandler(); }
-    };
-
     var changeContent = function(content,funcOut,funcIn){
       funcOut = funcOut || $.noop
       funcIn = funcIn || $.noop
@@ -310,6 +307,12 @@ $(document).ready(function(){
       }
     };
 
+    var isClickable = false
+    var makeSelectable = function(){
+      $el.addClass('selectable');
+      if(!isClickable){ setClickHandler(); }
+    };
+
     var setClickHandler = function(){
       $contentContainer.on({
         click: function(e){
@@ -318,7 +321,6 @@ $(document).ready(function(){
       });
       isClickable = true;
     };
-
 
     var returnObject = {
       $el: $el,
@@ -597,7 +599,7 @@ $(document).ready(function(){
 
 //---------OFFERSBOX---------OFFERSBOX---------OFFERSBOX---------OFFERSBOX---------//
   var createOffersBox = function(offerGroup){
-    var $el = undefined;
+    var $el
     var $bookRow = offerGroup.book.$el.find('.book-row-inner');
     var offerRows = []
     
@@ -653,16 +655,15 @@ $(document).ready(function(){
     var $el
     var offerGroup = offer.offerGroup
 
-    var create = function(){
+    var createWithBox = function(){
       this.$el = $el = addDomElement();
       offer.setOfferRow(returnObject);
-      if(offer.status === "Available"){
-        setMouseOverHandler();
-        setClickHandler();
-      }
-      if( offer.isSelected() ){
-        $el.addClass('selected')
-      }
+      setEventHandlers();
+    };
+
+    var addToExistingBox = function(){
+      this.$el = $el = addDomElement();
+      setEventHandlers();
     };
 
     var select = function(){
@@ -676,6 +677,16 @@ $(document).ready(function(){
     var addDomElement = function(){
       return $box.append(offer.offerHtml()).children().last();
     }
+
+    var setEventHandlers = function(){
+      if(offer.status === "Available"){
+        setMouseOverHandler();
+        setClickHandler();
+      }
+      if( offer.isSelected() ){
+        $el.addClass('selected')
+      }
+    };
 
     var setMouseOverHandler = function(){
       $el.on({
@@ -703,12 +714,12 @@ $(document).ready(function(){
       $el: $el,
       offer: offer,
       offersBox: offersBox,
-      create: create,
       select: select,
       deselect: deselect
     }
 
-    returnObject.create();
+    createWithBox();
+    
     return returnObject
   };
 
