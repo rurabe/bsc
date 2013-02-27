@@ -3,11 +3,14 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 // Styles
+$hover-color: #cad266;
+$selected-color: #6A7F10;
+$selected-hover-color: darken($selected-color,10%);
 
 @mixin button-active-style($margin-top,$margin-right,$margin-bottom,$margin-left){
   $shift-x: 4px;
   $shift-y: 4px;
-  $shadow-color: #ccc;
+  $shadow-color: rgba(204,204,204,0.7);
   $blur-radius: ($shift-x + $shift-y)/2;
   $spread-radius: ($blur-radius / 2);
 
@@ -18,6 +21,7 @@
   -moz-box-shadow:    $shift-x $shift-y $blur-radius $spread-radius $shadow-color;
   -webkit-box-shadow: $shift-x $shift-y $blur-radius $spread-radius $shadow-color;
   box-shadow:         $shift-x $shift-y $blur-radius $spread-radius $shadow-color;
+  background-color: $hover-color;
 }
 
 .shadow-button-style{
@@ -34,26 +38,44 @@
 }
 
 .selected-style{
-  background-color: black;
+  background-color: $selected-color;
   color: white;
+  text-shadow: 0.07em 0.07em 0.07em black;
+  a{
+    color: lighten($selected-color,20%);
+  }
 }
 
 .selectable-style{
   cursor: pointer;
 }
 
+body{
+  background-color: #eee !important;
+}
+
+.show-welcome{
+  margin: 10px;
+  font-size: 12pt;
+}
+
 .book-card {
   background-image: url(linedpaper.png);
-  border: 3px solid #DDD;
+    -moz-box-shadow:    5px 5px 5px 5px #ccc;
+  -webkit-box-shadow: 5px 5px 5px 5px #ccc;
+  box-shadow:         5px 5px 5px 5px #ccc;
+  // border: 3px solid #DDD;
   padding: 50px 0px 50px 0px;
   -webkit-border-radius: 4px 4px 4px 4px;
   -moz-border-radius: 4px 4px 4px 4px;
   border-radius: 4px 4px 4px 4px;
-  margin: 20px auto 50px;
+  margin: 40px auto 50px;
+  position: relative;
 }
 
 .book-card-container {
-  padding:  3.19% // This is half of one grid space
+  margin-top: 20px;
+  padding: 0% 3.19%// This is half of one grid space
 }
 
 .book-header{
@@ -115,7 +137,17 @@ $book-button-margin-left: 0px;
 }
 
 .book-button-outer.active{
+  @extend .ui-transition-style;
   @include button-active-style($book-button-margin-top,$book-button-margin-right,$book-button-margin-bottom,$book-button-margin-left);
+}
+
+.selected .book-button-outer.active{
+  background-color: $selected-hover-color;
+}
+
+
+.book-button-outer.inactive{
+  @extend .ui-transition-style;
 }
 
 .selectable .book-button-inner{
@@ -198,7 +230,7 @@ $offer-row-width: 400px;
   float: right;
   position: relative;
   margin: 25px 0px 30px;
-  width: $offer-row-width;
+  width: $offer-row-width + 12;
 }
 
 $offer-row-margin-top: 5px;
@@ -227,6 +259,13 @@ $offer-row-margin-left: 0px;
 .offer-row.active{
   @include button-active-style($offer-row-margin-top,$offer-row-margin-right,$offer-row-margin-bottom,$offer-row-margin-left);
   @extend .ui-transition-style;
+  // a{
+  //   color: $selected-color;
+  // }
+}
+
+.offer-row.selected.active{
+  background-color: $selected-hover-color;
 }
 
 .offer-row.inactive{

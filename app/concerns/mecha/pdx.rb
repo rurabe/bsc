@@ -55,7 +55,7 @@ module Mecha
 
       # Error definitions #
       def login_failed?
-        @mecha.current_page.search("//*[text()[contains(.,'Invalid User ID or Password')]]").present?
+        @mecha.current_page.search("//*[text()[contains(.,'The credentials you provided cannot be determined to be authentic')]]").present?
       end
 
       # Course_data helpers #
