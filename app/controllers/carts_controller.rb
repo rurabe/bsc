@@ -8,7 +8,7 @@ class CartsController < ApplicationController
   private
 
     def query(vendor)
-      mod = vendor.titlecase.gsub(' ','')
-      "#{mod}::CartQuery".constantize
+      _module = vendor.titlecase.gsub(' ','')
+      "#{_module}::CartQuery".constantize
     end
 end
