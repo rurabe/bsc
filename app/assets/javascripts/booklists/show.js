@@ -1,6 +1,18 @@
 $(document).ready(function(){
   var vendors = ['bookstore','amazon','bn'];
 
+//-------UTILS-----------------------------------------------------------//
+
+  var setActiveButton = function($element){
+    $element.on({
+      mouseenter: function(e){
+        $(this).addClass("active");
+      },
+      mouseleave: function(e){
+        $(this).removeClass("active").addClass('inactive');
+      },
+    });
+  }; 
 
 
 //--------BOOKLIST--------BOOKLIST--------BOOKLIST--------BOOKLIST-------//
@@ -186,6 +198,7 @@ $(document).ready(function(){
 //-------OFFERGROUP-------OFFERGROUP-------OFFERGROUP-------OFFERGROUP-------//
   var createOfferGroup = function(book,category){
     var $el = book.$el.find('.price-'+category)
+    var $outerContainer = $el.find('.book-button-outer')
     var $contentContainer = $el.find('.book-button-inner')
     var offers = [];
     var displayOffer
@@ -271,6 +284,7 @@ $(document).ready(function(){
           if(newDisplayOffer.status === "Available"){ 
             updateClasses(newDisplayOffer); 
             makeSelectable();
+            setActiveButton($outerContainer);
           }
           funcIn.call();
         },funcOut); 
@@ -680,23 +694,12 @@ $(document).ready(function(){
 
     var setEventHandlers = function(){
       if(offer.status === "Available"){
-        setMouseOverHandler();
+        setActiveButton($el);
         setClickHandler();
       }
       if( offer.isSelected() ){
         $el.addClass('selected')
       }
-    };
-
-    var setMouseOverHandler = function(){
-      $el.on({
-        mouseenter: function(e){
-          $(this).addClass("active");
-        },
-        mouseleave: function(e){
-          $(this).removeClass("active").addClass('inactive');
-        },
-      });
     };
 
     var setClickHandler = function(){

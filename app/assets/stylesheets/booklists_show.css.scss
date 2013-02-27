@@ -4,17 +4,26 @@
 
 // Styles
 
+@mixin button-active-style($margin-top,$margin-right,$margin-bottom,$margin-left){
+  $shift-x: 4px;
+  $shift-y: 4px;
+  $shadow-color: #ccc;
+  $blur-radius: ($shift-x + $shift-y)/2;
+  $spread-radius: ($blur-radius / 2);
+
+  margin-top: $margin-top - $shift-y;
+  margin-right: $margin-right + $shift-x;
+  margin-bottom: $margin-bottom + $shift-y;
+  margin-left: $margin-left - $shift-x;
+  -moz-box-shadow:    $shift-x $shift-y $blur-radius $spread-radius $shadow-color;
+  -webkit-box-shadow: $shift-x $shift-y $blur-radius $spread-radius $shadow-color;
+  box-shadow:         $shift-x $shift-y $blur-radius $spread-radius $shadow-color;
+}
+
 .shadow-button-style{
   -moz-box-shadow:    1px 1px 1px 1px #ccc;
   -webkit-box-shadow: 1px 1px 1px 1px #ccc;
   box-shadow:         1px 1px 1px 1px #ccc;
-}
-
-.button-active-style{
-  margin: 1px 4px 9px 0px;
-  -moz-box-shadow:    4px 4px 4px 2px #ccc;
-  -webkit-box-shadow: 4px 4px 4px 2px #ccc;
-  box-shadow:         4px 4px 4px 2px #ccc;
 }
 
 .ui-transition-style{
@@ -81,7 +90,16 @@ div.book-row-inner{
   height: $row-height
 }
 
+$book-button-margin-top: 0px;
+$book-button-margin-right: 0px;
+$book-button-margin-bottom: 0px;
+$book-button-margin-left: 0px;
+
 .book-button-outer{
+  margin-top: $book-button-margin-top;
+  margin-right: $book-button-margin-right;
+  margin-bottom: $book-button-margin-bottom;
+  margin-left: $book-button-margin-left;
   border: 1px solid silver;
   height: $row-height;
   background-color: white;
@@ -94,6 +112,10 @@ div.book-row-inner{
   user-select: none;
   @extend .shadow-button-style;
   position: relative;
+}
+
+.book-button-outer.active{
+  @include button-active-style($book-button-margin-top,$book-button-margin-right,$book-button-margin-bottom,$book-button-margin-left);
 }
 
 .selectable .book-button-inner{
@@ -141,7 +163,6 @@ div.book-row-inner{
   bottom: 1px;
   width: 16px;
   margin-left: -8px;
-  
 }
 
 .book-attr{
@@ -180,11 +201,19 @@ $offer-row-width: 400px;
   width: $offer-row-width;
 }
 
+$offer-row-margin-top: 5px;
+$offer-row-margin-right: 0px;
+$offer-row-margin-bottom: 5px;
+$offer-row-margin-left: 0px;
+
 .offer-row{
   width: $offer-row-width;
   height: $offer-row-height;
+  margin-top: $offer-row-margin-top;
+  margin-right: $offer-row-margin-right;
+  margin-bottom: $offer-row-margin-bottom;
+  margin-left: $offer-row-margin-left;
   border: 1px solid silver;
-  margin: 5px 0px 5px;
   background-color: white;
   padding: 5px;
   float: right;
@@ -196,7 +225,7 @@ $offer-row-width: 400px;
 }
 
 .offer-row.active{
-  @extend .button-active-style;
+  @include button-active-style($offer-row-margin-top,$offer-row-margin-right,$offer-row-margin-bottom,$offer-row-margin-left);
   @extend .ui-transition-style;
 }
 
