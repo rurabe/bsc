@@ -10,6 +10,7 @@ gem 'puma'
 gem 'mechanize'
 gem 'friendly_id'
 gem 'newrelic_rpm'
+gem 'fast-aes'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -26,11 +27,9 @@ group :development do
 end
 
 gem 'jquery-rails'
-gem 'sidekiq'
-gem 'sinatra'
 gem 'slim'
 
-gem 'fast-aes'
+
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

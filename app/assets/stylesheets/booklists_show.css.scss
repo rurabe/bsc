@@ -259,9 +259,6 @@ $offer-row-margin-left: 0px;
 .offer-row.active{
   @include button-active-style($offer-row-margin-top,$offer-row-margin-right,$offer-row-margin-bottom,$offer-row-margin-left);
   @extend .ui-transition-style;
-  // a{
-  //   color: $selected-color;
-  // }
 }
 
 .offer-row.selected.active{

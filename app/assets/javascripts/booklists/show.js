@@ -58,81 +58,89 @@ $(document).ready(function(){
     };
 
     var checkoutData = function(){
-      return _.map(checkoutVendors(),function(vendor){
-        var data = {
+
+      var selectedOffers = function(){
+        return _.reduce(books,function(memo,book){
+          if( book.selectedOffer() ){ memo.push( book.selectedOffer() ); }
+          return memo;
+        },[]);
+      };
+
+
+      var checkoutOffers = function(vendor){
+        return _.filter(selectedOffers(),function(offer){
+          return offer.vendor === vendor || offer.vendorCode === vendor;
+        });
+      };
+
+      var vendorCheckoutData = function(vendor){
+        return _.map( checkoutOffers(vendor), function(offer){
+          return {
+            vendor: offer.vendor,
+            ean: offer.ean,
+            condition: offer.condition,
+            vendor_offer_id: offer.vendorOfferId,
+            vendor_book_id: offer.vendorBookId,
+            price: offer.price
+          };
+        });
+      };
+
+      var vendorData = function(vendor){
+        return {
           vendor: vendor,
           school: $('h2.school-name').attr('data-slug'),
-          books: vendorCheckoutData(vendor) 
+          books:  vendorCheckoutData(vendor) 
         };
+      };
+
+      var checkoutVendors = function(){
+        return _.unique(_.map(selectedOffers(),function(offer){
+          return offer.vendor
+        }));
+      };
+
+      return _.map(checkoutVendors(),function(vendor){
         // For rails, check to make sure server interprets correctly if refactoring
-        return {
-          data: $.param(data).replace(/\%5B\d\%5D/g,"%5B%5D"),
-          vendor: vendor
-        };
+        return $.param( vendorData(vendor) ).replace(/\%5B\d\%5D/g,"%5B%5D");
       });
-    };
-
-    var vendorCheckoutData = function(vendor){
-      return _.map( checkoutOffers(vendor), function(offer){
-        return {
-          vendor: offer.vendor,
-          ean: offer.ean,
-          condition: offer.condition,
-          vendor_offer_id: offer.vendorOfferId,
-          vendor_book_id: offer.vendorBookId,
-          price: offer.price
-        };
-      });
-    }
-
-    var checkoutVendors = function(){
-      return _.unique(_.map(selectedOffers(),function(offer){
-        return offer.vendor
-      }));
-    }
-
-    var checkoutOffers = function(vendor){
-      return _.filter(selectedOffers(),function(offer){
-        return offer.vendor === vendor || offer.vendorCode === vendor;
-      });
-    };
-
-    var selectedOffers = function(){
-      return _.reduce(books,function(memo,book){
-        if( book.selectedOffer() ){ memo.push( book.selectedOffer() ); }
-        return memo;
-      },[]);
     };
 
     var booklistId = function(){
       return window.location.pathname.replace("/","")
-    }
+    };
 
     var setCheckoutButton = function(){
+
+      var windows = [];
+      var openWindow = function(name){
+        var x = 0;
+        var y = (windows.length)*150;
+        var newWindow = window.open('',name,'height=650,width=1000' );
+        newWindow.moveTo(x,y);
+        windows.push(newWindow);
+        return newWindow
+      };      
+
+      var sendToCart = function(params,name){
+        var form = document.createElement('form');
+        form.target = name
+        form.method = 'POST'
+        form.action = booklistId() + "/carts?" + params
+        var newWindow = openWindow(name)
+        if(newWindow){ form.submit(); } else {
+          console.log("popup blocked")
+        }
+      };
+
       $('#checkout-button').on({
         click: function(){
-          _.map(checkoutData(),function(vendorData){
-            $.ajax({
-              url: window.location.href + '/cart',
-              type: 'POST',
-              data: vendorData.data,
-              success: function(data, textStatus, jqXHR){
-                openWindow(data.link,vendorData.vendor)
-              }
-            });
+          _.map(checkoutData(),function(vendorData,i){
+            sendToCart(vendorData,'books ' + i);
           });
         }
       });
     };
-
-    var windows = []
-    var openWindow = function(link,vendor){
-      var x = 0;
-      var y = (windows.length)*150;
-      var newWindow = window.open(link, vendor + ' books','height=650,width=1000' );
-      newWindow.moveTo(x,y);
-      windows.push(newWindow);
-    }
 
     returnObject = {
       books: books,

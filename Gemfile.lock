@@ -30,9 +30,6 @@ GEM
       multi_json (~> 1.0)
     arel (3.0.2)
     builder (3.0.4)
-    celluloid (0.12.4)
-      facter (>= 1.6.12)
-      timers (>= 1.0.0)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
@@ -40,13 +37,11 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.4.0)
-    connection_pool (1.0.0)
     domain_name (0.5.7)
       unf (~> 0.0.3)
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
-    facter (1.6.17)
     fast-aes (0.1.1)
     friendly_id (4.0.9)
     hike (1.2.1)
@@ -85,8 +80,6 @@ GEM
     rack (1.4.4)
     rack-cache (1.2)
       rack (>= 0.4)
-    rack-protection (1.3.2)
-      rack
     rack-ssl (1.3.3)
       rack
     rack-test (0.6.2)
@@ -109,25 +102,12 @@ GEM
     rake (10.0.3)
     rdoc (3.12)
       json (~> 1.4)
-    redis (3.0.2)
-    redis-namespace (1.2.1)
-      redis (~> 3.0.0)
     ref (1.0.2)
     sass (3.2.5)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
       tilt (~> 1.3)
-    sidekiq (2.6.5)
-      celluloid (~> 0.12.0)
-      connection_pool (~> 1.0)
-      multi_json (~> 1)
-      redis (~> 3)
-      redis-namespace
-    sinatra (1.3.4)
-      rack (~> 1.4)
-      rack-protection (~> 1.3)
-      tilt (~> 1.3, >= 1.3.3)
     slim (1.3.6)
       temple (~> 0.5.5)
       tilt (~> 1.3.3)
@@ -142,7 +122,6 @@ GEM
       ref
     thor (0.17.0)
     tilt (1.3.3)
-    timers (1.1.0)
     treetop (1.4.12)
       polyglot
       polyglot (>= 0.3.1)
@@ -170,8 +149,6 @@ DEPENDENCIES
   quiet_assets
   rails (= 3.2.11)
   sass-rails (~> 3.2.3)
-  sidekiq
-  sinatra
   slim
   therubyracer
   uglifier (>= 1.0.3)

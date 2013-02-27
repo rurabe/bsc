@@ -14,8 +14,8 @@ BookSupply::Application.routes.draw do
 
   match'/:id/books/:vendor'  => 'books#show', :via => 'get', :as => 'books'
 
-  match '/:id'       => 'booklists#show',   :via => 'get',   :as => 'booklist'
-  match '/:id/cart'  => 'carts#create',     :via => 'post',  :as => 'carts'
+  match '/:id'        => 'booklists#show',   :via => 'get',   :as => 'booklist'
+  match '/:id/carts'  => 'carts#create',     :via => 'post',  :as => 'carts'
 
   root :to => 'schools#index'
 

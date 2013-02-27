@@ -2,7 +2,7 @@ class CartsController < ApplicationController
 
 	def create
     @query = query(params[:vendor]).new(params)
-    render :json => { :link => @query.link }.to_json
+    redirect_to @query.link
 	end
 
   private
