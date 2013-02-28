@@ -1,15 +1,13 @@
 <div class="row-fluid pagination-centered">
 	<div class="span12">
-
-		<div id="paper-box" class="logo-outer span10 offset1 paper">
-
+							
+		<div id="paper-box" class="paper">
 			<div class="logo-inner">
+				<%= render :partial => 'shared/logo' %>
+			</div>
 
-				<div class="logo-front">
-					<%= render :partial => 'shared/logo' %>
-				</div>
-				
-				<div class="loginform" style="display: none">
+			<div class="go-time" style="display:none">
+				<div class="loginform">
 					<%= render :partial => 'loginform' %>
 				</div>
 
@@ -17,9 +15,20 @@
 				  <div class="about-info" style="display: none">
 						<%= render :partial => 'shared/about_info' %>
 					</div>
-					<button class="btn btn-warning" id="about-handle" style="display:none"> What is Book Supply Co.??? </button>
+					<button class="btn btn-warning" id="about-handle"> 
+						Tell me more about Book Supply Co. 
+					</button>
+				</div>
+			</div>
+
+			<div class="teach-me" style="display: none">
+				<div class="demo">
+
 				</div>
 
+				<div class="try-div">
+					<button id="try" class="btn big-ass-button btn-large btn-school"> Try it now!</button>
+				</div>
 			</div>
 
 		</div>

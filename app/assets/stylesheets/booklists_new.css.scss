@@ -3,20 +3,41 @@
 
 #paper-box {
   position: relative;
-  height: 800px;
-  width: 100%;
-  margin: 0px auto;
-  display: none;
+  height: 600px;
+  width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .logo-inner {
-  margin: 20px;
+  margin-bottom: 20px;
+
 }
 
 .logo-front {
   margin: 0px auto 20px auto;
 }
 
+.demo{
+  width: 600px;
+  height: 300px;
+  border: 1px solid silver;
+  background-color: white;
+  margin: 0 auto;
+}
+
+.try-div{
+  margin: 40px auto;
+  clear: both;
+}
+
+#about-handle{
+  font-size: 14pt;
+}
+
+.go-time{
+  margin-top: 80px;
+}
 
 .loginform{
   margin: 10px auto;
@@ -26,12 +47,16 @@
   margin: 0px auto;
 }
 
-.form-label-cell {
+td.form-label-cell label {
   text-align: right;
   padding-right: 10px;
+  font-size: 18pt;
 }
 
-.form-field-cell {
+td.form-field-cell input{
+  font-size: 18pt;
+  height: 30px;
+  font-family: 'Gochi Hand', cursive;
 }
 
 input#booklist_username {
@@ -42,6 +67,9 @@ input#booklist_password {
   background-color: #FAFFBD;
 }
 
+input.big-ass-button, button.big-ass-button{
+  font-size: 18pt;
+}
 
 // For loading modal
 
