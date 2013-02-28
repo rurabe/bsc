@@ -12,6 +12,16 @@
  *= require_directory
  */
 
-
+.paper{
+  background-image: url(linedpaper.png);
+  background-repeat: repeat;
+  -moz-box-shadow:    5px 5px 5px 5px #ccc;
+  -webkit-box-shadow: 5px 5px 5px 5px #ccc;
+  box-shadow:         5px 5px 5px 5px #ccc;
+  padding: 50px 0px 50px 0px;
+  -webkit-border-radius: 1px 1px 1px 1px;
+  -moz-border-radius: 1px 1px 1px 1px;
+  border-radius: 1px 1px 1px 1px;
+}
 
 

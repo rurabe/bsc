@@ -15,3 +15,7 @@
 //= require_directory .
 
 
+$(document).ready(function(){
+  $('h1.logo').arctext({ radius: 2000 });
+  console.log("working")
+});

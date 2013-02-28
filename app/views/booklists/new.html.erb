@@ -1,14 +1,15 @@
 <div class="row-fluid pagination-centered">
 	<div class="span12">
 
-		<div class="logo-outer">
+		<div id="paper-box" class="logo-outer span10 offset1 paper">
+
 			<div class="logo-inner">
 
 				<div class="logo-front">
 					<%= render :partial => 'shared/logo' %>
 				</div>
 				
-				<div class="loginform">
+				<div class="loginform" style="display: none">
 					<%= render :partial => 'loginform' %>
 				</div>
 
@@ -16,22 +17,17 @@
 				  <div class="about-info" style="display: none">
 						<%= render :partial => 'shared/about_info' %>
 					</div>
-					<button class="btn btn-warning" id="about-handle"> What is Book Supply Co.??? </button>
+					<button class="btn btn-warning" id="about-handle" style="display:none"> What is Book Supply Co.??? </button>
 				</div>
 
 			</div>
+
 		</div>
 
 		<%= render :partial => 'loading_modal' %>
 
 	</div>
 </div>
-
-<%= link_to root_url do %>
-	<button class="btn btn-mini btn-warning other-school">
-		Not your school?
-	</button>
-<% end %>
 
 <%= content_for :page_js do %>
 	<%= javascript_include_tag "booklists/new" %>

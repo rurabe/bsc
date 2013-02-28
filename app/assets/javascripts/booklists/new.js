@@ -47,8 +47,6 @@ $(document).ready(function(){
       }
     });
 
-
-
   // [----------=====Loading Modal=====----------]
 
     $('#loadingModal').modal({
@@ -63,7 +61,7 @@ $(document).ready(function(){
         pause: "false"
       }).carousel('cycle');
       $('#loadingModal').modal('show');
-    })
+    });
 
   // [----------=====Keep the divs the same size =====----------]
 
@@ -72,6 +70,10 @@ $(document).ready(function(){
       var sizes = $('p.about-explanation').map(function(){ return $(this).height() }).get();
       var maxSize = Math.max.apply(null,sizes);
       $('p.about-explanation').map(function(){$(this).height(maxSize)});
-    }
+    };
+
+  // [----------=====     INIT      =====----------] 
+
+    $('#paper-box').fadeIn(1500);
   
 });
