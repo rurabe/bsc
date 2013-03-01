@@ -1,16 +1,35 @@
 $(document).ready(function(){
   // [----------------------------------------===== #NEW =====----------------------------------------]
-  
-  
 
-    $('#paper-box').hide().fadeIn(1000,function(){
-      $('.teach-me').fadeIn(500)
+    var recursiveFade = function(elementArray,fadeSpeed,delay){
+      fadeSpeed = fadeSpeed || 500;
+      delay = delay || 0
+      var fadeMeIn = function(i){
+        i = i || 0
+        $(elementArray[i]).fadeIn(fadeSpeed,function(){
+          if( i < (elementArray.length - 1) ){ 
+            setTimeout(function(){
+              fadeMeIn(i + 1); 
+            },delay);
+          }
+        });
+      };
+      fadeMeIn();
+    };
+    // so first the paper comes in
+    $('#paper-box').fadeIn(1000,function(){
+      // then the demo box and button fade in
+      $('#teach-me').fadeIn(500);
+            $('#tell-me-more').fadeIn(500);
+      recursiveFade($('.demo-column'),500,500);
+
     });
+    $('h1.logo').arctext({ radius: 2000 });
 
     $('#try').on({
       click: function(){
-        $('.teach-me').fadeOut(function(){
-          $('.go-time').fadeIn();
+        $('#teach-me').fadeOut(function(){
+          $('#go-time').fadeIn();
         })
       }
     })

@@ -1,36 +1,20 @@
 <div class="row-fluid pagination-centered">
 	<div class="span12">
-							
+											
 		<div id="paper-box" class="paper">
-			<div class="logo-inner">
-				<%= render :partial => 'shared/logo' %>
+
+			<div class="logo-inner row-fluid">
+				<%= render :partial => 'shared/logo' %>	
 			</div>
 
-			<div class="go-time" style="display:none">
-				<div class="loginform">
-					<%= render :partial => 'loginform' %>
-				</div>
+			<div id="new-page-main-content" class="row-fluid">
+				<%= render :partial => 'teach_me' %>
 
-				<div class="about-info-container">
-				  <div class="about-info" style="display: none">
-						<%= render :partial => 'shared/about_info' %>
-					</div>
-					<button class="btn btn-warning" id="about-handle"> 
-						Tell me more about Book Supply Co. 
-					</button>
-				</div>
+				<%= render :partial => 'go_time' %>
 			</div>
-
-			<div class="teach-me" style="display: none">
-				<div class="demo">
-
-				</div>
-
-				<div class="try-div">
-					<button id="try" class="btn big-ass-button btn-large btn-school"> Try it now!</button>
-				</div>
-			</div>
-
+		  <div class="tell-me-more-div">
+		    <button id="tell-me-more" class="btn btn-warning">Tell me more</button>
+		  </div>
 		</div>
 
 		<%= render :partial => 'loading_modal' %>

@@ -2,8 +2,9 @@
 
 
 #paper-box {
+  display: none;
   position: relative;
-  height: 600px;
+  height: 650px;
   width: 800px;
   margin-left: auto;
   margin-right: auto;
@@ -18,29 +19,71 @@
   margin: 0px auto 20px auto;
 }
 
+#teach-me{
+  display:none;
+}
+
+#new-page-main-content{
+  height: 417px;
+}
+
 .demo{
-  width: 600px;
-  height: 300px;
-  border: 1px solid silver;
-  background-color: white;
+  height: 350px;
   margin: 0 auto;
+  padding: 0px 2.5%;
+}
+
+.demo-column{
+  display: none;
+  position: relative;
+  height: 100%;
+  background: rgba(200,200,200,0.5);
+  margin: 0px 1.25%;
+  width: 30.75%;
+  float: left;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+}
+
+.demo-column-image{
+  height: 75%;
+  margin: 5%;
+  background-color:silver;
+
+}
+
+.demo-column-text{
+  height: 20%;
+  margin: 5%;
+  font-size: 12pt;
 }
 
 .try-div{
-  margin: 40px auto;
+  margin: 15px auto 0px;
   clear: both;
+}
+.tell-me-more-div{
+  margin: 5px auto;
+  clear: both;
+}
+
+#tell-me-more{
+  clear: both;
+  display:none;
+}
+
+#go-time{
+  display: none;
+  position: relative;
+  margin: none;
 }
 
 #about-handle{
   font-size: 14pt;
 }
 
-.go-time{
-  margin-top: 80px;
-}
-
 .loginform{
-  margin: 10px auto;
+  margin: 80px auto 0px;
 }
 
 .login {

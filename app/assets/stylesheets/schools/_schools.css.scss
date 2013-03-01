@@ -3,9 +3,26 @@
 // 
 // $school-primary-color
 // $school-secondary-color
+// $school-slug
 
 $school-primary-color: #6A7F10 !default;
 $school-secondary-color: #A8B400 !default;
+
+html{
+  background: url(#{$school-slug}-bg.jpg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+
+body{
+  background-color: none !important;
+}
 
 h1.logo {
 	color: $school-primary-color;

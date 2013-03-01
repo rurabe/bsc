@@ -13,8 +13,3 @@
 //= require jquery
 //= require jquery_ujs
 //= require_directory .
-
-
-$(document).ready(function(){
-  $('h1.logo').arctext({ radius: 2000 });
-});

@@ -18,3 +18,16 @@ body {
   display: block;
   margin: 5px auto;
 }
+
+.paper{
+  background-image: url(linedpaper.png);
+  background-repeat: repeat;
+  margin: 40px auto 50px;
+  -moz-box-shadow:    7px 7px 7px 7px rgba(25,25,25,0.5);
+  -webkit-box-shadow: 7px 7px 7px 7px rgba(25,25,25,0.5);
+  box-shadow:         7px 7px 7px 7px rgba(25,25,25,0.5);
+  padding: 50px 0px 50px 0px;
+  -webkit-border-radius: 3px 3px 3px 3px;
+  -moz-border-radius: 3px 3px 3px 3px;
+  border-radius: 3px 3px 3px 3px;
+}
