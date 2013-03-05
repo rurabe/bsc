@@ -7,6 +7,7 @@
 
 $school-primary-color: #6A7F10 !default;
 $school-secondary-color: #A8B400 !default;
+$school-slug: 'pdx' !default;
 
 html{
   background: url(#{$school-slug}-bg.jpg);

@@ -21,7 +21,7 @@ $(document).ready(function(){
       // then the demo box and button fade in
       $('#teach-me').fadeIn(500);
             $('#tell-me-more').fadeIn(500);
-      recursiveFade($('.demo-column'),500,500);
+      recursiveFade($('.demo-column'),500,700);
 
     });
 
