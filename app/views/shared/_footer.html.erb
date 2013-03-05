@@ -1,0 +1,34 @@
+  <footer>
+    <div class="row-fluid">
+    <div class="footer-menu span3">
+      <ul>
+        <li>Book Supply Co.</li>
+        <li class="ind1"><%= link_to 'About us', about_path %></li>
+        <li class="ind1"><%= link_to 'FAQ', faq_path %></li>
+        <li class="ind1">Work with us</li>
+      </ul>
+    </div>
+
+    <div class="contact span3">
+      <ul>
+        <li>Have a question? Drop us a line!</li>
+        <li><%= mail_to "contact@booksupply.co" %> </li>
+      </ul>
+    </div>
+
+    <div class="span3">
+    </div>
+
+    <div class="schools span3">
+      <span class="not-your-school"> Not your school? </span>
+      <ul id="other-schools">
+        <% @schools.each do |school| %>
+          <li class="footer-school other-school-<%= school.slug %>">
+            <%= link_to school.name.upcase, new_booklist_path( :school => school.slug ) %>
+          </li>
+        <% end %>
+          <li> Don't see your school? <%= mail_to "schools@booksupply.co", "email us" %> to add it!</li>
+      </ul>
+    </div>
+  </div>
+  </footer>

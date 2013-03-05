@@ -28,9 +28,13 @@
 		<!-- Content -->
 		<%= yield %>
 
-	<div>
+	</div>
+
+  <%= render :partial => 'shared/footer' %>
+
 	<div id="jses">
 		<%= yield :page_js %>
   </div>
+
 </body>
 </html>

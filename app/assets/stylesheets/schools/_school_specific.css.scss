@@ -1,0 +1,87 @@
+// This file contains the styles for school specific elements,
+// and is designed to be used with a school specific file that defines the variables:
+// 
+// $school-primary-color
+// $school-secondary-color
+// $school-slug
+
+$school-primary-color: #6A7F10 !default;
+$school-secondary-color: #A8B400 !default;
+
+html{
+  background: url(#{$school-slug}-bg.jpg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+
+body{
+  background-color: none !important;
+}
+
+h1.logo {
+	color: $school-primary-color;
+}
+
+h2.school-name {
+	color: $school-secondary-color;
+}
+
+.btn-school {
+  color: #ffffff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  background-color: $school-primary-color;
+  *background-color: $school-primary-color;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(lighten($school-primary-color,7)), to($school-primary-color));
+  background-image: -webkit-linear-gradient(top, lighten($school-primary-color,7), $school-primary-color);
+  background-image: -o-linear-gradient(top, lighten($school-primary-color,7), $school-primary-color);
+  background-image: linear-gradient(to bottom, lighten($school-primary-color,7), $school-primary-color);
+  background-image: -moz-linear-gradient(top, lighten($school-primary-color,7), $school-primary-color);
+  background-repeat: repeat-x;
+  border-color: $school-primary-color $school-primary-color #387038;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
+}
+
+.btn-school:hover,
+.btn-school:active,
+.btn-school.active,
+.btn-school.disabled,
+.btn-school[disabled] {
+  color: #ffffff;
+  background-color: lighten($school-primary-color,0.5);
+  *background-color: #499249;
+}
+
+.btn-school:active,
+.btn-school.active {
+  background-color: #408140 \9;
+}
+
+.about-info{
+	padding: 20px;
+}
+
+.about-point{
+	margin: 20px auto;
+}
+
+@mixin about-text($bg_color) {
+  @if lightness($bg_color) > 35 {color: black;}
+  @else                         {color: white;}
+}
+
+.about-explanation{
+  @include about-text($school-secondary-color);
+	padding: 10px;
+	background-color: transparentize($school-secondary-color,0.3);
+	-webkit-border-radius: 10px 10px 10px 10px;
+	-moz-border-radius: 10px 10px 10px 10px;
+	border-radius: 10px 10px 10px 10px;
+}

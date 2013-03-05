@@ -24,7 +24,6 @@ $(document).ready(function(){
       recursiveFade($('.demo-column'),500,500);
 
     });
-    $('h1.logo').arctext({ radius: 2000 });
 
     $('#try').on({
       click: function(){
@@ -33,6 +32,7 @@ $(document).ready(function(){
         })
       }
     })
+        $('h1.logo').arctext({ radius: 2000 });
 
   // [----------=====About Tab=====----------]
 

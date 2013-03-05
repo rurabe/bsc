@@ -5,7 +5,7 @@
   display: none;
   position: relative;
   height: 650px;
-  width: 800px;
+  width: 80%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -30,7 +30,6 @@
 .demo{
   height: 350px;
   margin: 0 auto;
-  padding: 0px 2.5%;
 }
 
 .demo-column{
@@ -46,16 +45,28 @@
 }
 
 .demo-column-image{
-  height: 75%;
-  margin: 5%;
+  height: 250px;
+  margin: 15px;
+  border: 3px solid silver;
   background-color:silver;
 
+  // background-repeat: no-repeat;
 }
 
 .demo-column-text{
   height: 20%;
-  margin: 5%;
+  margin: 10px;
   font-size: 12pt;
+}
+
+#teach-login{
+  background: url(teach-login.jpg);
+  background-position: center center;
+}
+
+#teach-find{
+  background: url(teach-find.jpg);
+  background-position: center center;
 }
 
 .try-div{
@@ -108,10 +119,6 @@ input#booklist_username {
 
 input#booklist_password {
   background-color: #FAFFBD;
-}
-
-input.big-ass-button, button.big-ass-button{
-  font-size: 18pt;
 }
 
 // For loading modal

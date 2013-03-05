@@ -2,18 +2,22 @@ class BooklistsController < ApplicationController
 
   before_filter :https_redirect,  :only 		=> [:new, :create]
   before_filter :http_redirect,   :only 		=> [:show]
-  before_filter :define_school,   :only 		=> [:new, :create]
+  before_filter :define_schools,  :only     => [:new,:show,:index]
   before_filter :define_booklist,	:only			=> [:show, :update]
   
   http_basic_authenticate_with :name => "admin", :password => "saintmarys", :only => [:index]
 
   rescue_from StandardError, :with => :error_handling
 
+  caches_page :new
+
   def new
+    @school = @schools.find { |school| school.slug == params[:school] }
     cookies[:school] = @school.slug
   end
 
   def create
+    @school = School.find( params[:school] )
     if params[:booklist][:username] == "test"
       show_example
     else
@@ -29,8 +33,7 @@ class BooklistsController < ApplicationController
   end
 
   def show
-    @school = @booklist.school || School.find(params[:school])
-    # @offers = @booklist.offers_data
+    @school = @booklist.school || School.find( params[:school] )
   end
 
   def index
@@ -43,8 +46,8 @@ class BooklistsController < ApplicationController
       @booklist = Booklist.where(:slug => params[:id]).includes(:courses,:books,:offers).first
     end
 
-    def define_school
-      @school = School.find(params[:school])
+    def define_schools
+      @schools = School.all
     end
 
     def show_example

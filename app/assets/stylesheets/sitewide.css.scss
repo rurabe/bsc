@@ -22,12 +22,59 @@ body {
 .paper{
   background-image: url(linedpaper.png);
   background-repeat: repeat;
-  margin: 40px auto 50px;
+  margin: 40px auto 100px;
   -moz-box-shadow:    7px 7px 7px 7px rgba(25,25,25,0.5);
   -webkit-box-shadow: 7px 7px 7px 7px rgba(25,25,25,0.5);
   box-shadow:         7px 7px 7px 7px rgba(25,25,25,0.5);
-  padding: 50px 0px 50px 0px;
+  padding: 50px 10px;
   -webkit-border-radius: 3px 3px 3px 3px;
   -moz-border-radius: 3px 3px 3px 3px;
   border-radius: 3px 3px 3px 3px;
+}
+
+footer{
+  padding: 10px;
+  height:150px;
+  background-color: silver;
+}
+
+footer ul{
+  list-style-type: none;
+}
+
+footer div.footer-menu{
+  width: 30%;
+}
+
+footer div.contact{
+}
+
+footer li{
+  margin: 10px 0px;
+}
+
+footer li.ind1{
+  margin-left: 10px;
+}
+
+footer div.schools{
+  padding: 10px 0px;
+}
+
+.schools ul{
+  height: 110px;
+  overflow-y: scroll;
+}
+
+ul#other-schools li{
+  margin: 3px;
+}
+
+.footer-schools{
+  font-weight: bold;
+}
+
+
+input.big-ass-button, button.big-ass-button{
+  font-size: 18pt;
 }
