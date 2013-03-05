@@ -1,9 +1,10 @@
+
 <div class="paper pagination-centered">
     <div class="logo-head">
       <%= render :partial => 'shared/logo' %>
     </div>
 
-      <div class="faq-box">
+      <div class="content-box">
       <h1>FAQs</h1>
 
 
@@ -214,19 +215,7 @@
       </div>
     </div>
 
-    <% if @school %>
-      <%= link_to new_booklist_url :school => @school.slug do %>
-        <button class="btn btn-warning give-try-btn btn-large big-ass-button">
-          Give it a try!
-        </button>
-      <% end %>
-    <% else %>
-      <%= link_to root_url do %>
-        <button class="btn btn-warning give-try-btn btn-large big-ass-button">
-          Give it a try!
-        </button>
-      <% end %>
-    <% end %>
+    <%= render :partial => 'shared/try_button' %>
 
     <p>
       Have more questions? Let us know on <%= link_to "Facebook", 'http://www.facebook.com/booksupplyco' %> or <%= mail_to "contact@booksupply.co", 'email us' %>.

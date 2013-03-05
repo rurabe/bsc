@@ -1,0 +1,13 @@
+<% if @school %>
+  <%= link_to new_booklist_url :school => @school.slug do %>
+    <button class="btn btn-warning give-try-btn btn-large big-ass-button">
+      Give it a try!
+    </button>
+  <% end %>
+<% else %>
+  <%= link_to root_url do %>
+    <button class="btn btn-warning give-try-btn btn-large big-ass-button">
+      Give it a try!
+    </button>
+  <% end %>
+<% end %>

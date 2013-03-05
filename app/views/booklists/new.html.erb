@@ -13,7 +13,9 @@
 				<%= render :partial => 'go_time' %>
 			</div>
 		  <div class="tell-me-more-div">
-		    <button id="tell-me-more" class="btn btn-warning">Tell me more</button>
+		    <%= link_to about_path do %>	
+		    	<button id="tell-me-more" class="btn btn-warning">Tell me more</button>
+		    <% end %>
 		  </div>
 		</div>
 
