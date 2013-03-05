@@ -2,8 +2,9 @@ BookSupply::Application.routes.draw do
 
   match '/booklists'   => 'booklists#index'
 
-  match "/about"        => 'staticpages#about'
-  match "/faq"          => 'staticpages#faq'
+  match '/about'        => 'staticpages#about'
+  match '/faq'          => 'staticpages#faq'
+  match '/join'         => 'staticpages#join'
   match '/channel.html' => Facebook::Channel
 
   scope :constraints => School do
