@@ -4,28 +4,44 @@
 
   <div class="content-box">
 
+    <div class="row-fluid pagination-centered">
+      <p>At Book Supply Co. our mission is to:</p>
+      <p class="mission">Be the absolute easiest way to get the best prices on textbooks.</p>
+      <p>Here's how we do it:</p>
+    </div>
 
-    <p>At Book Supply Co. our mission is to:</p>
-    <p class="mission">Be the absolute easiest way to get the best prices on textbooks.</p>
-    <p>Here's how we do it:</p>
+    <div class="row-fluid">
+      <div class="about-image span7" id="about-prices"></div>
+      <div class="about-text span5">
+        <h2 class="about-headline">Low prices</h2>
+        <p> We search all over the internet for the lowest prices, then compare them to your campus bookstore. If your bookstore is cheaper, that's great! We'll even link you there if they let you order online. 
+        <p>Best of all, these prices are exactly the same as if you had gone to these sites yourself!</p>
+      </div>
+    </div>
 
-    <h2>Low prices</h2>
-    <div class="about-image" id="about-prices"></div>
-    <p> We search all over the internet for the lowest prices, then compare them to your campus bookstore. If your bookstore is cheaper, that's great! We'll even link you there if they let you order online. 
-    <p>Best of all, these prices are exactly the same as if you had gone to these sites yourself!</p>
 
-    <h2>Automation</h2>
-    <div class="about-image" id="about-auto"></div>
-    <p>Do you enjoy copying and pasting ISBNs from your school website to Amazon? Neither did we when we were in school! Book Supply Co. lets you tell us what books you need simply by entering your school username and password.</p>
-    <p>After you pick which books you want, we will even put them into a cart for you so you can get it over with and back to <span class="strike">partying</span> studying.</p><p>It's like using the magic flute in Super Mario 3.</p>
+    <div class="row-fluid">
+      <div class="about-text span5">
+        <h2 class="about-headline">Automation</h2>
+        <p>Do you enjoy copying and pasting ISBNs from your school website to Amazon? Neither did we! Book Supply Co. lets you tell us what books you need simply by entering your school username and password.</p>
+        <p>After you pick which books you want, we will even put them into a cart for you so you can get it over with and back to <span class="strike">partying</span> studying.</p>
+      </div>
+      <div class="about-image span7" id="about-auto"></div>
+    </div>
 
-    <h2>Flexibility</h2>
-    <div class="about-image" id="about-flex"></div>
-    <p>Students have a lot of options these days. Do you want a book used, or new? Wanna rent it, or buy it outright? While it's nice to have choice, these choices are scattered all over the internet.</p>
-    <p>We give you the power of having all information you need at your fingertips, then let you decide what works best for you.</p>
-  </p>
+
+    <div class="row-fluid">
+      <div class="about-image span7" id="about-flex"></div>
+      <div class="about-text span5">
+        <h2 class="about-headline">Flexibility</h2>
+        <p>Students have a lot of options these days. Do you want a book used, or new? Wanna rent it, or buy it outright? Choice is nice, but these choices are scattered all over the internet.</p>
+        <p>We put you all information you need at your fingertips, then let you decide what works best for you.</p>
+      </div>
+    </div>
+
+    <div class="row-fluid pagination-centered">
+      <%= render :partial => 'shared/try_button' %>
+    </div>
+
   </div>
-
-  <%= render :partial => 'shared/try_button' %>
-
 </div>

@@ -24,11 +24,6 @@
 p.mission{
   font-size: 24pt;
   font-style: italic;
-
-}
-
-.content-box p,h2{
-  text-align: center;
 }
 
 .content-box p{
@@ -40,11 +35,15 @@ p.mission{
 }
 
 .about-image{
-  width: 80%;
   height:250px;
   margin: 0 auto 20px auto;
   background-position: center center;
   background-repeat: no-repeat;
+}
+
+.about-text{
+  margin: 0 auto;
+  text-align: left;
 }
 
 #about-prices{

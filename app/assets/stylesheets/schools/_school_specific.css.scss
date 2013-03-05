@@ -86,3 +86,8 @@ h2.school-name {
 	-moz-border-radius: 10px 10px 10px 10px;
 	border-radius: 10px 10px 10px 10px;
 }
+
+p.mission, h2.about-headline{
+  color: $school-primary-color;
+  text-shadow: 0.04em 0.04em 0.04em black;
+}
