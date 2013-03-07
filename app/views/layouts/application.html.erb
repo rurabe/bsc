@@ -9,28 +9,20 @@
 </head>
 <body>
 	<div id="fb-root"></div>
-	<div class="container" >
-		
-		<!-- Flash -->
-		<div id="flash">
-			<% flash.each do |key,array| %>
-				<div class="alert alert-<%= key %> fade in">
-					<a class="close" data-dismiss="alert" href="#">&times;</a>
-					<ul>
-						<% array.each do |error| %>
-							<li><%= error %></li>
-						<% end %>
-					</ul>
-				</div>
-			<% end %>
-		</div>
+  <div id="main-container">
 
-		<!-- Content -->
-		<%= yield %>
+
+
+  	<div class="container">
+  		<!-- Content -->
+  		<%= yield %>
+    </div>
+
+    <%= render :partial => 'shared/footer' %>
 
 	</div>
 
-  <%= render :partial => 'shared/footer' %>
+
 
 	<div id="jses">
 		<%= yield :page_js %>

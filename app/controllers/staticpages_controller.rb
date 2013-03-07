@@ -11,6 +11,14 @@ class StaticpagesController < ApplicationController
 
   end
 
+  def team
+
+  end
+
+  def join
+    
+  end
+
   private
 
     def define_schools

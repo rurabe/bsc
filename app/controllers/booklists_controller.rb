@@ -2,7 +2,7 @@ class BooklistsController < ApplicationController
 
   before_filter :https_redirect,  :only 		=> [:new, :create]
   before_filter :http_redirect,   :only 		=> [:show]
-  before_filter :define_schools,  :only     => [:new,:show,:index]
+  before_filter :define_schools
   before_filter :define_booklist,	:only			=> [:show, :update]
   
   http_basic_authenticate_with :name => "admin", :password => "saintmarys", :only => [:index]
@@ -63,8 +63,6 @@ class BooklistsController < ApplicationController
     # Error handling
     def error_handling(error)
       flash[:error] = [error.message]
-      pp error
-      pp error.backtrace
       render 'new'
     end
 

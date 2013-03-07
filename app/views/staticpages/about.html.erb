@@ -5,8 +5,10 @@
   <div class="content-box">
 
     <div class="row-fluid pagination-centered">
-      <p>At Book Supply Co. our mission is to:</p>
+      <p>At Book Supply Co. our mission is to</p>
       <p class="mission">Be the absolute easiest way to get the best prices on textbooks.</p>
+      <p>If buying your books were Super Mario Bros 3, we want to be your <%= link_to "magic whistle", "http://www.mariowiki.com/Warp_Whistle", :target => '_blank' %>
+      </p>
       <p>Here's how we do it:</p>
     </div>
 
@@ -37,6 +39,11 @@
         <p>Students have a lot of options these days. Do you want a book used, or new? Wanna rent it, or buy it outright? Choice is nice, but these choices are scattered all over the internet.</p>
         <p>We put you all information you need at your fingertips, then let you decide what works best for you.</p>
       </div>
+    </div>
+
+    
+    <div class="row-fluid pagination-centered faq-link">
+      <%= link_to 'More questions? Check out our FAQs', faq_path %>
     </div>
 
     <div class="row-fluid pagination-centered">

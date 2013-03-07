@@ -1,9 +1,45 @@
+$footer-height: 160px;
+
+#main-container{
+  box-sizing: border-box;
+  min-height: 100%;
+  padding: 0 0 $footer-height;
+  position: relative;
+}
+
+html{
+  height: 100%;
+}
+
 body {
-  // background-image:url('bg.png');
+  height: 100%;
 }
 
 #flash{
-  margin: 20px auto;
+  width:100%;
+  height: 100px;
+  position: relative;
+}
+
+.flash-container{
+  width: 100%;
+  position: absolute;
+  bottom: 0px;
+  margin-bottom: 25px;
+}
+
+#flash ul{
+  list-style: none;
+  margin: 0px auto 5px auto;
+}
+
+.flash-message{
+  font-family: 'Gochi Hand', cursive;
+  font-size: 12pt;
+}
+
+.flash-error{
+  color: red;
 }
 
 .social-button {
@@ -33,8 +69,12 @@ body {
 }
 
 footer{
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  position: absolute;
   padding: 10px;
-  height:150px;
+  height: $footer-height;
   background-color: silver;
 }
 
@@ -53,7 +93,7 @@ footer li{
   margin: 10px 0px;
 }
 
-footer li.ind1{
+.ind1{
   margin-left: 10px;
 }
 
@@ -62,7 +102,7 @@ footer div.schools{
 }
 
 .schools ul{
-  height: 110px;
+  height: 120px;
   overflow-y: scroll;
 }
 

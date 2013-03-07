@@ -93,25 +93,25 @@ module Mecha
 
 	class AuthenticationError < StandardError
 		def message
-			"There was an error with your username or password. You might want to check that out and try again."
+			"Oops, we couldn't log you in. Check your username and password and try again."
 		end
 	end
 
   class NoClassesError < StandardError
     def message
-      "The system is reporting that you aren't registered for any classes. Check to make sure you're signed up and come back!"
+      "Your school says that you aren't registered for any classes. Check to make sure you're signed up and come back!"
     end
   end
 
   class ClassesNotInSystemError < StandardError
     def message
-      "Sorry! We can't find your classes in the system. We can only find books for classes in the system."
+      "Sorry! Your classes aren't in your school's system (and we need them to work)"
     end
   end
 
   class ServiceDownError < StandardError
     def message
-      "It looks like the school's website is down right now (and we need it to do our magic). Check back soon and it should be working again."
+      "Your school's website is down right now (and we need it to do our magic). Check back soon and it should be working again."
     end
   end
 

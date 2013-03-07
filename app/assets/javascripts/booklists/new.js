@@ -17,22 +17,25 @@ $(document).ready(function(){
       fadeMeIn();
     };
     // so first the paper comes in
-    $('#paper-box').fadeIn(1000,function(){
-      // then the demo box and button fade in
-      $('#teach-me').fadeIn(500);
-            $('#tell-me-more').fadeIn(500);
-      recursiveFade($('.demo-column'),500,700);
 
-    });
-
-    $('#try').on({
-      click: function(){
-        $('#teach-me').fadeOut(function(){
-          $('#go-time').fadeIn();
-        })
-      }
-    })
-        $('h1.logo').arctext({ radius: 2000 });
+    if( $.cookie('try') ){
+      $('#paper-box,#tell-me-more,#go-time').show()
+    } else {
+      $('#paper-box').fadeIn(1000,function(){
+        $('#teach-me,#tell-me-more').fadeIn(500);
+        recursiveFade($('.demo-column'),500,700);
+        $('#try-button').on({
+          click: function(){
+            // Tranistion in the go-time
+            $('#teach-me').fadeOut(function(){
+              $('#go-time').fadeIn();
+            });
+          }
+        });
+      });
+    }
+    
+    $('h1.logo').arctext({ radius: 2000 });
 
   // [----------=====About Tab=====----------]
 
