@@ -13,7 +13,6 @@ class BooklistsController < ApplicationController
 
   def new
     @school = @schools.find { |school| school.slug == params[:school] }
-    cookies[:school] = @school.slug
   end
 
   def create
