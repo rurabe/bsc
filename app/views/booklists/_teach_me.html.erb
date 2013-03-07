@@ -3,7 +3,7 @@
     <div class="demo-column">
       <div class="demo-column-image" id="teach-login"></div>
       <div class="demo-column-text">
-        <span>1. Enter your <%= @school.user_id_label %> and password.</span>
+        <span>1. Enter your <%= @school ? @school.user_id_label : 'username' %> and password.</span>
       </div>
     </div>
     <div class="demo-column">

@@ -1,0 +1,7 @@
+@import "schools.css.scss";
+
+$school-primary-color: $pdx-primary-color ;
+$school-secondary-color: $pdx-secondary-color ;
+$school-slug: 'default';
+
+@import "school_specific.css.scss";

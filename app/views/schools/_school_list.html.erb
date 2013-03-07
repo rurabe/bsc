@@ -1,0 +1,12 @@
+<div id="schools-index-box">
+  <h3>Choose your school:</h3>
+    <% @schools.each do |school| %>
+    <%= link_to new_booklist_url(:school => school.slug), :protocol => 'https' do %>
+      <div class="school-row">
+        <h2 class="school-<%= school.slug %> index-school-name">
+          <%= school.name.upcase %>
+        </h2>
+      </div>
+    <% end %>
+  <% end %>
+</div>

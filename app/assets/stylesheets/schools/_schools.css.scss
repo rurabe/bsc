@@ -1,8 +1,17 @@
 @mixin footer-styles($slug,$primary-color,$secondary-color){
   ul#other-schools li.other-school-#{$slug} a{
     color: $primary-color;
+  } 
+}
+
+@mixin index-styles($slug,$primary-color,$secondary-color){
+  h2.school-#{$slug} {
+    color: $primary-color;
+
+    &:hover{
+      color: $secondary-color;
+    }
   }
-  
 }
 
 
@@ -10,21 +19,25 @@ $hawaii-slug: 'hawaii';
 $hawaii-primary-color: #024731 ;
 $hawaii-secondary-color: #000000 ;
 @include footer-styles($hawaii-slug,$hawaii-primary-color,$hawaii-secondary-color);
+@include index-styles($hawaii-slug,$hawaii-primary-color,$hawaii-secondary-color);
 
 $pdx-slug: 'pdx';
 $pdx-primary-color: #6A7F10 ;
 $pdx-secondary-color: #A8B400 ;
 @include footer-styles($pdx-slug,$pdx-primary-color,$pdx-secondary-color);
+@include index-styles($pdx-slug,$pdx-primary-color,$pdx-secondary-color);
 
 $saddleback-slug: 'saddleback';
 $saddleback-primary-color: #b30838 ;
 $saddleback-secondary-color: #fdbe57 ;
 @include footer-styles($saddleback-slug,$saddleback-primary-color,$saddleback-secondary-color);
+@include index-styles($saddleback-slug,$saddleback-primary-color,$saddleback-secondary-color);
 
 $usc-slug: 'usc';
 $usc-primary-color: #990000 ;
 $usc-secondary-color: #FFCC00 ;
 @include footer-styles($usc-slug,$usc-primary-color,$usc-secondary-color);
+@include index-styles($usc-slug,$usc-primary-color,$usc-secondary-color);
 
 
 
