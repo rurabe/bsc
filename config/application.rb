@@ -69,6 +69,9 @@ module BookSupply
     config.autoload_paths.each do |path|
       config.eager_load_paths << path
     end
+    
+    # All pages use SSL
+    config.force_ssl = true
 
     # For deployment on heroku
     config.assets.initialize_on_precompile = false

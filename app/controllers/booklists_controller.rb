@@ -1,7 +1,7 @@
 class BooklistsController < ApplicationController
 
-  before_filter :https_redirect,  :only 		=> [:new, :create]
-  before_filter :http_redirect,   :only 		=> [:show]
+  # before_filter :https_redirect,  :only 		=> [:new, :create]
+  # before_filter :http_redirect,   :only 		=> [:show]
   before_filter :define_schools
   before_filter :define_booklist,	:only			=> [:show, :update]
   
