@@ -7,7 +7,22 @@
 
 $school-primary-color: #6A7F10 !default;
 $school-secondary-color: #A8B400 !default;
-$school-slug: 'pdx' !default;
+$school-slug: 'default' !default;
+
+$selected-color: $school-primary-color;
+$hover-color: transparentize($selected-color,0.6);
+$selected-hover-color: darken($selected-color,10%);
+
+
+.selected-style{
+  background-color: $selected-color;
+  color: white;
+  text-shadow: 0.07em 0.07em 0.07em black;
+  a{
+    color: $school-secondary-color;
+  }
+}
+
 
 html{
   background: url(#{$school-slug}-bg.jpg);
@@ -19,7 +34,6 @@ html{
   -o-background-size: cover;
   background-size: cover;
 }
-
 
 body{
   background-color: none !important;
@@ -65,29 +79,35 @@ h2.school-name {
   background-color: #408140 \9;
 }
 
-.about-info{
-	padding: 20px;
-}
-
-.about-point{
-	margin: 20px auto;
-}
-
-@mixin about-text($bg_color) {
-  @if lightness($bg_color) > 35 {color: black;}
-  @else                         {color: white;}
-}
-
-.about-explanation{
-  @include about-text($school-secondary-color);
-	padding: 10px;
-	background-color: transparentize($school-secondary-color,0.3);
-	-webkit-border-radius: 10px 10px 10px 10px;
-	-moz-border-radius: 10px 10px 10px 10px;
-	border-radius: 10px 10px 10px 10px;
-}
+// ABOUT
 
 p.mission, h2.about-headline{
   color: $school-primary-color;
   text-shadow: 0.04em 0.04em 0.04em black;
+}
+
+// SHOW
+
+.selected .book-button-outer{
+  @extend .selected-style;
+}
+
+.offer-row.selected{
+  @extend .selected-style
+}
+
+.selected .book-button-outer.active{
+  background-color: $selected-hover-color;
+}
+
+.offer-row.selected.active{
+  background-color: $selected-hover-color;
+}
+
+.book-button-outer.active{
+  background-color: $hover-color;
+}
+
+.offer-row.active{
+  background-color: $hover-color;
 }

@@ -3,8 +3,8 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 // Styles
-$hover-color: #cad266;
 $selected-color: #6A7F10;
+$hover-color: transparentize($selected-color,0.6);
 $selected-hover-color: darken($selected-color,10%);
 
 @mixin button-active-style($margin-top,$margin-right,$margin-bottom,$margin-left){
@@ -21,7 +21,6 @@ $selected-hover-color: darken($selected-color,10%);
   -moz-box-shadow:    $shift-x $shift-y $blur-radius $spread-radius $shadow-color;
   -webkit-box-shadow: $shift-x $shift-y $blur-radius $spread-radius $shadow-color;
   box-shadow:         $shift-x $shift-y $blur-radius $spread-radius $shadow-color;
-  background-color: $hover-color;
 }
 
 .shadow-button-style{
@@ -35,15 +34,6 @@ $selected-hover-color: darken($selected-color,10%);
   -moz-transition: all 0.1s ease;
   -o-transition: all 0.1s ease;
   transition: all 0.1s ease;
-}
-
-.selected-style{
-  background-color: $selected-color;
-  color: white;
-  text-shadow: 0.07em 0.07em 0.07em black;
-  a{
-    color: lighten($selected-color,20%);
-  }
 }
 
 .selectable-style{
@@ -128,11 +118,6 @@ $book-button-margin-left: 0px;
   @include button-active-style($book-button-margin-top,$book-button-margin-right,$book-button-margin-bottom,$book-button-margin-left);
 }
 
-.selected .book-button-outer.active{
-  background-color: $selected-hover-color;
-}
-
-
 .book-button-outer.inactive{
   @extend .ui-transition-style;
 }
@@ -141,10 +126,8 @@ $book-button-margin-left: 0px;
   @extend .selectable-style;
 }
 
-
 .selected .book-button-outer{
   @extend .ui-transition-style;
-  @extend .selected-style;
 }
 
 .deselected .book-button-outer{
@@ -192,7 +175,6 @@ $book-button-margin-left: 0px;
   text-align: left;
 }
 
-
 .book-title{
   text-align: left;
   font-size: 14pt;
@@ -204,10 +186,6 @@ $book-button-margin-left: 0px;
 
 .book-price{
   font-size: 18pt;
-}
-
-.price-content{
-
 }
 
 $offer-row-height: 40px;
@@ -248,9 +226,6 @@ $offer-row-margin-left: 0px;
   @extend .ui-transition-style;
 }
 
-.offer-row.selected.active{
-  background-color: $selected-hover-color;
-}
 
 .offer-row.inactive{
   @extend .ui-transition-style;
@@ -268,9 +243,7 @@ $offer-row-margin-left: 0px;
   background-position: 100% 50%;
 }
 
-.offer-row.selected{
-  @extend .selected-style
-}
+
 
 .offer-column-link{
   width: 10%;
@@ -355,13 +328,16 @@ $button-height: 40px;
 }
 
 .vendor-tag.amazon{
+  @extend .ui-transition-style;
   background-image: url(vendor-tag-amazon.png);
 }
 
 .vendor-tag.bn{
+  @extend .ui-transition-style;
   background-image: url(vendor-tag-bn.png);
 }
 
 .vendor-tag.bookstore{
+  @extend .ui-transition-style;
   background-image: url(vendor-tag-bookstore.png);
 }
