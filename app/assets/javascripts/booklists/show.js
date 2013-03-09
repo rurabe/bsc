@@ -499,29 +499,31 @@ $(document).ready(function(){
     };
 
     var offerRowTemplate = '\
-      <div class="offer-row <%= offer.vendorCode %>">\
-        <div class="offer-column-link">\
-          <% if(offer.vendorBookId){ %>\
-            <a href="<%= offer.vendorLink %>" class="link-safe" target="_blank">\
-              <i class="icon-link link-safe"></i>\
-            </a>\
-          <% } %>\
-        </div>\
-        <div class="offer-column-left">\
-          <div class="offer-price">\
-            <span class"offer-price-content"><%= offer.priceHtml() %></span>\
-          </div>\
-          <span class="offer-vendor"><%= offer.vendor %></span>\
-        </div>\
-        <div class="offer-column-right">\
-          <div class="offer-column-row">\
-            <% if(offer.detailedCondition){ %>\
-              Condition: <span class="offer-detailed-condition"><%= offer.detailedCondition %></span>\
+      <div class="offer-row-outer">\
+        <div class="offer-row <%= offer.vendorCode %>">\
+          <div class="offer-column-link">\
+            <% if(offer.vendorBookId){ %>\
+              <a href="<%= offer.vendorLink %>" class="link-safe" target="_blank">\
+                <i class="icon-link link-safe"></i>\
+              </a>\
             <% } %>\
-            <span class="offer-shipping-time"><%= offer.shippingTime %></span>\
           </div>\
-          <div class="offer-column-row offer-comments-row">\
-            <span class="offer-comments"><%= offer.comments || offer.alternateComments() %></span>\
+          <div class="offer-column-left">\
+            <div class="offer-price">\
+              <span class"offer-price-content"><%= offer.priceHtml() %></span>\
+            </div>\
+            <span class="offer-vendor"><%= offer.vendor %></span>\
+          </div>\
+          <div class="offer-column-right">\
+            <div class="offer-column-row">\
+              <% if(offer.detailedCondition){ %>\
+                Condition: <span class="offer-detailed-condition"><%= offer.detailedCondition %></span>\
+              <% } %>\
+              <span class="offer-shipping-time"><%= offer.shippingTime %></span>\
+            </div>\
+            <div class="offer-column-row offer-comments-row">\
+              <span class="offer-comments"><%= offer.comments || offer.alternateComments() %></span>\
+            </div>\
           </div>\
         </div>\
       </div>\
@@ -681,10 +683,12 @@ $(document).ready(function(){
   var createOfferRow = function(offer,offersBox){
     var $box = offersBox.$el
     var $el
+    var $elInner
     var offerGroup = offer.offerGroup
 
     var createWithBox = function(){
       this.$el = $el = addDomElement();
+      this.$elInner = $elInner = $el.find('.offer-row')
       offer.setOfferRow(returnObject);
       setEventHandlers();
     };
@@ -708,7 +712,7 @@ $(document).ready(function(){
 
     var setEventHandlers = function(){
       if(offer.status === "Available"){
-        setActiveButton($el);
+        setActiveButton($elInner);
         setClickHandler();
       }
       if( offer.isSelected() ){
@@ -729,6 +733,7 @@ $(document).ready(function(){
 
     returnObject = {
       $el: $el,
+      $elInner: $elInner,
       offer: offer,
       offersBox: offersBox,
       select: select,

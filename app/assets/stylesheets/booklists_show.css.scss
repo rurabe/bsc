@@ -203,6 +203,11 @@ $offer-row-margin-right: 0px;
 $offer-row-margin-bottom: 5px;
 $offer-row-margin-left: 0px;
 
+.offer-row-outer{
+  float: right;
+  height: $offer-row-height + 2 * ($offer-row-margin-top + $offer-row-margin-bottom) + 2;
+}
+
 .offer-row{
   width: $offer-row-width;
   height: $offer-row-height;
@@ -341,4 +346,9 @@ $button-height: 40px;
 .vendor-tag.bookstore{
   @extend .ui-transition-style;
   background-image: url(vendor-tag-bookstore.png);
+}
+
+.search-status{
+  border: 1px solid silver;
+  height: 50px;
 }
