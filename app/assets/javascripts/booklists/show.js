@@ -598,7 +598,7 @@ $(document).ready(function(){
         offerGroup.offersBox.close()
         $wireline.animate({'height': '0px'},time);
         labelChanger(arrows('down'),"more options");
-        changeContent( arrows('down') );
+        $el.trigger('mouseleave')
         $el.off('click')
         $el.on({
           click: open
