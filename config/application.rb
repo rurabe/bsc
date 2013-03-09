@@ -71,7 +71,7 @@ module BookSupply
     end
     
     # All pages use SSL
-    config.force_ssl = true
+    config.force_ssl = false
 
     # For deployment on heroku
     config.assets.initialize_on_precompile = false
