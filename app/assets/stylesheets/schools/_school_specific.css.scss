@@ -111,3 +111,7 @@ p.mission, h2.about-headline{
 .offer-row.active{
   background-color: $hover-color;
 }
+
+.offer-row.selected .offer-price{
+  text-shadow: 0.07em 0.07em 0.07em black;
+} 
