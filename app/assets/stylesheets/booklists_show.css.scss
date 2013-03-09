@@ -256,13 +256,13 @@ $offer-row-margin-left: 0px;
   @extend .ui-transition-style;
 }
 
-.offer-row.amazon, .book-button-inner.amazon{
+.offer-row.amazon{
   background-image: url(amazon-bg.png);
   background-repeat: no-repeat;
   background-position: 100% 0%;
 }
 
-.offer-row.bn, .book-button-inner.bn{
+.offer-row.bn{
   background-image: url(bn-bg.png);
   background-repeat: no-repeat;
   background-position: 100% 50%;
@@ -343,4 +343,25 @@ $button-height: 40px;
 #checkout-button{
   font-size: 18pt;
   height: $button-height;
+}
+
+
+.vendor-tag{
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  height: 32px;
+  width: 32px;
+}
+
+.vendor-tag.amazon{
+  background-image: url(vendor-tag-amazon.png);
+}
+
+.vendor-tag.bn{
+  background-image: url(vendor-tag-bn.png);
+}
+
+.vendor-tag.bookstore{
+  background-image: url(vendor-tag-bookstore.png);
 }

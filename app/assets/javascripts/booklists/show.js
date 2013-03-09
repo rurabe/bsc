@@ -209,6 +209,7 @@ $(document).ready(function(){
   var createOfferGroup = function(book,category){
     var $el = book.$el.find('.price-'+category)
     var $outerContainer = $el.find('.book-button-outer')
+    var $vendorTag = $el.find('.vendor-tag')
     var $contentContainer = $el.find('.book-button-inner')
     var offers = [];
     var displayOffer
@@ -291,8 +292,8 @@ $(document).ready(function(){
       if(displayOffer != newDisplayOffer){
         displayOffer = newDisplayOffer;
         changeContent('<span class="price-content">'+ newDisplayOffer.priceHtml() +'</span>',function(){
-          if(newDisplayOffer.status === "Available"){ 
-            updateClasses(newDisplayOffer); 
+          updateClasses(newDisplayOffer)
+          if(newDisplayOffer.status === "Available"){  
             makeSelectable();
             setActiveButton($outerContainer);
           }
@@ -303,8 +304,8 @@ $(document).ready(function(){
 
     // For adding vendor styling to book buttons
     var updateClasses = function(offer){
-      $contentContainer.removeClass();
-      $contentContainer.addClass('book-button-inner ' + offer.vendorCode);
+      $vendorTag.removeClass();
+      $vendorTag.addClass('vendor-tag ' + offer.vendorCode);
     };
 
     var changeContent = function(content,funcOut,funcIn){
@@ -409,7 +410,9 @@ $(document).ready(function(){
       codes = {
         'Amazon': "amazon",
         'Barnes and Noble': 'bn'}
-      return codes[vendor]
+
+      if( vendor.match(/bookstore/i) ){ var bookstore = "bookstore" }
+      return codes[vendor] || bookstore
     }();
 
     var schoolAmazonTag = function(){
