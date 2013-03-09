@@ -544,7 +544,7 @@ $(document).ready(function(){
     var $wireline = $el.siblings('.wireline')
 
     var arrows = function(direction){
-      return '<i class="icon-double-angle-' + direction + '"></i>'
+      return '<i class="icon-caret-' + direction + '"></i>'
     };
 
     var labelChanger = function(off,on){
@@ -598,6 +598,7 @@ $(document).ready(function(){
         offerGroup.offersBox.close()
         $wireline.animate({'height': '0px'},time);
         labelChanger(arrows('down'),"more options");
+        changeContent( arrows('down') );
         $el.off('click')
         $el.on({
           click: open
