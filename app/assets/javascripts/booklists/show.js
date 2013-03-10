@@ -699,11 +699,11 @@ $(document).ready(function(){
     };
 
     var select = function(){
-      $el.removeClass('deselected').addClass('selected')
+      $elInner.removeClass('deselected').addClass('selected')
     }
 
     var deselect = function(){
-      $el.removeClass('selected').addClass('deselected');
+      $elInner.removeClass('selected').addClass('deselected');
     };
 
     var addDomElement = function(){
@@ -716,12 +716,12 @@ $(document).ready(function(){
         setClickHandler();
       }
       if( offer.isSelected() ){
-        $el.addClass('selected')
+        $elInner.addClass('selected')
       }
     };
 
     var setClickHandler = function(){
-      $el.on({
+      $elInner.on({
         click: function(e){
           e.stopPropagation();
           if( !$(e.target).hasClass('link-safe') ){
