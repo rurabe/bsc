@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130226023047) do
+ActiveRecord::Schema.define(:version => 20130310114457) do
 
   create_table "booklists", :force => true do |t|
     t.datetime "created_at", :null => false
@@ -102,5 +102,16 @@ ActiveRecord::Schema.define(:version => 20130226023047) do
   end
 
   add_index "sections", ["course_id"], :name => "index_sections_on_course_id"
+
+  create_table "snags", :force => true do |t|
+    t.text     "current_url"
+    t.text     "current_page_html"
+    t.text     "history"
+    t.integer  "booklist_id"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  add_index "snags", ["booklist_id"], :name => "index_snags_on_booklist_id"
 
 end

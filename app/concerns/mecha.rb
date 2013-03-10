@@ -18,10 +18,14 @@ module Mecha
     def initialize(options = {})
       @mecha = Mechanize.new { |mecha| mecha.follow_meta_refresh = true }
       @courses_page = navigate(options)
+    rescue => e
+      error_handling(e)
     end
 
     def parse(page=@courses_page)
       course_data(page)
+    rescue => e
+      error_handling(e)
     end
 
     private
@@ -88,34 +92,79 @@ module Mecha
           nil
         end
       end
+
+      def error_handling(error)
+        case error
+        when KnownError then raise error
+        else 
+          raise UnknownError.new(error,@mecha)
+        end
+      end
+
+  end
+
+  class UnknownError < StandardError
+    attr_reader :error,
+                :mecha
+
+    def initialize(error,mecha)
+      @error = error
+      @mecha = mecha
+    end
+
+    def data
+      { :current_url       => current_url,
+        :current_page_html => current_page_html,
+        :history           => history }
+    end
+
+    def message
+      "Sorry, something went wrong. But we've notified the tech guys so they'll check it out"
+    end
+
+    private
+      def current_url
+        @mecha.current_page.uri.to_s
+      end
+
+      def current_page_html
+        @mecha.current_page.root.to_s
+      end
+
+      def history
+        @mecha.history.map { |page| page.uri.to_s }
+      end
+  end
+
+  class KnownError < StandardError
   end
 
 
-	class AuthenticationError < StandardError
+	class AuthenticationError < KnownError
 		def message
 			"Oops, we couldn't log you in. Check your username and password and try again."
 		end
 	end
 
-  class NoClassesError < StandardError
+  class NoClassesError < KnownError
     def message
       "Your school says that you aren't registered for any classes. Check to make sure you're signed up and come back!"
     end
   end
 
-  class ClassesNotInSystemError < StandardError
+  class ClassesNotInSystemError < KnownError
     def message
       "Sorry! Your classes aren't in your school's system (and we need them to work)"
     end
   end
 
-  class ServiceDownError < StandardError
+  class ServiceDownError < KnownError
     def message
       "Your school's website is down right now (and we need it to do our magic). Check back soon and it should be working again."
     end
   end
 
-  class NoBooksError < StandardError
+  class NoBooksError < KnownError
     def message
       "It doesn't look like you have any books listed for your courses (or they haven't been posted yet)."
     end

@@ -4,7 +4,9 @@ class Booklist < ActiveRecord::Base
   has_many :courses, :dependent => :destroy
   has_many :books, :through => :courses
   has_many :offers, :through => :books
-  has_one :page
+  has_many :snags, :dependent => :destroy
+  has_one :page, :dependent => :destroy
+
 
   after_create :set_slug
 

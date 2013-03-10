@@ -1,36 +1,36 @@
 class BooklistsController < ApplicationController
 
   before_filter :define_schools
-  before_filter :define_booklist,	:only			=> [:show, :update]
+  before_filter :define_school,   :only     => [:new,:create,:show]
   
   http_basic_authenticate_with :name => "admin", :password => "saintmarys", :only => [:index]
-
-  rescue_from StandardError, :with => :error_handling
 
   caches_page :new
 
   def new
-    @school = @schools.find { |school| school.slug == params[:school] }
+    
   end
 
   def create
-    @school = School.find( params[:school] )
+    @school = @schools.find { |school| school.slug == params[:school] }
     if params[:booklist][:username] == "test"
       show_example
     else
       @booklist = @school.booklists.build
-      @booklist.get_books(params[:booklist])
+      @mecha = @booklist.get_books(params[:booklist])
       if @booklist.save
         redirect_to booklist_url(@booklist, :protocol => "http")
       else
         rerender_and_show_error
       end
     end
-
+  rescue => e
+    error_handling(e)
   end
 
   def show
-    @school = @booklist.school || School.find( params[:school] )
+    @booklist = Booklist.where(:slug => params[:id]).includes(:courses,:books,:offers).first
+    @school = @schools.find { |school| school.id == @booklist.school_id } || School.find( params[:school] )
   end
 
   def index
@@ -39,12 +39,12 @@ class BooklistsController < ApplicationController
 
   private
 
-    def define_booklist
-      @booklist = Booklist.where(:slug => params[:id]).includes(:courses,:books,:offers).first
-    end
-
     def define_schools
       @schools = School.all
+    end
+
+    def define_school
+      @school = @schools.find { |school| school.slug == params[:school] }
     end
 
     def show_example
@@ -59,6 +59,10 @@ class BooklistsController < ApplicationController
 
     # Error handling
     def error_handling(error)
+      if error.is_a? Mecha::UnknownError
+        @booklist.save
+        @booklist.snags.create(error.data)
+      end
       flash[:error] = [error.message]
       render 'new'
     end

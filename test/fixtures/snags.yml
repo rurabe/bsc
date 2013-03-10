@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  current_url: MyText
+  current_page_html: MyText
+  history: MyText
+  booklist: 
+
+two:
+  current_url: MyText
+  current_page_html: MyText
+  history: MyText
+  booklist: 
