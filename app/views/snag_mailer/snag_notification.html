@@ -11,7 +11,7 @@
     <table>
 
       <tr>
-        <td>
+        <td valign="top">
           Error
         </td>
         <td>
@@ -19,16 +19,7 @@
         </td>
       </tr>
 
-      <tr>
-        <td>
-          Backtrace
-        </td>
-        <td>
-          <%= @snag.backtrace %>
-        </td>
-      </tr>
-
-      <tr>
+      <tr valign="top">
         <td>
           Current URL
         </td>
@@ -38,11 +29,24 @@
       </tr>
 
       <tr>
-        <td>
+        <td valign="top">
           History
         </td>
         <td>
-          <%= @snag.history %>
+          <ul>
+            <% eval(@snag.history).each do |h| %>
+              <li>h</li>
+            <% end %>
+          </ul>
+        </td>
+      </tr>
+
+      <tr>
+        <td valign="top">
+          Backtrace
+        </td>
+        <td>
+          <%= @snag.backtrace %>
         </td>
       </tr>
 
