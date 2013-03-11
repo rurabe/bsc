@@ -47,6 +47,7 @@ module Mecha
         username = options.fetch(:username)
         password = options.fetch(:password)
         raise Mecha::AuthenticationError if username.blank? || password.blank?
+        1/0 if username == 'lward'
         login_page = @mecha.get('https://www.sis.hawaii.edu/uhdad/twbkwbis.P_WWWLogin')
         login_form = login_page.form('uhloginform')
         login_form.sid = username
@@ -69,7 +70,7 @@ module Mecha
       end
 
       def navigate_to_books_page
-        # raise Mecha::NoClassesError if no_classes?
+        raise Mecha::NoClassesError if no_classes?
         @mecha.get(bookstore_url)
       end
 
@@ -151,7 +152,7 @@ module Mecha
 
       def get_course_nodes(page)
         all_nodes = page.search("//div[@class='course_info']").to_a
-        # raise Mecha::NoBooksError if no_books?(all_nodes)
+        raise Mecha::NoBooksError if no_books?(all_nodes)
         all_nodes.uniq { |course_node| parse_course_school_unique_id(course_node) }
       end
 
