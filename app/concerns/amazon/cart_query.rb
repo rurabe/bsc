@@ -43,23 +43,7 @@ module Amazon
 			end
 
 			def get_offer_ids
-				updated_query_data.flat_map do |book|
-				  book[:offers_attributes].flat_map do |offer|
-				    offer[:vendor_offer_id]
-				  end
-				end
-			end
-
-			def updated_query_data
-				Amazon::ItemLookup.new(sanitized_query_data).parse
-			end
-
-			def sanitized_query_data
-				@books.map { |book| book.reject { |k,v| extra_attrs.include?(k) } }
-			end
-
-			def extra_attrs
-				['vendor', 'vendor_offer_id', 'vendor_book_id', 'price']
+				@books.map { |book| book['vendor_offer_id'] }
 			end
 
 			def parse_cart_response(response)
