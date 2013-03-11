@@ -1,35 +1,25 @@
 <footer>
-  <div class="row-fluid">
-    <div class="footer-menu span3">
-      <ul>
-        <li>Book Supply Co.</li>
-        <li class="ind1"><%= link_to 'About us', about_path %></li>
-        <li class="ind1"><%= link_to 'FAQ',      faq_path %></li>
-        <li class="ind1"><%= link_to 'Blog',     'http://booksupplyco.tumblr.com/' %></li>
-        <li class="ind1"><%= link_to 'Our team', team_path %></li>
-      </ul>
-    </div>
+  <div class="footer-menu row-fluid pagination-centered">
+    <ul>
+      <li>Book Supply Co.</li>
+      <li><%= link_to 'About us', about_path %></li>
+      <li><%= link_to 'FAQ',      faq_path %></li>
+      <li><%= link_to 'Blog',     'http://booksupplyco.tumblr.com/' %></li>
+      <li><%= link_to 'Our team', team_path %></li>
+      <li><%= mail_to "contact@booksupply.co", 'Contact' %></li>
+    </ul>
+  </div>
 
-    <div class="contact span3">
-      <ul>
-        <li>Have a question? Drop us a line!</li>
-        <li><%= mail_to "contact@booksupply.co" %> </li>
-      </ul>
-    </div>
-
-    <div class="span3">
-    </div>
-
-    <div class="schools span3">
-      <span class="not-your-school"> Not your school? </span>
-      <ul id="other-schools">
-        <% @schools.each do |school| %>
-          <li class="footer-school other-school-<%= school.slug %>">
-            <%= link_to school.name.upcase, new_booklist_path( :school => school.slug ) %>
-          </li>
-        <% end %>
-          <li> Don't see your school? <%= mail_to "schools@booksupply.co", "email us" %> to add it!</li>
-      </ul>
-    </div>
+  <div class="schools row-fluid pagination-centered">
+    <ul id="other-schools">
+      <% @schools.each do |school| %>
+        <li class="footer-school other-school-<%= school.slug %>">
+          <%= link_to new_booklist_path( :school => school.slug ) do %>
+          <span><%= school.name.upcase %></span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+   <p>Don't see your school? <%= mail_to "schools@booksupply.co", "email us" %> to add it!</p>
   </div>
 </footer>

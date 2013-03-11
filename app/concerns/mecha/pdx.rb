@@ -11,7 +11,7 @@ module Mecha
           widmer bike coop rain northface nike organic )
     end
 
-    # private
+    private
       # Hardpoints #
       def navigate(options = {}) #{:username => 'foo', :password => 'blah'}
         login(options)
@@ -44,7 +44,7 @@ module Mecha
       end
 
       def navigate_to_course_schedule
-        # raise Mecha::AuthenticationError, self if login_failed?
+        raise Mecha::AuthenticationError, self if login_failed?
         @mecha.post('https://banweb.pdx.edu/pls/oprd/bwskfshd.P_CrseSchdDetl', 'term_in' => CURRENT_TERM )
       end
 

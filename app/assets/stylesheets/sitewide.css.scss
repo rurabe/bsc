@@ -1,4 +1,4 @@
-$footer-height: 160px;
+$footer-height: 75px;
 
 #main-container{
   box-sizing: border-box;
@@ -80,40 +80,26 @@ footer{
 
 footer ul{
   list-style-type: none;
-}
-
-footer div.footer-menu{
-  width: 30%;
-}
-
-footer div.contact{
+  margin: 0 auto;
 }
 
 footer li{
-  margin: 10px 0px;
+  margin: 0px 5px;
+  display: inline;
 }
 
-.ind1{
-  margin-left: 10px;
-}
-
-footer div.schools{
-  padding: 10px 0px;
+.footer-menu{
+  font-size: 14pt;
 }
 
 .schools ul{
-  height: 120px;
-  overflow-y: scroll;
+  margin-top: 5px;
+  font-size: 12pt;
 }
 
-ul#other-schools li{
-  margin: 3px;
+.footer-school{
+  margin: 0px 5px 0px 5px; 
 }
-
-.footer-schools{
-  font-weight: bold;
-}
-
 
 input.big-ass-button, button.big-ass-button{
   font-size: 18pt;

@@ -7,7 +7,6 @@
 @mixin index-styles($slug,$primary-color,$secondary-color){
   h2.school-#{$slug} {
     color: $primary-color;
-
     &:hover{
       color: $secondary-color;
     }
