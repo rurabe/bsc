@@ -1,0 +1,163 @@
+
+
+#paper-box {
+  display: none;
+  position: relative;
+  height: 650px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.logo-inner {
+  margin-bottom: 20px;
+
+}
+
+.logo-front {
+  margin: 0px auto 20px auto;
+}
+
+#teach-me{
+  display:none;
+}
+
+#new-page-main-content{
+  height: 417px;
+}
+
+.demo{
+  height: 350px;
+  margin: 0 auto;
+}
+
+.demo-column{
+  display: none;
+  position: relative;
+  height: 100%;
+  background: rgba(200,200,200,0.5);
+  margin: 0px 1.25%;
+  width: 30.75%;
+  float: left;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+}
+
+.demo-column-image{
+  height: 250px;
+  margin: 15px;
+  border: 3px solid silver;
+  background-color:silver;
+
+  // background-repeat: no-repeat;
+}
+
+.demo-column-text{
+  height: 20%;
+  margin: 10px;
+  font-size: 12pt;
+}
+
+#teach-login{
+  background: url(teach-login.jpg);
+  background-position: center center;
+}
+
+#teach-find{
+  background: url(teach-find.jpg);
+  background-position: center center;
+}
+
+#teach-vendors{
+  background: url(teach-vendors.jpg);
+  background-position: center center;
+}
+
+.try-div{
+  margin: 15px auto 0px;
+  clear: both;
+}
+.tell-me-more-div{
+  margin: 5px auto;
+  clear: both;
+}
+
+#tell-me-more{
+  clear: both;
+  display:none;
+}
+
+#go-time{
+  display: none;
+  position: relative;
+  margin: none;
+}
+
+#about-handle{
+  font-size: 14pt;
+}
+
+.loginform{
+  margin: 0px auto;
+}
+
+.login {
+  margin: 0px auto;
+}
+
+td.form-label-cell label {
+  text-align: right;
+  padding-right: 10px;
+  font-size: 18pt;
+}
+
+td.form-field-cell input{
+  font-size: 18pt;
+  height: 30px;
+  font-family: 'Gochi Hand', cursive;
+}
+
+input#booklist_username {
+  background-color: #FAFFBD;
+}
+
+input#booklist_password {
+  background-color: #FAFFBD;
+}
+
+// For loading modal
+
+#loadingModal {
+  overflow: visible;
+}
+
+#loadingModal-body {
+  overflow-y: visible;
+}
+
+#intro-carousel {
+  width: 100%;
+  height: 300px;
+}
+
+button.search-icon {
+  width: 130px;
+  height: 110px;
+  font-size: 16pt;
+  font-weight: bold;
+}
+
+
+// For about
+
+.icon-image {
+  font-size: 48pt;
+}
+
+.other-school{
+  width: 100px;
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  margin: 0px 0px 0px -50px;
+}

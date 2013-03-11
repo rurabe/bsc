@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+
+    <h1>Snag Report</h1>
+    <h2><%= @school.name %></h2>
+    <h3><%= @snag.created_at.localtime %></h3>
+
+    <table>
+
+      <tr>
+        <td valign="top">
+          Error
+        </td>
+        <td>
+          <%= @snag.error %>
+        </td>
+      </tr>
+
+      <tr valign="top">
+        <td>
+          Current URL
+        </td>
+        <td>
+          <%= @snag.current_url %>
+        </td>
+      </tr>
+
+      <tr>
+        <td valign="top">
+          History
+        </td>
+        <td>
+          <%= @snag.history %>
+        </td>
+      </tr>
+
+      <tr>
+        <td valign="top">
+          Backtrace
+        </td>
+        <td>
+          <%= @snag.backtrace %>
+        </td>
+      </tr>
+
+
+    </table>
+  </body>
+</html>

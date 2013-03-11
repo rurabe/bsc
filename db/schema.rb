@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130115204610) do
+ActiveRecord::Schema.define(:version => 20130311094913) do
 
   create_table "booklists", :force => true do |t|
     t.datetime "created_at", :null => false
@@ -38,8 +38,10 @@ ActiveRecord::Schema.define(:version => 20130115204610) do
     t.string   "ean",                         :limit => 13
     t.integer  "section_id"
     t.string   "notes"
+    t.text     "link"
   end
 
+  add_index "books", ["ean"], :name => "index_books_on_ean"
   add_index "books", ["section_id"], :name => "index_books_on_section_id"
 
   create_table "courses", :force => true do |t|
@@ -52,6 +54,22 @@ ActiveRecord::Schema.define(:version => 20130115204610) do
   end
 
   add_index "courses", ["booklist_id"], :name => "index_courses_on_booklist_id"
+
+  create_table "offers", :force => true do |t|
+    t.string   "condition"
+    t.string   "vendor"
+    t.decimal  "price",              :precision => 6, :scale => 2
+    t.string   "vendor_book_id"
+    t.string   "vendor_offer_id"
+    t.string   "detailed_condition"
+    t.string   "availability"
+    t.string   "shipping_time"
+    t.string   "comments"
+    t.integer  "book_id"
+    t.datetime "created_at",                                       :null => false
+    t.datetime "updated_at",                                       :null => false
+    t.text     "link"
+  end
 
   create_table "pages", :force => true do |t|
     t.integer  "booklist_id"
@@ -84,5 +102,17 @@ ActiveRecord::Schema.define(:version => 20130115204610) do
   end
 
   add_index "sections", ["course_id"], :name => "index_sections_on_course_id"
+
+  create_table "snags", :force => true do |t|
+    t.text     "current_url"
+    t.text     "current_page_html"
+    t.text     "history"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.string   "error"
+    t.text     "backtrace"
+    t.integer  "school_id"
+    t.text     "pages_history"
+  end
 
 end

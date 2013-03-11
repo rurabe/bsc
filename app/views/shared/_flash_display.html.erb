@@ -1,0 +1,11 @@
+<div class="flash-container">
+  <% flash.each do |key,array| %>
+    <div class="flash-message flash-<%= key %>">
+      <ul>
+        <% array.each do |error| %>
+          <li><%= error %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+</div>

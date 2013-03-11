@@ -5,7 +5,10 @@
 
 // Variables ----------------------------|
 
-$school-primary-color: #024731 ;
-$school-secondary-color: #000000 ;
-
 @import "schools.css.scss";
+
+$school-primary-color: $hawaii-primary-color ;
+$school-secondary-color: $hawaii-secondary-color ;
+$school-slug: $hawaii-slug;
+
+@import "school_specific.css.scss";

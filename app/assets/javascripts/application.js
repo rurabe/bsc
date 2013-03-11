@@ -12,10 +12,4 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require bootstrap.min.js
-//= require facebook.js
-//= require twitter.js
-//= require jquery.cookie.js
-//= require jquery.arctext.js
-
-
+//= require_directory .

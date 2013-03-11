@@ -1,0 +1,227 @@
+
+<div class="paper pagination-centered">
+    <div class="logo-head">
+      <%= render :partial => 'shared/logo' %>
+    </div>
+
+      <div class="content-box">
+      <h1>FAQs</h1>
+
+
+      <div class="accordion" id="faq-accordion">
+        <h3>General</h3>
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseWhat">
+              So what is Book Supply Co. exactly?
+            </a>
+          </div>
+          <div id="collapseWhat" class="accordion-body collapse in">
+            <div class="accordion-inner">
+              <p>Book Supply Co. finds the cheapest deals on the textbooks students need from the most reliable online sources. </p>
+              <p>Our mission is to be the absolute easiest way to get the best prices on textbooks. We all know that books online are cheaper, but it sucks to look up books one by one on every site out there. We automate this process so you dont have to.</p>
+            </div>
+          </div>
+        </div>
+
+         <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFree">
+              Is it free to use?
+            </a>
+          </div>
+          <div id="collapseFree" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <p>Book Supply Co. is and always will be 100% free to use.</p>
+              <p>Your books might not be free, but you can always count on our help to find the lowest price!</p>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseWhy">
+              Why are you doing this?
+            </a>
+          </div>
+          <div id="collapseWhy" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <p>Hi! I'm Ryan, co-founder of Book Supply Co.</p>
+
+              My girlfriend is currently a student. It took me so long to find her the best prices online, that I decided to make the process easier. Book Supply Co. is the result of that, and is here to help everyone else out.
+            </div>
+          </div>
+        </div>
+
+
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseYou">
+              What's in this for you?
+            </a>
+          </div>
+          <div id="collapseYou" class="accordion-body collapse">
+            <div class="accordion-inner">
+              Our partners give us a small percentage of the books that you order, but the price they charge you is <i>exactly the same</i> as if you had gone there yourself. They pay us, and you save money and time. Win-win!
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseSell">
+              So you're trying to sell me books?
+            </a>
+          </div>
+          <div id="collapseSell" class="accordion-body collapse">
+            <div class="accordion-inner">
+              Not exactly. We're not selling anything, just providing a service that figures out what books you need, presents you with some great online options, and links you straight to the choice you make. You are purchasing the books from the online bookstores (Amazon or Barnes and Noble) themselves after we link you to them.
+            </div>
+          </div>
+        </div>
+
+        <h3>Books</h3>
+
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseRightBook">
+              How do I know you'll get the right book?
+            </a>
+          </div>
+          <div id="collapseRightBook" class="accordion-body collapse">
+            <div class="accordion-inner">
+              Book Supply Co. searches the web using the precise ISBN13 (also known as EAN) for the exact book that your teacher specified. Because of this, you will always get the exact version of the book your class requires.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseCustom">
+              Even if my class requires a school specific edition?
+            </a>
+          </div>
+          <div id="collapseCustom" class="accordion-body collapse">
+            <div class="accordion-inner">
+              Yep! If your school does this, however, there is a very low chance that your version is for sale online. But if for some reason they do, you will know that it is the exact version you need for class.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseShip">
+              How long does it take to ship?
+            </a>
+          </div>
+          <div id="collapseShip" class="accordion-body collapse">
+            <div class="accordion-inner">
+              That's something that you can choose when you check out with Amazon or Barnes and Noble. If you need your books faster, you'll probably pay more, but if you can wait a few days, shipping is usually free over $25. Amazon is actually offering <a href='http://www.amazon.com/gp/student/signup/info?ie=UTF8&refcust=HR7XOWUQOG6SMYEDL5FJBQACTU&ref_type=generic' target='_blank'>free 2 day shipping with Amazon Student.</a> That can be a good option for getting your books quickly and cheaply.
+            </div>
+          </div>
+        </div>
+
+
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseAvailable">
+              What if my books are not available on your site?
+            </a>
+          </div>
+          <div id="collapseAvailable" class="accordion-body collapse">
+            <div class="accordion-inner">
+              Book Supply Co. works in real time with our retail partners and our data shows our retail partners’ inventories. Warehouses get updated and restocked daily so chances are good that your book will be available shortly if you check tomorrow. If there are any questions or issues, please email us at <%= mail_to "contact@booksupply.co" %>.
+            </div>
+          </div>
+        </div>
+
+
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseReturn">
+              Can I return books?
+            </a>
+          </div>
+          <div id="collapseReturn" class="accordion-body collapse">
+            <div class="accordion-inner">
+              Sorry, we don't sell the books, but you can contact the vendor you bought the books from and return them there.
+            </div>
+          </div>
+        </div>
+
+        <h3>Security</h3>
+
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseLogin">
+              Why do you need my login and password?
+            </a>
+          </div>
+          <div id="collapseLogin" class="accordion-body collapse">
+            <div class="accordion-inner">
+              There is always a tension that exists between ease and security, but our mission is to make buying books cheaply as easy as possible. We decided that instead of:
+              <ul>
+                <li>logging in to your school's website,</li>
+                <li>finding your booklist,</li>
+                <li>entering your books on our website.</li>
+              </ul>
+              We would automate that all away by letting you enter your username and password (since you can probably recall that off the top of your head).
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseDoPassword">
+              What do you do with my login and password?
+            </a>
+          </div>
+          <div id="collapseDoPassword" class="accordion-body collapse">
+            <div class="accordion-inner">
+              Book Supply Co. uses your information to login to your school's website and get your booklist, then it throws your login and password away forever.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTrust">
+              How can I trust you?
+            </a>
+          </div>
+          <div id="collapseTrust" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <p>Honestly, we find it much easier to make money by sending you to get your books cheaply from our partners than it is to scam people. We are so paranoid about your security that we don't even record your login or password-so we have no records that someone else could come steal from us.</p>
+              <p>If you're still nervous and live in Portland, send me an email at <%= mail_to 'ryan@booksupply.co' %> and we can talk about it over a beer (or EANAB).</p>
+
+
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseSecurity">
+              What kind of technologies do you use to keep me safe?
+            </a>
+          </div>
+          <div id="collapseSecurity" class="accordion-body collapse">
+            <div class="accordion-inner">
+              Well first off, all your information is sent using Secure Socket Layer (SSL) technology, which makes it near impossible for anyone to intercept your data. You can tell it's working because there will usually be a lock next to the URL and it will say https:// instead of http://. But the best security is the fact that we don't ever record your information, so it can never be stolen.
+            </div>
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+
+    <%= render :partial => 'shared/try_button' %>
+
+    <p>
+      Have more questions? Let us know on <%= link_to "Facebook", 'http://www.facebook.com/booksupplyco' %> or <%= mail_to "contact@booksupply.co", 'email us' %>.
+    </p>
+
+</div>

@@ -1,7 +1,6 @@
 class BooksController < ApplicationController
-	def update
-		@book = Book.find_by_ean(params[:id])
-		query = BarnesAndNoble::UsedLookup.new(@book.ean)
-		render :json => query.ui_data.to_json
+	def show
+		@booklist = Booklist.where( :slug => params[:id] ).includes(:books,:offers).first
+    render :json => @booklist.get_offers( params[:vendor] )
 	end
 end

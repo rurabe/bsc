@@ -1,0 +1,354 @@
+// Place all the styles related to the booklists controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+// Styles
+$selected-color: #6A7F10;
+$hover-color: transparentize($selected-color,0.6);
+$selected-hover-color: darken($selected-color,10%);
+
+@mixin button-active-style($margin-top,$margin-right,$margin-bottom,$margin-left){
+  $shift-x: 4px;
+  $shift-y: 4px;
+  $shadow-color: rgba(204,204,204,0.7);
+  $blur-radius: ($shift-x + $shift-y)/2;
+  $spread-radius: ($blur-radius / 2);
+
+  margin-top: $margin-top - $shift-y;
+  margin-right: $margin-right + $shift-x;
+  margin-bottom: $margin-bottom + $shift-y;
+  margin-left: $margin-left - $shift-x;
+  -moz-box-shadow:    $shift-x $shift-y $blur-radius $spread-radius $shadow-color;
+  -webkit-box-shadow: $shift-x $shift-y $blur-radius $spread-radius $shadow-color;
+  box-shadow:         $shift-x $shift-y $blur-radius $spread-radius $shadow-color;
+}
+
+.shadow-button-style{
+  -moz-box-shadow:    1px 1px 1px 1px #ccc;
+  -webkit-box-shadow: 1px 1px 1px 1px #ccc;
+  box-shadow:         1px 1px 1px 1px #ccc;
+}
+
+.ui-transition-style{
+  -webkit-transition: all 0.1s ease;
+  -moz-transition: all 0.1s ease;
+  -o-transition: all 0.1s ease;
+  transition: all 0.1s ease;
+}
+
+.selectable-style{
+  cursor: pointer;
+}
+
+
+.show-welcome{
+  margin: 10px;
+  font-size: 12pt;
+}
+
+.book-card {
+  position: relative;
+}
+
+.book-card-container {
+  margin-top: 20px;
+  padding: 0% 3.19%// This is half of one grid space
+}
+
+.book-header{
+  font-size:18pt;
+}
+
+$row-height: 35px !default;
+
+// Course rows
+
+.course-row{
+  height: $row-height
+}
+
+.course-attr{
+  text-align: left;
+  font-size: 18pt;
+}
+
+// Book rows
+div.book-row-outer{
+  position: relative;
+}
+
+div.book-row-inner{
+  margin: 5px auto 25px;
+}
+
+.no-books-row{
+  height: $row-height;
+}
+
+.book-cell{
+  height: $row-height
+}
+
+$book-button-margin-top: 0px;
+$book-button-margin-right: 0px;
+$book-button-margin-bottom: 0px;
+$book-button-margin-left: 0px;
+
+.book-button-outer{
+  margin-top: $book-button-margin-top;
+  margin-right: $book-button-margin-right;
+  margin-bottom: $book-button-margin-bottom;
+  margin-left: $book-button-margin-left;
+  border: 1px solid silver;
+  height: $row-height;
+  background-color: white;
+  text-shadow: 0.07em 0.07em 0.07em silver;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  @extend .shadow-button-style;
+  position: relative;
+}
+
+.book-button-outer.active{
+  @extend .ui-transition-style;
+  @include button-active-style($book-button-margin-top,$book-button-margin-right,$book-button-margin-bottom,$book-button-margin-left);
+}
+
+.book-button-outer.inactive{
+  @extend .ui-transition-style;
+}
+
+.selectable .book-button-inner{
+  @extend .selectable-style;
+}
+
+.selected .book-button-outer{
+  @extend .ui-transition-style;
+}
+
+.deselected .book-button-outer{
+  @extend .ui-transition-style;
+}
+
+.wireline{
+  width: 2px;
+  margin: 0px auto;
+  background-color: black;
+}
+
+.book-button-handle{
+  $button-height: 15px;
+  margin: -1px auto 0px;
+  width: 50%;
+  height: $button-height;
+  border: 1px solid silver;
+  font-size: 10pt;
+  line-height: $button-height;
+  color: black;
+  background-color: white;
+  @extend .shadow-button-style;
+  @extend .selectable-style;
+
+}
+
+.loading {
+  background-image: url(ajax-loader.gif);
+  background-repeat: no-repeat;
+  background-position: center 95%;
+  height: $row-height;
+  position: absolute;
+  left: 50%;
+  bottom: 1px;
+  width: 16px;
+  margin-left: -8px;
+}
+
+.book-attr{
+  line-height: $row-height;
+}
+
+.book-requirement{
+  text-align: left;
+}
+
+.book-title{
+  text-align: left;
+  font-size: 14pt;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  overflow-wrap: ellipsis; 
+  white-space: nowrap;
+}
+
+.book-price{
+  font-size: 18pt;
+}
+
+$offer-row-height: 40px;
+$offer-row-width: 400px;
+
+.offer-box{
+  float: right;
+  position: relative;
+  margin: 25px 0px 30px;
+  width: $offer-row-width + 12;
+}
+
+$offer-row-margin-top: 5px;
+$offer-row-margin-right: 0px;
+$offer-row-margin-bottom: 5px;
+$offer-row-margin-left: 0px;
+
+.offer-row-outer{
+  float: right;
+  height: $offer-row-height + 2 * ($offer-row-margin-top + $offer-row-margin-bottom) + 2;
+}
+
+.offer-row{
+  width: $offer-row-width;
+  height: $offer-row-height;
+  margin-top: $offer-row-margin-top;
+  margin-right: $offer-row-margin-right;
+  margin-bottom: $offer-row-margin-bottom;
+  margin-left: $offer-row-margin-left;
+  border: 1px solid silver;
+  background-color: white;
+  padding: 5px;
+  float: right;
+  @extend .shadow-button-style;
+}
+
+.selectable .offer-row{
+  @extend .selectable-style;
+}
+
+.offer-row.active{
+  @include button-active-style($offer-row-margin-top,$offer-row-margin-right,$offer-row-margin-bottom,$offer-row-margin-left);
+  @extend .ui-transition-style;
+}
+
+
+.offer-row.inactive{
+  @extend .ui-transition-style;
+}
+
+.offer-row.amazon{
+  background-image: url(amazon-bg.png);
+  background-repeat: no-repeat;
+  background-position: 100% 0%;
+}
+
+.offer-row.bn{
+  background-image: url(bn-bg.png);
+  background-repeat: no-repeat;
+  background-position: 100% 50%;
+}
+
+
+
+.offer-column-link{
+  width: 10%;
+  height: 100%;
+  float: left;
+  font-size: 18pt;
+  line-height: $offer-row-height;
+}
+
+.offer-column-link a:hover{
+  text-decoration: none;
+}
+
+
+.offer-column-left{
+  width: 25%;
+  float: left;
+  text-align: left;
+}
+
+.offer-column-right{
+  width: 65%;
+  height: 100%;
+  float: right;
+  font-size: 8pt;
+  text-align: left;
+}
+
+.offer-price{
+  font-size: 18pt;
+  line-height: 18pt;
+  text-shadow: 0.07em 0.07em 0.07em silver;
+}
+
+.offer-vendor{
+  font-size: 10pt;
+}
+
+.offer-column-row{
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  overflow-wrap: ellipsis; 
+  white-space: nowrap;
+  height: 22px;
+}
+
+.offer-detailed-condition{
+  height: 20px;
+  font-size: 11pt;
+}
+
+.offer-shipping-time{
+  height: 20px;
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+}
+
+.offer-comments-row{
+  margin-top: 3px;
+}
+
+$button-height: 40px;
+
+.checkout-row{
+  padding: 25px 0px;
+  height: $button-height;
+}
+
+#checkout-button{
+  font-size: 18pt;
+  height: $button-height;
+}
+
+
+.vendor-tag{
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  height: 32px;
+  width: 32px;
+}
+
+.vendor-tag.amazon{
+  @extend .ui-transition-style;
+  background-image: url(vendor-tag-amazon.png);
+}
+
+.vendor-tag.bn{
+  @extend .ui-transition-style;
+  background-image: url(vendor-tag-bn.png);
+}
+
+.vendor-tag.bookstore{
+  @extend .ui-transition-style;
+  background-image: url(vendor-tag-bookstore.png);
+}
+
+.search-status{
+  border: 1px solid silver;
+  height: 50px;
+}

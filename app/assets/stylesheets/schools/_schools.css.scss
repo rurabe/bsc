@@ -1,70 +1,42 @@
-// This file contains the styles for school specific elements,
-// and is designed to be used with a school specific file that defines the variables:
-// 
-// $school-primary-color
-// $school-secondary-color
-
-$school-primary-color: #6A7F10 !default;
-$school-secondary-color: #A8B400 !default;
-
-h1.logo {
-	color: $school-primary-color;
+@mixin footer-styles($slug,$primary-color,$secondary-color){
+  ul#other-schools li.other-school-#{$slug} a{
+    color: $primary-color;
+  } 
 }
 
-h2.school-name {
-	color: $school-secondary-color;
+@mixin index-styles($slug,$primary-color,$secondary-color){
+  h2.school-#{$slug} {
+    color: $primary-color;
+    &:hover{
+      color: $secondary-color;
+    }
+  }
 }
 
-.btn-school {
-  color: #ffffff;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-  background-color: $school-primary-color;
-  *background-color: $school-primary-color;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(lighten($school-primary-color,7)), to($school-primary-color));
-  background-image: -webkit-linear-gradient(top, lighten($school-primary-color,7), $school-primary-color);
-  background-image: -o-linear-gradient(top, lighten($school-primary-color,7), $school-primary-color);
-  background-image: linear-gradient(to bottom, lighten($school-primary-color,7), $school-primary-color);
-  background-image: -moz-linear-gradient(top, lighten($school-primary-color,7), $school-primary-color);
-  background-repeat: repeat-x;
-  border-color: $school-primary-color $school-primary-color #387038;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);
-  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
-}
 
-.btn-school:hover,
-.btn-school:active,
-.btn-school.active,
-.btn-school.disabled,
-.btn-school[disabled] {
-  color: #ffffff;
-  background-color: lighten($school-primary-color,0.5);
-  *background-color: #499249;
-}
+$hawaii-slug: 'hawaii';
+$hawaii-primary-color: #024731 ;
+$hawaii-secondary-color: #000000 ;
+@include footer-styles($hawaii-slug,$hawaii-primary-color,$hawaii-secondary-color);
+@include index-styles($hawaii-slug,$hawaii-primary-color,$hawaii-secondary-color);
 
-.btn-school:active,
-.btn-school.active {
-  background-color: #408140 \9;
-}
+$pdx-slug: 'pdx';
+$pdx-primary-color: #6A7F10 ;
+$pdx-secondary-color: #A8B400 ;
+@include footer-styles($pdx-slug,$pdx-primary-color,$pdx-secondary-color);
+@include index-styles($pdx-slug,$pdx-primary-color,$pdx-secondary-color);
 
-.about-info{
-	padding: 20px;
-}
+$saddleback-slug: 'saddleback';
+$saddleback-primary-color: #b30838 ;
+$saddleback-secondary-color: #fdbe57 ;
+@include footer-styles($saddleback-slug,$saddleback-primary-color,$saddleback-secondary-color);
+@include index-styles($saddleback-slug,$saddleback-primary-color,$saddleback-secondary-color);
 
-.about-point{
-	margin: 20px auto;
-}
+$usc-slug: 'usc';
+$usc-primary-color: #990000 ;
+$usc-secondary-color: #FFCC00 ;
+@include footer-styles($usc-slug,$usc-primary-color,$usc-secondary-color);
+@include index-styles($usc-slug,$usc-primary-color,$usc-secondary-color);
 
-@mixin about-text($bg_color) {
-  @if lightness($bg_color) > 35 {color: black;}
-  @else                         {color: white;}
-}
 
-.about-explanation{
-  @include about-text($school-secondary-color);
-	padding: 10px;
-	background-color: transparentize($school-secondary-color,0.3);
-	-webkit-border-radius: 10px 10px 10px 10px;
-	-moz-border-radius: 10px 10px 10px 10px;
-	border-radius: 10px 10px 10px 10px;
-}
+

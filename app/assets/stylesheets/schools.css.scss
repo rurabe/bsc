@@ -2,33 +2,41 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-div.schools-index-box{
+#paper-box-index{
+  position: relative;
+  height: 600px;
+  width: 80%;
+  display: none;
+}
+
+div#schools-index-box{
+  text-align: center;
+  padding: 20px 0px;
+  display: none;
+}
+
+#schools-index-box a{
+  text-decoration: none;
+}
+
+div.index-content-box{
+  min-height: 417px;
 }
 
 div.school-row {
 	margin: 0px auto 10px auto;
 }
 
-.schools-index-box a{
-	text-decoration: none;
-}
-
-h3.school-listing{
-  font-size: 30pt;
-  font-family: "FuturaBold";
-  text-shadow: 0.05em 0.07em 0.06em black;
-  margin: 0 auto 0 auto;
-}
 
 .main-front-row{
   margin: 25px auto;
   padding: 10px;
 }
 
-.about-point{
-  margin: 30px auto 20px auto;
+.index-school-name{
+  font-size: 42pt;
+  text-shadow: 0.05em 0.07em 0.06em black;
+  margin: 0px auto;
 }
 
-div.tooltip-inner{
-  cursor: pointer;
-}
+

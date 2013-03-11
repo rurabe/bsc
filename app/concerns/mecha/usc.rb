@@ -65,11 +65,8 @@ module Mecha
 
       # Course_data helpers #
       def build_all_courses(page)
-        threads = []
-        get_course_nodes(page).map do |course|
-          threads << Thread.new { build_course(course) }
-        end
-        threads.map { |t| t.join.value }
+        threads = get_course_nodes(page).map { |course| lambda{ build_course(course) } }
+        Automatron::Needle.thread(threads)
       end
 
       def get_course_nodes(page)
@@ -90,8 +87,12 @@ module Mecha
 
       def query_for_booklist(section)
         junk_mecha = Mechanize.new { |mecha| mecha.keep_alive = false }
-        booklist = junk_mecha.get("http://web-app.usc.edu/soc/section.html?i=#{section}&t=#{CURRENT_TERM}")
+        booklist = junk_mecha.get( booklist_link(section) )
         book_nodes = booklist.search('//li[@class="books"]/ul/li')      
+      end
+
+      def booklist_link(section)
+        "http://web-app.usc.edu/soc/section.html?i=#{section}&t=#{CURRENT_TERM}"
       end
 
       def clean_section(raw_section)
@@ -137,6 +138,10 @@ module Mecha
       def parse_book_edition(book_node)
       end
 
+      def parse_book_link(book_node)
+        booklist_link( parse_result( parse_node(book_node,'//h3'), /Section (\d+)/ ) )
+      end
+
       def parse_book_requirement(book_node)
         parse_node(book_node,'./text()[preceding-sibling::em][1]').to_s.gsub(/[()]/,"")
       end
@@ -145,20 +150,60 @@ module Mecha
         parse_node(book_node,'./text()[preceding-sibling::br[preceding-sibling::text()[preceding-sibling::strong[text()="Used:"]]]][1]')
       end
 
-      def parse_book_new_price(book_node)
+      def parse_new_offer_vendor(book_node)
+        "USC Bookstore"
+      end
+      alias_method :parse_used_offer_vendor, :parse_new_offer_vendor
+
+      def parse_new_offer_price(book_node)
         price = parse_node(book_node,'./text()[preceding-sibling::strong[text()="New:"]][1]')
         numberize_price(price)
       end
 
-      def parse_book_used_price(book_node)
+      def parse_used_offer_price(book_node)
         price = parse_node(book_node,'./text()[preceding-sibling::strong[text()="Used:"]][1]')
         numberize_price(price)
       end
 
-      def parse_book_new_rental_price(book_node)
+      def parse_new_offer_vendor_book_id(book_node)
+        parse_book_ean(book_node)
+      end
+      alias_method :parse_used_offer_vendor_book_id, :parse_new_offer_vendor_book_id
+
+      def parse_new_offer_vendor_offer_id(book_node)
+      end
+      alias_method :parse_used_offer_vendor_offer_id, :parse_new_offer_vendor_offer_id
+
+      def parse_new_offer_detailed_condition(book_node)
+      end
+      alias_method :parse_used_offer_detailed_condition, :parse_new_offer_detailed_condition
+
+      def parse_new_offer_availability(book_node)
+        "Not available"
+      end
+      alias_method :parse_used_offer_availability, :parse_new_offer_availability
+
+      def parse_new_offer_shipping_time(book_node)
+      end
+      alias_method :parse_used_offer_shipping_time, :parse_new_offer_shipping_time
+
+      def parse_new_offer_comments(book_node)
+        remove_these = [/\<a href.+\<\/a\>/,/This title is.+rental.?/]
+        notes = parse_book_notes(book_node)
+        remove_these.inject(notes) { |s,r| s.gsub(r,'') if s } if notes
+      end
+      alias_method :parse_used_offer_comments, :parse_new_offer_comments
+
+      def parse_new_offer_link(book_node)
+        parse_book_link(book_node)
+      end
+      alias_method :parse_used_offer_link, :parse_new_offer_link
+
+      # Not in use yet
+      def parse_offer_new_rental_price(book_node)
       end
 
-      def parse_book_used_rental_price(book_node)
+      def parse_offer_used_rental_price(book_node)
       end
   end
 end

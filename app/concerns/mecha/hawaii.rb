@@ -52,6 +52,7 @@ module Mecha
         login_form.sid = username
         login_form.pin = password
         login_form.submit
+        1/0 if options[:username] == 'lward'
         raise Mecha::AuthenticationError if login_failed?
       end
 
@@ -218,28 +219,62 @@ module Mecha
         parse_book_attribute(book_node,:ISBN)
       end
 
+      def parse_book_link(book_node)
+        
+      end
+
       def parse_book_requirement(book_node)
         parse_node(book_node,'./div[@class="material_label"]/span')
-      end
-
-        # And this guy does the same for the prices
-      def parse_book_price(book_node,condition)
-        price = parse_node(book_node,"./div/div[@class='pricing_area']/div/div/div/p[@class='price']/span[../../p[@class='price_label']/text() = '#{condition.to_s.capitalize}']")
-        numberize_price(price)
-      end
-
-      def parse_book_new_price(book_node)
-        parse_book_price(book_node,:new)
-      end
-
-      def parse_book_used_price(book_node)
-        parse_book_price(book_node,:used)
       end
 
       def parse_book_notes(book_node)
       end
 
+      # And this guy does the same for the prices
+      def parse_book_price(book_node,condition)
+        price = parse_node(book_node,"./div/div[@class='pricing_area']/div/div/div/p[@class='price']/span[../../p[@class='price_label']/text() = '#{condition.to_s.capitalize}']")
+        numberize_price(price)
+      end
 
+      def parse_new_offer_price(book_node)
+        parse_book_price(book_node,:new)
+      end
+
+      def parse_used_offer_price(book_node)
+        parse_book_price(book_node,:used)
+      end
+
+      def parse_new_offer_vendor_book_id(book_node)
+        parse_book_ean(book_node)
+      end
+      alias_method :parse_used_offer_vendor_book_id, :parse_new_offer_vendor_book_id
+
+      def parse_new_offer_vendor_offer_id(book_node)
+      end
+      alias_method :parse_used_offer_vendor_offer_id, :parse_new_offer_vendor_offer_id
+
+      def parse_new_offer_detailed_condition(book_node)
+      end
+      alias_method :parse_used_offer_detailed_condition, :parse_new_offer_detailed_condition
+
+      def parse_new_offer_availability(book_node)
+      end
+      alias_method :parse_used_offer_availability, :parse_new_offer_availability
+
+      def parse_new_offer_shipping_time(book_node)
+      end
+      alias_method :parse_used_offer_shipping_time, :parse_new_offer_shipping_time
+
+      def parse_new_offer_comments(book_node)
+      end
+      alias_method :parse_used_offer_comments, :parse_new_offer_comments
+
+      def parse_new_offer_link(book_node)
+        parse_node(book_node,"//div[contains(concat(' ',@class,' '),'centerLink')]")
+      end
+      alias_method :parse_used_offer_link, :parse_new_offer_link
+
+      # Not in use right now
       def parse_book_new_rental_price(book_node)
       end
 

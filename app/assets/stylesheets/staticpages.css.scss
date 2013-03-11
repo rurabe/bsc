@@ -2,9 +2,10 @@
 // They will automatically be included in staticpages.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.faq-box{
-  padding: 0px 20px;
+.content-box{
+  margin: 20px;
   text-align: left;
+  font-size: 12pt;
 }
 
 .accordion-toggle{
@@ -18,4 +19,45 @@
 .give-try-btn{
   text-align: center;
   margin: 0px auto 20px auto;
+}
+
+p.mission{
+  font-size: 24pt;
+  font-style: italic;
+}
+
+.content-box p{
+  margin-bottom: 20px;
+}
+
+.strike{
+  text-decoration: line-through;
+}
+
+.about-image{
+  height:250px;
+  margin: 0 auto 20px auto;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.about-text{
+  margin: 0 auto;
+  text-align: left;
+}
+
+#about-prices{
+  background-image: url('about-prices.png');
+}
+
+#about-auto{
+  background-image: url('about-auto.png');
+}
+
+#about-flex{
+  background-image: url('about-flex.png');
+}
+
+.faq-link{
+  margin-bottom: 10px;
 }

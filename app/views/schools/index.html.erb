@@ -1,55 +1,25 @@
-<div class="row-fluid pagination-centered">
-	<div class="span12">
+<div id="paper-box-index" class="paper pagination-centered">
 
-		<div class="row">
-			<div class="row-fluid">
-				<div class="logo-container">
-					<div class="logo-box">
-						<h1 class="logo">BOOK SUPPLY CO.</h1>
-					</div>
-					<div class="subtag">
-						All your books, online, for cheap. No lines, no wait!
-					</div>
-					</div>
-				</div>
-			</div>
+  <%= render :partial => 'shared/logo' %>
 
+  <div class="index-content-box">
 
-	<div class="row main-front-row">
+  	<%= render :partial => 'booklists/teach_me' %>
 
-		<div class="span12" >
-			<div class="schools-index-box">
- 				<% @schools.each do |school| %>
-					<%= link_to new_booklist_url :school => school.slug do %>
-						<div class="school-row" style="color: #<%= school.primary_color %>" data-primary-color="#<%= school.primary_color %>" data-secondary-color="#<%= school.secondary_color %>">
-							<h2 class="school-name">
-								<%= school.name.upcase %>
-							</h2>
-						</div>
-					<% end %>
-				<% end %>
-			</div>
-		</div>
-	</div>			
-
-		<div class="about-info">
-			<%= render :partial => 'shared/about_info' %>
-		</div>
-
-		<%= link_to about_path do %>
-			<button class='btn btn-danger faq-button'>Tell me more</button>
-		<% end %>
-
-		<div class="socials">
-			<%= render :partial => 'shared/socials' %>
-		</div>
-
-
+  	<%= render :partial => 'school_list' %>
 
 	</div>
+
+		<div class="tell-me-more-div">
+	    <%= link_to about_path do %>	
+	    	<button id="tell-me-more" class="btn btn-warning">Tell me more</button>
+	    <% end %>
+	  </div>
+
+
 </div>
 
 
 <%= content_for :page_js do %>
-	<%= javascript_include_tag "schools" %>
+	<%= javascript_include_tag "schools/schools.js" %>
 <% end %>

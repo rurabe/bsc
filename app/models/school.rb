@@ -7,6 +7,7 @@ class School < ActiveRecord::Base
                   :bookstore_name
 
  	has_many :booklists
+  has_many :snags
   
   extend FriendlyId
  	friendly_id :slug, :use => :slugged

@@ -1,33 +1,25 @@
 module Amazon
-	class CartQuery
-		attr_reader :link
+	class CartQuery < ApiClass
 
 		def initialize(params)
-			@books = params[:books]
-			@associate_tag = params[:tag]
-			@request_defaults = {
-				:operation		=> 'CartCreate',
-				:service 			=> 'AWSECommerceService' 	 
-			}
+			@books = params['books']
+			@associate_tag = "bsc-#{params['school']}-20"
 			@response = nil
-			@link = nil
 			control
 		end
 		
+		def link
+			parse_cart_response(@response)
+		end
+
 		private
 
 			def control
-				@response = send_request
-				parse_cart_response(@response)
-			end
-
-			def send_request
-				# Amazon::Ecs.send_request(:operation => 'CartCreate',:'Item.1.OfferListingId' => 'cdr23rg...', :'Item.1.Quantity' => 1,:service => "AWSECommerceService")
-				Amazon::Ecs.send_request(build_request)
+				@response = send_request(build_request)
 			end
 
 			def build_request
-				@request_defaults.merge(build_associate_tag_param)
+				base_params.merge(build_associate_tag_param)
 			end
 
 			def build_associate_tag_param
@@ -40,18 +32,38 @@ module Amazon
 				end
 			end
 
+			def base_params
+				{ :operation		=> 'CartCreate',
+					:service 			=> 'AWSECommerceService' }
+			end
+
 			def cart_data
-				Amazon::ItemLookup.new(@books).cart_data
+				# TODO raise a sold out error if nils are included
+				get_offer_ids.reject(&:nil?) #right now it just silently kicks them out
+			end
+
+			def get_offer_ids
+				updated_query_data.flat_map do |book|
+				  book[:offers_attributes].flat_map do |offer|
+				    offer[:vendor_offer_id]
+				  end
+				end
+			end
+
+			def updated_query_data
+				Amazon::ItemLookup.new(sanitized_query_data).parse
+			end
+
+			def sanitized_query_data
+				@books.map { |book| book.reject { |k,v| extra_attrs.include?(k) } }
+			end
+
+			def extra_attrs
+				['vendor', 'vendor_offer_id', 'vendor_book_id', 'price']
 			end
 
 			def parse_cart_response(response)
-				@link = parse_node(response.doc,'./CartCreateResponse/Cart/PurchaseURL')
+				parse_node(response,'.//Cart/PurchaseURL')
 			end
-
-			def parse_node(node,xpath)
-				result = node.xpath(xpath).first
-				result.content if result
-			end
-
 	end
 end

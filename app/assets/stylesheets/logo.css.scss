@@ -1,23 +1,26 @@
 // This file contains the default styles for the logo.
 
+div.logo-container{
+	margin-bottom: 25px;
+}
+
 div.logo-container a{
 	text-decoration: none;
 }
 
 h1.logo {
-	font-family: "FuturaBold";
-	font-size: 48pt;
+	font-size: 54pt;
 	text-shadow: 0.05em 0.07em 0.07em black;
 	color: #6A7F10;
 	margin: 0 auto 0 auto;
 }
 
 .logo-box {
-	margin: 20px auto 50px auto;
+	margin-bottom: 50px;
 }
 
 .school-name {
-	font-family: "FuturaBold";
+	// font-family: "FuturaBold";
 	text-shadow: 0.05em 0.07em 0.06em black;
 	margin: 20px auto 0px auto;
 }
@@ -25,6 +28,7 @@ h1.logo {
 h2.school-name{
 	font-size: 42pt;
 }
+
 
 @media(max-width:480px){
 	h1.logo{

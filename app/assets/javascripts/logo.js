@@ -1,3 +1,5 @@
 $(document).ready(function(){
-  $('.logo').arctext({ radius: 2000 });
+  if($('h1.logo').is(':visible')){
+    $('h1.logo').arctext({ radius: 2000 });
+  }
 });

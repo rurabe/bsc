@@ -1,26 +1,23 @@
 
 
-<div class="row-fluid pagination-centered">
+<div class="row pagination-centered">
 	<div class="span12">
 
-		<div class="logo-head">
-			<%= render :partial => 'shared/logo' %>
-		</div>
+		<div class="book-card paper">
+			<div class="logo-head">
+				<%= render :partial => 'shared/logo' %>
+			</div>
 
-		<div class="book-card">
+      <div class="show-welcome">
+        <%= render :partial => 'show_welcome' %>
+      </div>
+
 			<%= render :partial => 'book_card' %>
 		</div>
 
-		<button class="btn btn-mini btn-success" id="tour-button">Take the tour again</button>
-
-		<div class="socials">
-			<%= render :partial => 'shared/socials' %>
-		</div>
 	</div>
 </div>
 
-<%= render :partial => 'tour' %>
-
 <% content_for :page_js do %>
-	<%= javascript_include_tag "booklists/show" %>
+	<%= javascript_include_tag "booklists/show", :debug => false %>
 <% end %>

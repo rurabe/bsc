@@ -63,11 +63,8 @@ module Mecha
 
       # Course_data helpers #
       def build_all_courses(page)
-        threads = []
-        get_course_nodes(page).map do |course|
-          threads << Thread.new { build_course(course) }
-        end
-        threads.map { |t| t.join.value }
+        threads = get_course_nodes(page).map { |course| lambda{ build_course(course) } }
+        Automatron::Needle.thread(threads)
       end
 
       def get_course_nodes(page)
@@ -143,6 +140,10 @@ module Mecha
         parse_result(string,/AUTHOR:([\w ]+)/)
       end
 
+      def parse_book_link(book_node)
+        "http://www.bkstr.com/" + parse_node(book_node,"//div[contains(concat(' ',@class,' '),'centerLink')]/a/@href")
+      end
+
       def parse_book_requirement(book_node)
         string = parse_node(book_node,".//preceding::*[(self::h2 or self::h3) and following::comment()[contains(.,'retrieve material')]][1]")
         requirement = parse_result(string,/(required|choose|recommended|optional)/im) if string
@@ -152,16 +153,52 @@ module Mecha
       def parse_book_notes(book_node)
       end
 
-      def parse_book_new_price(book_node)
+      def parse_new_offer_vendor(book_node)
+        "Saddleback Bookstore"
+      end
+      alias_method :parse_used_offer_vendor, :parse_new_offer_vendor
+
+      def parse_new_offer_price(book_node)
         string = parse_node(book_node,".//li[contains(concat(' ',text(),' '),'NEW')]")
         parse_result(string,/NEW:\$([\d\.]+)/)
       end
 
-      def parse_book_used_price(book_node)
+      def parse_used_offer_price(book_node)
         string = parse_node(book_node,".//li[contains(concat(' ',text(),' '),'USED:')][1]")
         parse_result(string,/USED:\$([\d\.]+)/)
       end
 
+      def parse_new_offer_vendor_book_id(book_node)
+        parse_book_ean(book_node)
+      end
+      alias_method :parse_used_offer_vendor_book_id, :parse_new_offer_vendor_book_id
+
+      def parse_new_offer_vendor_offer_id(book_node)
+      end
+      alias_method :parse_used_offer_vendor_offer_id, :parse_new_offer_vendor_offer_id
+
+      def parse_new_offer_detailed_condition(book_node)
+      end
+      alias_method :parse_used_offer_detailed_condition, :parse_new_offer_detailed_condition
+
+      def parse_new_offer_availability(book_node)
+      end 
+      alias_method :parse_used_offer_availability, :parse_new_offer_availability
+
+      def parse_new_offer_shipping_time(book_node)
+      end
+      alias_method :parse_used_offer_shipping_time, :parse_new_offer_shipping_time
+
+      def parse_new_offer_comments(book_node)
+      end
+      alias_method :parse_used_offer_comments, :parse_new_offer_comments
+
+      def parse_new_offer_link(book_node)
+        parse_book_link(book_node)
+      end
+      alias_method :parse_used_offer_link, :parse_new_offer_link
+
+      # Not in use right now
       def parse_book_new_rental_price(book_node)
       end
 

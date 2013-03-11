@@ -3,12 +3,14 @@ class Booklist < ActiveRecord::Base
   belongs_to :school
   has_many :courses, :dependent => :destroy
   has_many :books, :through => :courses
-  has_one :page
+  has_many :offers, :through => :books
+  has_one :page, :dependent => :destroy
+
 
   after_create :set_slug
 
- 	extend FriendlyId
- 	friendly_id :slug, :use => :slugged
+  extend FriendlyId
+  friendly_id :slug, :use => :slugged
 
   def get_books(options={})
     m = mecha.new(options)
@@ -16,19 +18,23 @@ class Booklist < ActiveRecord::Base
     link_courses(m.parse)
   end
 
-  def lookup(vendor)
+  def get_offers(vendor)
+    e = eans
     case vendor
-      when "amazon"  then Amazon::ItemLookup.new(eans)
-      when "bn"      then BarnesAndNoble::ItemLookup.new(eans)
-      when "bn-used" then BarnesAndNoble::UsedBooks.new(eans)
+    when 'amazon'     then Amazon::ItemLookup.new(e).parse
+    when 'bn'         then BarnesAndNoble::ItemLookup.new(e).parse
+    when 'bookstore'  then bookstore_offers_data
     end
   end
 
-  def used_bn
-    eans.map { |e| BarnesAndNoble::UsedBooks.new(e).ui_data }
-  end
-
   private
+
+    def bookstore_offers_data
+      offers.map do |offer|
+        { :ean               => offer.book.ean,
+          :offers_attributes => [offer] }
+      end
+    end
   
     def eans
       books.pluck(:ean)

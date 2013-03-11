@@ -1,8 +1,14 @@
 class CartsController < ApplicationController
 
 	def create
-		# params = {"cart"=> {"books"=>[{"condition" => "used", "ean" => "123..."}], "tag" => "bsc-usc-20"}}
-		@query = Amazon::CartQuery.new(params[:cart])
-		redirect_to @query.link, :status => 303
+    @query = query(params[:vendor]).new(params)
+    redirect_to @query.link
 	end
+
+  private
+
+    def query(vendor)
+      _module = vendor.titlecase.gsub(' ','')
+      "#{_module}::CartQuery".constantize
+    end
 end

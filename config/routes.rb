@@ -2,7 +2,9 @@ BookSupply::Application.routes.draw do
 
   match '/booklists'   => 'booklists#index'
 
-  match "/about"        => 'staticpages#about'
+  match '/about'        => 'staticpages#about'
+  match '/faq'          => 'staticpages#faq'
+  match '/team'         => 'staticpages#team'
   match '/channel.html' => Facebook::Channel
 
   scope :constraints => School do
@@ -12,9 +14,10 @@ BookSupply::Application.routes.draw do
     end
   end
 
-  match '/:id'       => 'booklists#show',   :via => 'get',  :as => 'booklist'
-  match '/:id'       => 'booklists#update', :via => 'put',  :as => 'update_booklist'
-  match '/:id/carts' => 'carts#create',     :via => 'get',  :as => 'carts'
+  match'/:id/books/:vendor'  => 'books#show', :via => 'get', :as => 'books'
+
+  match '/:id'        => 'booklists#show',   :via => 'get',   :as => 'booklist'
+  match '/:id/carts'  => 'carts#create',     :via => 'post',  :as => 'carts'
 
   root :to => 'schools#index'
 

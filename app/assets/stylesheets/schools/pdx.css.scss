@@ -5,7 +5,10 @@
 
 // Variables ----------------------------|
 
-$school-primary-color: #6A7F10 ;
-$school-secondary-color: #A8B400 ;
-
 @import "schools.css.scss";
+
+$school-primary-color: $pdx-primary-color ;
+$school-secondary-color: $pdx-secondary-color ;
+$school-slug: $pdx-slug;
+
+@import "school_specific.css.scss";
