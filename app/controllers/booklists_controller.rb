@@ -60,13 +60,10 @@ class BooklistsController < ApplicationController
     # Error handling
     def error_handling(error)
       if error.is_a? Mecha::UnknownError
-        @booklist.save
-        @booklist.snags.create(error.data)
+        @school.snags.create(error.data)
       end
       flash[:error] = [error.message]
       render 'new'
     end
-
-
 
 end

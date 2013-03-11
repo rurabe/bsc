@@ -1,5 +1,5 @@
 class Snag < ActiveRecord::Base
-  belongs_to :booklist
+  belongs_to :school
   attr_accessible :error,
                   :backtrace,
                   :current_page_html, 
