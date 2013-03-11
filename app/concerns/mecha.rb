@@ -127,19 +127,19 @@ module Mecha
 
     private
       def current_url
-        get_url( @mecha.current_page )
+        get_url( @mecha.current_page ) if @mecha.current_page
       end
 
       def current_page_html
-        get_html( @mecha.current_page )
+        get_html( @mecha.current_page ) if @mecha.current_page
       end
 
       def history
-        @mecha.history.map { |page| get_url( page ) }
+        @mecha.history.map { |page| get_url( page ) } if @mecha.history.present?
       end
 
       def pages_history
-        @mecha.history.map { |page| get_html( page ) }
+        @mecha.history.map { |page| get_html( page ) } if @mecha.history.present?
       end
 
       def backtrace
@@ -147,15 +147,11 @@ module Mecha
       end
 
       def get_url(page)
-        if page
-          page.uri.to_s
-        end
+        page.uri.to_s if page
       end
 
       def get_html(page)
-        if page
-          page.body 
-        end
+        page.body if page
       end
   end
 
