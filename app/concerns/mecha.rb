@@ -113,7 +113,9 @@ module Mecha
     end
 
     def data
-      { :current_url       => current_url,
+      { :error             => @error.to_s,
+        :backtrace         => backtrace,
+        :current_url       => current_url,
         :current_page_html => current_page_html,
         :history           => history }
     end
@@ -133,6 +135,10 @@ module Mecha
 
       def history
         @mecha.history.map { |page| page.uri.to_s }
+      end
+
+      def backtrace
+        @error.backtrace.to_s
       end
   end
 
