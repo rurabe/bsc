@@ -147,11 +147,15 @@ module Mecha
       end
 
       def get_url(page)
-        page.uri.to_s if page
+        if page
+          page.uri.to_s
+        end
       end
 
       def get_html(page)
-        page.body if page
+        if page
+          page.body 
+        end
       end
   end
 
