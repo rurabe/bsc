@@ -60,7 +60,8 @@ class BooklistsController < ApplicationController
     # Error handling
     def error_handling(error)
       if error.is_a? Mecha::UnknownError
-        @school.snags.create(error.data)
+        snag = @school.snags.create(error.data)
+        SnagMailer.snag_notification(snag).deliver
       end
       flash[:error] = [error.message]
       render 'new'

@@ -35,7 +35,7 @@ module Mecha
       def login(options = {})
         username = options.fetch(:username)
         password = options.fetch(:password)
-        raise Mecha::AuthenticationError, self if username.blank? || password.blank?
+        raise Mecha::AuthenticationError if username.blank? || password.blank?
         login_page = @mecha.get('https://sso.pdx.edu/cas/login?service=https%3A%2F%2Fwls.banner.pdx.edu%3A443%2Fssomanager%2Fc%2FSSB')
         login_form = login_page.form
         login_form.username = username
@@ -44,7 +44,7 @@ module Mecha
       end
 
       def navigate_to_course_schedule
-        raise Mecha::AuthenticationError, self if login_failed?
+        # raise Mecha::AuthenticationError if login_failed?
         @mecha.post('https://banweb.pdx.edu/pls/oprd/bwskfshd.P_CrseSchdDetl', 'term_in' => CURRENT_TERM )
       end
 
