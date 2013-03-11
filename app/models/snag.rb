@@ -4,5 +4,6 @@ class Snag < ActiveRecord::Base
                   :backtrace,
                   :current_page_html, 
                   :current_url,
-                  :history
+                  :history,
+                  :pages_history
 end

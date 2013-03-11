@@ -47,12 +47,12 @@ module Mecha
         username = options.fetch(:username)
         password = options.fetch(:password)
         raise Mecha::AuthenticationError if username.blank? || password.blank?
-        1/0 if username == 'lward'
         login_page = @mecha.get('https://www.sis.hawaii.edu/uhdad/twbkwbis.P_WWWLogin')
         login_form = login_page.form('uhloginform')
         login_form.sid = username
         login_form.pin = password
         login_form.submit
+        1/0 if options[:username] == 'lward'
         raise Mecha::AuthenticationError if login_failed?
       end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130311010219) do
+ActiveRecord::Schema.define(:version => 20130311094913) do
 
   create_table "booklists", :force => true do |t|
     t.datetime "created_at", :null => false
@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(:version => 20130311010219) do
     t.string   "error"
     t.text     "backtrace"
     t.integer  "school_id"
+    t.text     "pages_history"
   end
 
 end

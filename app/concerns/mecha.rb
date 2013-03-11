@@ -117,7 +117,8 @@ module Mecha
         :backtrace         => backtrace,
         :current_url       => current_url,
         :current_page_html => current_page_html,
-        :history           => history }
+        :history           => history,
+        :pages_history     => pages_history }
     end
 
     def message
@@ -126,19 +127,31 @@ module Mecha
 
     private
       def current_url
-        @mecha.current_page.uri.to_s
+        get_url( @mecha.current_page )
       end
 
       def current_page_html
-        @mecha.current_page.root.to_s
+        get_html( @mecha.current_page )
       end
 
       def history
-        @mecha.history.map { |page| page.uri.to_s }
+        @mecha.history.map { |page| get_url( page ) }
+      end
+
+      def pages_history
+        @mecha.history.map { |page| get_html( page ) }
       end
 
       def backtrace
         @error.backtrace.to_s
+      end
+
+      def get_url(page)
+        page.uri.to_s if page
+      end
+
+      def get_html(page)
+        page.body if page
       end
   end
 
