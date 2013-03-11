@@ -33,11 +33,7 @@
           History
         </td>
         <td>
-          <ul>
-            <% eval(@snag.history).each do |h| %>
-              <li>h</li>
-            <% end %>
-          </ul>
+          <%= @snag.history %>
         </td>
       </tr>
 
