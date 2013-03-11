@@ -69,7 +69,7 @@ module Mecha
       end
 
       def navigate_to_books_page
-        raise Mecha::NoClassesError if no_classes?
+        # raise Mecha::NoClassesError if no_classes?
         @mecha.get(bookstore_url)
       end
 
