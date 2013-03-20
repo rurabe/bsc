@@ -77,7 +77,9 @@ module Mecha
 
       # Book_data helpers #
       def get_book_nodes(section_node)
-        section_node.search("//*[preceding-sibling::h3[.//span/text()='#{section_node.text}']][1]//tr[contains(concat(' ',@class,' '),'book course')]")
+        department = parse_course_department(section_node)
+        number     = parse_course_number(section_node)
+        section_node.search("//*[preceding-sibling::h3[.//span/text()[contains(.,'#{department}') and contains(.,'#{number}')]]][1]//tr[contains(concat(' ',@class,' '),'book course')]")
       end
 
       # Course parsers #
@@ -121,7 +123,7 @@ module Mecha
       end
 
       def parse_book_link(book_node)
-        @link.uri.to_s
+        # @link.uri.to_s
       end
 
       def parse_book_requirement(book_node)

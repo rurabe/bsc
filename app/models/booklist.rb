@@ -15,7 +15,7 @@ class Booklist < ActiveRecord::Base
   def get_books(options={})
     m = mecha.new(options)
     build_page(:html => m.courses_page.body)
-    link_courses(m.parse)
+    link_courses( m.parse )
   end
 
   def get_offers(vendor)
