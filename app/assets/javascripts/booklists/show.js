@@ -429,7 +429,12 @@ $(document).ready(function(){
         bn: {
           'new': "http://click.linksynergy.com/deeplink?mid=36889&id=BF/ADxwv1Mc&murl=http%3A%2F%2Fwww.barnesandnoble.com%2Fean%2F" + vendorBookId,
           'used': "http://click.linksynergy.com/deeplink?mid=36889&id=BF/ADxwv1Mc&murl=http%3A%2F%2Fwww.barnesandnoble.com%2Flisting%2F" + vendorBookId
+        },
+        bookstore: {
+          'new': link,
+          'used': link
         } 
+
       };
       return link || links[vendorCode][condition];
     }();
