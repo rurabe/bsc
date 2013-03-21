@@ -123,7 +123,7 @@ module Mecha
       end
 
       def parse_book_link(book_node)
-        # @link.uri.to_s
+        @link.uri.to_s
       end
 
       def parse_book_requirement(book_node)
