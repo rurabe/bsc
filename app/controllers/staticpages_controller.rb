@@ -19,6 +19,10 @@ class StaticpagesController < ApplicationController
     
   end
 
+  def terms
+    
+  end
+
   private
 
     def define_schools
