@@ -1,5 +1,5 @@
 <ul class="deals-list">
   <% @deals.each do |deal| %>
-    <li class="deal"><%= link_to deal.description, deal.link %></li>
+    <li class="deal"><%= link_to deal.description, deal.link, :target => '_blank' %></li>
   <% end %>
 </ul>
