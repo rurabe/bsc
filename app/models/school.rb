@@ -12,6 +12,8 @@ class School < ActiveRecord::Base
   extend FriendlyId
  	friendly_id :slug, :use => :slugged
 
+  after_save { School.update_cache }
+
 
 	# Method used in the as the default for the constraint School.
 	# Seeks to limit non-404 requests to only those schools listed below.
