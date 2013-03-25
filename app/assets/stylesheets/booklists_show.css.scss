@@ -352,3 +352,16 @@ $button-height: 40px;
   border: 1px solid silver;
   height: 50px;
 }
+
+
+.deals-list{
+  list-style: none;
+}
+
+.deal{
+  font-family: 'Gochi Hand', cursive;
+  font-size: 14pt;
+}
+.deal a:link {
+  text-decoration: none;
+}

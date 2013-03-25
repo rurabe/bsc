@@ -31,6 +31,7 @@ class BooklistsController < ApplicationController
   def show
     @booklist = Booklist.where(:slug => params[:id]).includes(:courses,:books,:offers).first
     @school = @schools.find { |school| school.id == @booklist.school_id } || School.find( params[:school] )
+    @deals = Deal.all
   end
 
   def index
