@@ -19,6 +19,19 @@ class School < ActiveRecord::Base
  		current_schools.include?(request.params[:school])
  	end
 
+  def self.update_cache
+    REDIS.set( :schools_all, Marshal.dump( all ) )
+  end
+
+  def self.cached_schools
+    d = REDIS.get(:schools_all)
+    Marshal.load( d ) if d.present?
+  end
+
+  def self.all
+    cached_schools || super
+  end
+
  	private
 
 	 	def self.current_schools
