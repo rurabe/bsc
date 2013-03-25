@@ -22,6 +22,7 @@ class School < ActiveRecord::Base
  	end
 
   def self.update_cache
+    REDIS.del( :schools_all )
     REDIS.set( :schools_all, Marshal.dump( all ) )
   end
 

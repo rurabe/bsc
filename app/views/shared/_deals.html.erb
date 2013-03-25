@@ -1,0 +1,5 @@
+<ul class="deals-list">
+  <% @deals.each do |deal| %>
+    <li class="deal"><%= link_to deal.description, deal.link %></li>
+  <% end %>
+</ul>
