@@ -13,9 +13,7 @@ $(document).ready(function(){
 		$(this).css('color',color);
 	});
 
-  $('#schoolsCarousel').carousel({
-    interval: 8000
-  })
+  
 
 
 });

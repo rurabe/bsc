@@ -1,15 +1,20 @@
 $(document).ready(function(){
   // [----------------------------------------===== #NEW =====----------------------------------------]
 
-    var recursiveFade = function(elementArray,fadeSpeed,delay){
+    var recursiveFade = function(elementArray,fadeSpeed,delay,callback){
       fadeSpeed = fadeSpeed || 500;
-      delay = delay || 0
+      delay = delay || 0;
+      callback = callback || $.noop;
       var fadeMeIn = function(i){
         i = i || 0
         $(elementArray[i]).fadeIn(fadeSpeed,function(){
           if( i < (elementArray.length - 1) ){ 
             setTimeout(function(){
               fadeMeIn(i + 1); 
+            },delay);
+          } else {
+            setTimeout(function(){
+              callback(); 
             },delay);
           }
         });
@@ -22,8 +27,10 @@ $(document).ready(function(){
       $('#paper-box,#tell-me-more,#go-time').show()
     } else {
       $('#paper-box').fadeIn(1000,function(){
-        $('#teach-me,#tell-me-more').fadeIn(500);
-        recursiveFade($('.demo-column'),500,700);
+        $('#teach-me,#readyStart').fadeIn(500);
+        recursiveFade($('.demo-column'),500,700,function(){
+          $('#curiousDemo,#skepticalAbout').fadeIn(500);
+        });
         $('#try-button').on({
           click: function(){
             // Tranistion in the go-time

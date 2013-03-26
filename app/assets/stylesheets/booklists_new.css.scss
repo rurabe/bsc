@@ -23,33 +23,36 @@
 }
 
 #new-page-main-content{
-  height: 417px;
+  height: 317px;
 }
 
 .demo{
-  height: 350px;
+  height: 300px;
   margin: 0 auto;
+}
+
+.tri-column{
+  height: 100%;
+  margin: 0px 1.25%;
+  width: 30.75%;
+  float: left;
+  position: relative;
+  display: hidden;
 }
 
 .demo-column{
   display: none;
-  position: relative;
-  height: 100%;
   background: rgba(200,200,200,0.5);
-  margin: 0px 1.25%;
-  width: 30.75%;
-  float: left;
   -moz-border-radius: 15px;
   border-radius: 15px;
 }
 
 .demo-column-image{
-  height: 250px;
+  height: 200px;
   margin: 15px;
   border: 3px solid silver;
   background-color:silver;
-
-  // background-repeat: no-repeat;
+  background-repeat: no-repeat;
 }
 
 .demo-column-text{
@@ -73,18 +76,39 @@
   background-position: center center;
 }
 
-.try-div{
-  margin: 15px auto 0px;
-  clear: both;
+.action-wrapper{
+  display: none;
 }
-.tell-me-more-div{
+
+.actions-div{
+  height: 120px;
   margin: 5px auto;
   clear: both;
 }
 
+.action-label-div{
+  height: 50px;
+}
+
+.action-label{
+  margin-top: 20px;
+  font-size: 14pt;
+}
+
+.big-action-label{
+  font-size: 22pt;
+}
+
+.action-button{
+  margin: 0 auto;
+}
+
+.small-action-button{
+  margin-top:15px;
+}
+
 #tell-me-more{
   clear: both;
-  display:none;
 }
 
 #go-time{

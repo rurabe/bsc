@@ -1,26 +1,26 @@
 <div class="book-card-container">
 
-  <%= render :partial => 'book_card_headers' %>
+  <%= render :partial => 'booklists/book_card_headers' %>
 
   <% @booklist.courses.each do |course| %>
 
-    <%= render :partial => 'course_row', :locals => { :course => course } %>
+    <%= render :partial => 'booklists/course_row', :locals => { :course => course } %>
 
     <% if course.books.present? %>
 
       <% course.books.each do |book| %>
-        <%= render :partial => 'book_row', :locals => { :book => book } %>
+        <%= render :partial => 'booklists/book_row', :locals => { :book => book } %>
       <% end %>
 
     <% else %>
 
-      <%= render :partial => 'no_books_row' %>
+      <%= render :partial => 'booklists/no_books_row' %>
 
     <% end %>
 
   <% end %>
 
-  <%= render :partial => 'checkout_button' %>
+  <%= render :partial => 'booklists/checkout_button' %>
 
 </div>
 

@@ -7,6 +7,7 @@ BookSupply::Application.routes.draw do
   match '/team'         => 'staticpages#team'
   match '/terms'        => 'staticpages#terms'
   match '/privacy'      => 'staticpages#privacy'
+  match '/example'      => 'staticpages#example'
   match '/channel.html' => Facebook::Channel
 
   scope :constraints => School do

@@ -23,6 +23,12 @@ class StaticpagesController < ApplicationController
     
   end
 
+  def example
+    @booklist = Booklist.find("example")
+    @deals = Deal.all
+    render 'booklists/show'
+  end
+
   private
 
     def define_schools
