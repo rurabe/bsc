@@ -754,4 +754,6 @@ $(document).ready(function(){
 
   BOOKSUPPLYCO.addBooks();
 
+  $('#likeModal').modal('show')
+
 });

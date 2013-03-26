@@ -1,1 +1,5 @@
-<fb:like href="http://www.facebook.com/BookSupplyCo" send="true" layout="button_count" width="100" show_faces="true" ref=<%= @school ? @school.slug : "booksupply" %>></fb:like>
+<% if faces %>
+  <fb:like-box href="https://www.facebook.com/BookSupplyCo" width="500" height="250" show_faces="true" stream="false" header="false" border-color="#FFFFFF"></fb:like-box>
+<% else %>
+  <fb:like href="http://www.facebook.com/BookSupplyCo" send="true" layout="button_count" width="100" show_faces="true" ref=<%= @school ? @school.slug : "booksupply" %> ></fb:like>
+<% end %>

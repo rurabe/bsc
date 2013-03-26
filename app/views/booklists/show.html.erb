@@ -22,6 +22,25 @@
 	</div>
 </div>
 
+<div id="likeModal" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Spread the word!</h3>
+  </div>
+  <div class="modal-body">
+    <p>Thanks for checking out Book Supply Co! We've put a lot of time, thought, and effort into making buying your books as cheap and easy as possible, and we hope we can help you..</p>
+
+    <p>Please consider taking a moment to "Like" us and spread the word to your friends and classmates. Let's help everyone get cheap books.</p>
+
+    <div class="modal-facebook-row">
+      <%= render :partial => 'shared/facebook', :locals => {:faces => true} %>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-school" data-dismiss="modal" aria-hidden="true">Take me to my books</button>
+  </div>
+</div>
+
 <% content_for :page_js do %>
 	<%= javascript_include_tag "booklists/show", :debug => false %>
 <% end %>
