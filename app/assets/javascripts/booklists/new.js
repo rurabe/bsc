@@ -34,7 +34,7 @@ $(document).ready(function(){
         $('#try-button').on({
           click: function(){
             // Tranistion in the go-time
-            $('#teach-me').fadeOut(function(){
+            $('#teach-me,.actions-div').fadeOut(function(){
               $('#go-time').fadeIn();
             });
           }
