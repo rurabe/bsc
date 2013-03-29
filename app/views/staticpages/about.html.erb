@@ -40,13 +40,18 @@
       </div>
     </div>
 
-    
-    <div class="row-fluid pagination-centered faq-link">
-      <%= link_to 'More questions? Check out our FAQs', faq_path %>
-    </div>
+
 
     <div class="row-fluid pagination-centered">
       <%= render :partial => 'shared/try_button' %>
+    </div>
+
+    <div class="row-fluid pagination-centered example-link">
+      <%= link_to faq_path do %>
+        <button class="btn btn-warning faq-link">
+          More questions? Check out our FAQs
+        </button>
+      <% end %>
     </div>
 
   </div>
