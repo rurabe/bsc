@@ -1,0 +1,47 @@
+
+.tour-background{
+  transition-delay: 0s;
+  transition-duration: 0.5s;
+  transition-property: opacity;
+  transition-timing-function: linear;
+  -webkit-transition-delay: 0s;
+  -webkit-transition-duration: 0.5s;
+  -webkit-transition-property: opacity;
+  -webkit-transition-timing-function: linear;
+  opacity: 0.0;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  position: fixed;
+  background-color: #000000;
+  color: #000000;
+  z-index: 10;
+}
+
+.tour-container{
+  display: none;
+}
+
+.tour-arrow{
+  position: fixed;
+}
+
+.tour-arrow-two{
+  -webkit-transform: rotate(-90deg);
+}
+
+.tour-next{
+  font-family: 'Gochi Hand', cursive;
+  position: fixed;
+  font-size: 16pt;
+}
+
+#tourScreen .tour-description{
+  font-family: 'Gochi Hand', cursive;
+  position: absolute;
+  color: #FFFFFF;
+  font-size: 20pt;
+}
+
+

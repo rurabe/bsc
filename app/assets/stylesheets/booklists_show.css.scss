@@ -86,7 +86,8 @@ div.book-row-inner{
 }
 
 .book-cell{
-  height: $row-height
+  height: $row-height;
+  text-align: center;
 }
 
 $book-button-margin-top: 0px;
@@ -317,11 +318,13 @@ $button-height: 40px;
 .checkout-row{
   padding: 25px 0px;
   height: $button-height;
+  position: relative;
 }
 
 #checkout-button{
   font-size: 18pt;
   height: $button-height;
+  position: absolute;
 }
 
 

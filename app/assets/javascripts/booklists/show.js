@@ -753,7 +753,10 @@ $(document).ready(function(){
 //--------INIT--------INIT--------INIT--------INIT--------INIT--------INIT--------//
 
   BOOKSUPPLYCO.addBooks();
-
-  $('#likeModal').modal('show')
+  bscTour.start();
+  // $('#likeModal').modal({
+  //   backdrop: false,
+  //   show:     true
+  // });
 
 });
