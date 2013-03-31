@@ -39,7 +39,7 @@
 
 #tourScreen .tour-description{
   font-family: 'Gochi Hand', cursive;
-  position: absolute;
+  position: fixed;
   color: #FFFFFF;
   font-size: 20pt;
 }

@@ -29,13 +29,13 @@ $(document).ready(function(){
             var arrow1CSS = this.$el.offset()
             arrow1CSS.top -= 155;
             arrow1CSS.left -= 50;
-            this.arrow.css( arrow1CSS ).fadeIn();
+            this.arrow.offset( arrow1CSS ).fadeIn();
 
             this.description = $('#tourOne .tour-description').clone().appendTo('#tourScreen').hide();
             var desc1CSS = arrow1CSS;
             desc1CSS.left -= 100;
             desc1CSS.top -= 30;
-            this.description.css(desc1CSS).fadeIn();
+            this.description.offset(desc1CSS).fadeIn();
 
             this.$el.css({'z-index': 20})
 
@@ -45,7 +45,7 @@ $(document).ready(function(){
               top: this.description.offset().top + this.description.height() + 10
             }
 
-            this.next.css( nextCSS ).fadeIn().one({
+            this.next.offset( nextCSS ).fadeIn().one({
               click: function(){
                 stepOne.cleanup();
                 stepTwo.call()
@@ -66,49 +66,52 @@ $(document).ready(function(){
         var stepTwo = {
           $el: $('#checkout-button'),
           call: function(){
+            var step = this
 
             tour.unlockBackground();
 
             $('html,body').animate({
-              scrollTop: ($('#checkout-button').offset().top - 500)
-            },200)
+              scrollTop: ($('#checkout-button').offset().top )
+            },{
+              duration: 200,
+              complete: function(){
 
-            tour.lockBackground();
+                tour.lockBackground();
 
-            this.arrow = $('#tourTwo .tour-arrow').clone().appendTo('#tourScreen').hide();
-            var arrow2CSS = this.$el.offset()
-            arrow2CSS.top -= 200;
-            arrow2CSS.left -= 150;
-            this.arrow.css( arrow2CSS ).fadeIn();
-
-
-            this.description = $('#tourTwo .tour-description').clone().appendTo('#tourScreen').hide();
-            var desc2CSS = arrow2CSS
-            desc2CSS.top += 10;
-            desc2CSS.left -= 300;
-            this.description.css(desc2CSS).fadeIn();
+                step.arrow = $('#tourTwo .tour-arrow').clone().appendTo('#tourScreen').hide();
+                var arrow2CSS = step.$el.offset()
+                arrow2CSS.top -= 25;
+                arrow2CSS.left -= 150;
+                step.arrow.offset( arrow2CSS ).fadeIn();
 
 
-            this.$el.css({'z-index': 20});
+                step.description = $('#tourTwo .tour-description').clone().appendTo('#tourScreen').hide();
+                var desc2CSS = arrow2CSS
+                desc2CSS.top += 10;
+                desc2CSS.left -= 300;
+                step.description.offset(desc2CSS).fadeIn();
 
-            this.next = $('<a href="#" class="tour-next"><span>Get started!</span></a>').appendTo('#tourScreen').hide();
-            var nextCSS = {
-              left: this.description.offset().left + this.description.width() - this.next.width(),
-              top: this.description.offset().top + this.description.height() + 10
-            }
 
-            this.next.css( nextCSS ).fadeIn().one({
-              click: function(){
-                stepTwo.cleanup();
-                tour.end();
+                step.$el.css({'z-index': 20});
+
+                step.next = $('<a href="#" class="tour-next"><span>Get started!</span></a>').appendTo('#tourScreen').hide();
+                var next2CSS = desc2CSS
+                next2CSS.left += (step.description.width() - step.next.width());
+                next2CSS.top += 10 + step.description.height();
+                step.next.offset( next2CSS ).fadeIn().one({
+                  click: function(){
+                    stepTwo.cleanup();
+                    tour.end();
+                  }
+                })
+
+                setTimeout(function(){
+                  stepTwo.cleanup();
+                  tour.end();
+                },10000)
+
               }
-            })
-
-            setTimeout(function(){
-              stepTwo.cleanup();
-              tour.end();
-            },10000)
-
+            });
           },
           cleanup: function(){
             this.arrow.remove();

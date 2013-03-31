@@ -152,11 +152,16 @@ input#booklist_password {
 // For loading modal
 
 #loadingModal {
+  height: 600px;
   overflow: visible;
 }
 
 #loadingModal-body {
   overflow-y: visible;
+}
+
+.searching{
+  text-align: center;
 }
 
 #intro-carousel {

@@ -1,5 +1,6 @@
 <div class="modal hide fade" id="loadingModal" >
 	<div class="modal-body" id="loadingModal-body">
+		<h2 class="searching"> Searching </h2>
 		<div id="icon-carousel" class="carousel slide">
 		  <!-- Carousel items -->
 		  <div class="carousel-inner">
@@ -20,10 +21,12 @@
 		    </div>
 		  </div>
 		</div>
-	<h3>Searching... this will only take a bit.	</h3>
-	<h5>Meanwhile, if you recommend us on facebook we can be, like, best friends.</h5>
-	<div>
-	<%= render :partial => 'shared/facebook', :locals => {:faces => false} %>
-	</div>
+		<p>Thanks for checking out Book Supply Co! We've put a lot of time, thought, and effort into making buying your books as cheap and easy as possible, and we hope we can help you.</p>
+
+    <p>Please take a moment to "Like" us and spread the word to your friends and classmates. Let's help everyone get cheap books.</p>
+
+    <div class="modal-facebook-row">
+      <%= render :partial => 'shared/facebook', :locals => {:faces => true} %>
+    </div>
 	</div>
 </div>

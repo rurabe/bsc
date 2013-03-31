@@ -754,9 +754,5 @@ $(document).ready(function(){
 
   BOOKSUPPLYCO.addBooks();
   bscTour.start();
-  // $('#likeModal').modal({
-  //   backdrop: false,
-  //   show:     true
-  // });
 
 });

@@ -1,16 +1,4 @@
-<div class="tour-container">
-  <div id="tourOne" class="tour-step">
-    <%= image_tag "tour-arrow-a.png", :class => "tour-arrow tour-arrow-one" %>
-    <span class="tour-description tour-description-one">Step 1 - Click the prices</span>
-  </div>
-
-  <div id="tourTwo" class="tour-step">
-    <%= image_tag "tour-arrow-a.png", :class => "tour-arrow tour-arrow-two" %>
-    <span class="tour-description tour-description-two">Step 2 - Check out. You're done.</span>
-  </div>
-</div>
-
-
+<%= render :partial => 'tour' %>
 
 <div class="row pagination-centered">
 	<div class="span12">
@@ -33,8 +21,6 @@
 
 	</div>
 </div>
-
-<%= render :partial => 'booklists/like_modal' %>
 
 <% content_for :page_js do %>
 	<%= javascript_include_tag "booklists/show", :debug => false %>
