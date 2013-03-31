@@ -4,7 +4,7 @@
 
 // Styles
 $selected-color: #6A7F10;
-$hover-color: transparentize($selected-color,0.6);
+$hover-color: lighten($selected-color,100%);
 $selected-hover-color: darken($selected-color,10%);
 
 @mixin button-active-style($margin-top,$margin-right,$margin-bottom,$margin-left){

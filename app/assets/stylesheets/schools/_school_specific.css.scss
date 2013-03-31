@@ -10,7 +10,7 @@ $school-secondary-color: #A8B400 !default;
 $school-slug: 'default' !default;
 
 $selected-color: $school-primary-color;
-$hover-color: transparentize($selected-color,0.6);
+$hover-color: lighten($selected-color,40%);
 $selected-hover-color: darken($selected-color,10%);
 
 
