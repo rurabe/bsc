@@ -162,9 +162,12 @@ module Mecha
       alias_method :parse_used_offer_detailed_condition, :parse_new_offer_detailed_condition
 
       def parse_new_offer_availability(book_node)
-        "Not available"
+        parse_node(book_node,".//input[@id[contains(.,'radio-sku-new_')]]/@disabled").present? ? "Not Available" : "Available"
       end
-      alias_method :parse_used_offer_availability, :parse_new_offer_availability
+
+      def parse_used_offer_availability(book_node)
+        parse_node(book_node,".//input[@id[contains(.,'radio-sku-used_')]]/@disabled").present? ? "Not Available" : "Available"
+      end
 
       def parse_new_offer_shipping_time(book_node)
       end

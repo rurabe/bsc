@@ -83,6 +83,7 @@ $(document).ready(function(){
             condition: offer.condition,
             vendor_offer_id: offer.vendorOfferId,
             vendor_book_id: offer.vendorBookId,
+            link: offer.link,
             price: offer.price
           };
         });
@@ -484,6 +485,7 @@ $(document).ready(function(){
       detailedCondition:  detailedCondition,
       ean:                offerGroup.book.ean,
       price:              price,
+      link:               link,
       formattedPrice:     formattedPrice,
       shippingTime:       shippingTime,
       vendor:             vendor,

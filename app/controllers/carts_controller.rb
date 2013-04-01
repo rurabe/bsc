@@ -8,7 +8,11 @@ class CartsController < ApplicationController
   private
 
     def query(vendor)
-      _module = vendor.titlecase.gsub(' ','')
-      "#{_module}::CartQuery".constantize
+      if vendor =~ /bookstore/i
+        Bookstore::CartQuery
+      else
+        _module = vendor.titlecase.gsub(' ','')
+        "#{_module}::CartQuery".constantize
+      end
     end
 end

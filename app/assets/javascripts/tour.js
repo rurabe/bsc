@@ -39,7 +39,7 @@ $(document).ready(function(){
 
             this.$el.css({'z-index': 20})
 
-            this.next = $('<a href="#" class="tour-next"><span>Next &gt;&gt;</span></a>').appendTo('#tourScreen').hide();
+            this.next = $('<a href="javascript:;" class="tour-next"><span>Next &gt;&gt;</span></a>').appendTo('#tourScreen').hide();
             var nextCSS = {
               left: this.description.offset().left + this.description.width() - this.next.width(),
               top: this.description.offset().top + this.description.height() + 10
@@ -94,7 +94,7 @@ $(document).ready(function(){
 
                 step.$el.css({'z-index': 20});
 
-                step.next = $('<a href="#" class="tour-next"><span>Get started!</span></a>').appendTo('#tourScreen').hide();
+                step.next = $('<a href="javascript:;" class="tour-next"><span>Get started!</span></a>').appendTo('#tourScreen').hide();
                 var next2CSS = desc2CSS
                 next2CSS.left += (step.description.width() - step.next.width());
                 next2CSS.top += 10 + step.description.height();
