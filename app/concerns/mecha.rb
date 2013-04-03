@@ -16,7 +16,10 @@ module Mecha
     attr_reader :mecha, :courses_page
     
     def initialize(options = {})
-      @mecha = Mechanize.new { |mecha| mecha.follow_meta_refresh = true }
+      @mecha = Mechanize.new do |mecha| 
+        mecha.follow_meta_refresh = true
+        mecha.user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.43 Safari/537.31"
+      end
       @courses_page = navigate(options)
     rescue => e
       error_handling(e)

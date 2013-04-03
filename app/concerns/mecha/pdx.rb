@@ -36,10 +36,18 @@ module Mecha
         username = options.fetch(:username)
         password = options.fetch(:password)
         raise Mecha::AuthenticationError if username.blank? || password.blank?
-        login_page = @mecha.get('https://sso.pdx.edu/cas/login?service=https%3A%2F%2Fwls.banner.pdx.edu%3A443%2Fssomanager%2Fc%2FSSB')
+
+        # WTF
+        # login_page = @mecha.get('https://sso.pdx.edu/cas/login?service=https%3A%2F%2Fwls.banner.pdx.edu%3A443%2Fssomanager%2Fc%2FSSB')
+        # login_form = login_page.form
+        # login_form.username = username
+        # login_form.password = password
+
+        # Patch
+        login_page = @mecha.get("https://banweb.pdx.edu/pls/oprd/twbkwbis.P_WWWLogin")
         login_form = login_page.form
-        login_form.username = username
-        login_form.password = password
+        login_form.sid = username
+        login_form.pin = password
         login_form.submit
       end
 
