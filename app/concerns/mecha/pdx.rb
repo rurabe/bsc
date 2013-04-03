@@ -11,7 +11,7 @@ module Mecha
           widmer bike coop rain northface nike organic )
     end
 
-    private
+    # private
       # Hardpoints #
       def navigate(options = {}) #{:username => 'foo', :password => 'blah'}
         login(options)
